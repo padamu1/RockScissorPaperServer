@@ -130,7 +130,9 @@ namespace SimulFactory.Core
                     decoded[i] = (byte)(dataBuffer[offset + i] ^ masks[i % 4]);
                 }
 
+                
                 Console.WriteLine(Encoding.UTF8.GetString(decoded));    //데이터 출력
+                Console.WriteLine(ByteUtillity.ByteToObject(decoded).data);
                 switch (opcode)
                 {
                     case PayloadDataType.Text:
@@ -161,7 +163,6 @@ namespace SimulFactory.Core
 
             return true;
         }
-
         public void SendData(byte[] data, PayloadDataType opcode)
         {
             byte[] sendData;
