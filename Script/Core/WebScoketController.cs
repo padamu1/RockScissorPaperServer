@@ -57,7 +57,7 @@ namespace SimulFactory.Core
             {
                 if(State == WebSocketState.Open) // 이미 연결 중인 상태일 경우 다시 연결 요청에 대한 응답을 할 이유가 없으므로 dispose
                 {
-                    Dispose(); 
+                    Dispose();
                     return;
                 }
                 HandshakeToClient(size);        // 연결 요청에 대한 응답
@@ -65,6 +65,11 @@ namespace SimulFactory.Core
             }
             else
             {
+                if(size == 0) // 비어있는 데이터는 없으므로 dispose
+                {
+                    Dispose();
+                    return;
+                }
                 // 메시지 수신에 대한 처리, 반환 값은 연결 종료 여부
                 if (ProcessClientRequest(size) == false) { return; }
             }
