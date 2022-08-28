@@ -45,8 +45,8 @@ namespace SimulFactory.Core
 
         private void OnReadData(IAsyncResult ar)
         {
-            int size = messageStream.EndRead(ar);   //데이터 수신 종료
-
+            int size = messageStream.EndRead(ar);   
+            
             byte[] httpRequestRaw = new byte[7];    //HTTP request method는 7자리를 넘지 않는다.
                                                     //GET만 확인하면 되므로 new byte[3]해도 상관없음
             Array.Copy(dataBuffer, httpRequestRaw, httpRequestRaw.Length);
@@ -55,6 +55,11 @@ namespace SimulFactory.Core
             //GET 요청인지 여부 확인
             if (Regex.IsMatch(httpRequest, "^GET", RegexOptions.IgnoreCase))
             {
+                if(State == WebSocketState.Open) // 이미 연결 중인 상태일 경우 다시 연결 요청에 대한 응답을 할 이유가 없으므로 dispose
+                {
+                    Dispose(); 
+                    return;
+                }
                 HandshakeToClient(size);        // 연결 요청에 대한 응답
                 State = WebSocketState.Open;    // 응답이 성공하여 연결 중으로 상태 전환
             }
@@ -203,6 +208,7 @@ namespace SimulFactory.Core
 
         public void Dispose()
         {
+            Console.WriteLine("Client Disconnected");
             targetClient.Close();
             targetClient.Dispose(); //모든 소켓에 관련된 자원 해제
         }
