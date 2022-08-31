@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using SimulFactory.Common.Instance;
+using System.Collections;
 using System.Net.Sockets;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -29,16 +30,16 @@ namespace SimulFactory.Core
     {
         //웹 소켓의 상태 객체
         public WebSocketState State { get; private set; } = WebSocketState.None;
-
         private readonly TcpClient targetClient;
         private readonly NetworkStream messageStream;
         private readonly byte[] dataBuffer = new byte[1024];
-
+        public PcInstance playerInstance;
         public WebSocketController(TcpClient tcpClient)
         {
             State = WebSocketState.Connecting;  //완전한 WebSocket 연결이 아니므로 연결 중 표시
-
+            playerInstance = PcInstance.GetInstance();
             targetClient = tcpClient;
+            playerInstance.SetWebSocketController(this);
             messageStream = targetClient.GetStream();
             messageStream.BeginRead(dataBuffer, 0, dataBuffer.Length, OnReadData, null);
         }
@@ -73,7 +74,6 @@ namespace SimulFactory.Core
                 // 메시지 수신에 대한 처리, 반환 값은 연결 종료 여부
                 if (ProcessClientRequest(size) == false) { return; }
             }
-
             //데이터 수신 재시작
             messageStream.BeginRead(dataBuffer, 0, dataBuffer.Length, OnReadData, null);
         }
@@ -129,13 +129,11 @@ namespace SimulFactory.Core
                 {
                     decoded[i] = (byte)(dataBuffer[offset + i] ^ masks[i % 4]);
                 }
-
                 
-                Console.WriteLine(Encoding.UTF8.GetString(decoded));    //데이터 출력
-                Console.WriteLine(ByteUtillity.ByteToObject(decoded).data);
                 switch (opcode)
                 {
                     case PayloadDataType.Text:
+                        PcInstance.GetInstance().ProcessData(ByteUtillity.ByteToObject(decoded));
                         SendData(Encoding.UTF8.GetBytes("Success!"), PayloadDataType.Text);
                         break;
                     case PayloadDataType.Binary:
@@ -163,7 +161,7 @@ namespace SimulFactory.Core
 
             return true;
         }
-        public void SendData(byte[] data, PayloadDataType opcode)
+        public void SendData(byte[] data, PayloadDataType opcode = PayloadDataType.Text)
         {
             byte[] sendData;
             BitArray firstByte = new BitArray(new bool[] {

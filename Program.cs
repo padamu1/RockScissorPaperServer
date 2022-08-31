@@ -3,12 +3,17 @@ using System.Net;
 using System.Net.Sockets;
 
 using SimulFactory.Core;
+using SimulFactory.Game;
+
 public class Program
 {
     public static void Main()
     {
         ConnectionManager cm = new ConnectionManager(3000);
         bool isServerStop = false;
+        Thread matchThread = new Thread(MatchSystem.GetInstance().Matching);
+        matchThread.IsBackground = true;
+        matchThread.Start();
         while (!isServerStop)
         {
             Console.Write("\n\n\n\nServer For RockScissorPaper\n");
