@@ -1,0 +1,16 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace SimulFactory.Core.Util
+{
+    public class Util
+    {
+        public static void CheckNumber()
+        {
+
+        }
+    }
+}

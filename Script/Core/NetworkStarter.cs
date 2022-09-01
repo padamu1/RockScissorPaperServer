@@ -1,10 +1,5 @@
-﻿using SimulFactory.Game;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿using SimulFactory.Common.Instance;
+using SimulFactory.Game;
 namespace SimulFactory.Core
 {
     public class NetworkStarter
@@ -13,6 +8,7 @@ namespace SimulFactory.Core
         public NetworkStarter()
         {
             ConnectionManager = new ConnectionManager(3000);
+            PcListInstance.GetInstance();
             Thread matchThread = new Thread(MatchSystem.GetInstance().Matching);
             matchThread.IsBackground = true;
             matchThread.Start();
