@@ -1,67 +1,75 @@
 ﻿using SimulFactory.Common.Instance;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SimulFactory.Game
 {
     public class MatchSystem
     {
-        private static MatchSystem? Instance = null;
+        static readonly Lazy<MatchSystem> instanceHolder = new Lazy<MatchSystem>(() => new MatchSystem());
         public static MatchSystem GetInstance()
         {
-            if(Instance == null)
-            {
-                Instance = new MatchSystem();
-            }
-            return Instance;
+            return instanceHolder.Value;
         }
-        private List<PcInstance> pcInstances = new List<PcInstance>();
-        private List<PcInstance> addPcInstances = new List<PcInstance>();
-        private List<PcInstance> removedPcInstances = new List<PcInstance>();
+        private List<PcInstance> matchList;
+        private List<PcInstance> addMatchList;
+        private List<PcInstance> removeMatchList;
+        private List<PcInstance> readyMatchList;
+        public MatchSystem()
+        {
+            matchList = new List<PcInstance>();
+            addMatchList = new List<PcInstance>();
+            removeMatchList = new List<PcInstance>();
+            readyMatchList = new List<PcInstance>();
+        }
         public void Matching()
         {
             while(true)
             {
-                lock (addPcInstances)
+                lock (addMatchList)
                 {
-                    foreach(PcInstance instance in addPcInstances)
+                    foreach(PcInstance instance in addMatchList)
                     {
-                        pcInstances.Add(instance);
+                        matchList.Add(instance);
                     }
-                    addPcInstances.Clear();
+                    addMatchList.Clear();
                 }
-                lock (addPcInstances)
+                lock (addMatchList)
                 {
-                    foreach (PcInstance instance in removedPcInstances)
+                    foreach (PcInstance instance in removeMatchList)
                     {
-                        pcInstances.Remove(instance);
+                        matchList.Remove(instance);
                     }
-                    removedPcInstances.Clear();
+                    removeMatchList.Clear();
                 }
+                // 매칭 전 정렬
+                matchList.OrderBy(x => x.pcPvp.rating);
                 // 실제 로직 처리
-                foreach (PcInstance pcInstance in pcInstances)
+                for (int count = 0; count < matchList.Count - 1;) 
                 {
-                    
+                    bool matchSuccess = false;
+                    if(matchSuccess)
+                    {
+                        count += 2;
+                    }
+                    else
+                    {
+                        count += 1;
+                    }
                 }
-                Console.WriteLine(pcInstances.Count);
-                Thread.Sleep(1000); // 1초간 멈춤
+                Thread.Sleep(3000);
             }
         }
         public void AddPcInsatnce(PcInstance pcInstance)
         {
-            lock(addPcInstances)
+            lock(addMatchList)
             {
-                addPcInstances.Add(pcInstance);
+                addMatchList.Add(pcInstance);
             }
         }
         public void RemovePcInstance(PcInstance pcInstance)
         {
-            lock(removedPcInstances)
+            lock(removeMatchList)
             {
-                removedPcInstances.Add(pcInstance);
+                removeMatchList.Add(pcInstance);
             }
         }
     }

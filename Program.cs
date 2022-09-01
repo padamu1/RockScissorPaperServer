@@ -9,11 +9,8 @@ public class Program
 {
     public static void Main()
     {
-        ConnectionManager cm = new ConnectionManager(3000);
+        NetworkStarter networkStarter = new NetworkStarter();
         bool isServerStop = false;
-        Thread matchThread = new Thread(MatchSystem.GetInstance().Matching);
-        matchThread.IsBackground = true;
-        matchThread.Start();
         while (!isServerStop)
         {
             Console.Write("\n\n\n\nServer For RockScissorPaper\n");
