@@ -9,14 +9,15 @@ namespace SimulFactory.Game
     {
         public static void ProcessData(PcInstance pc, DataFormat dataFormat)                      // 클라이언트로부터 들어온 정보를 처리하기 위한 함수
         {
-            byte evCode = dataFormat.evCode;
+            byte eventCode = dataFormat.eventCode;
             Dictionary<byte, object> param = dataFormat.data;
-            switch (evCode)
+            switch (eventCode)
             {
                 case (byte)Define.EVENT_CODE.LoginC:
                     C_Login.LoginC(pc,param);
                     break;
                 case (byte)Define.EVENT_CODE.StartMatchingC:
+                    C_StartMatching.StartMatchingC(pc);
                     break;
                 case (byte)Define.EVENT_CODE.MatchingResponseC:
                     break;

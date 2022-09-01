@@ -9,7 +9,11 @@ namespace SimulFactory.Game.Event
             // 정보 받은 후 로그인 처리
             pc.UserData.UserId = (string)param[0];
             pc.UserData.UserName = (string)param[1];
-            S_Login.Login_S();
+            pc.pcPvp.rating = Convert.ToInt32(param[2]);
+            pc.pcPvp.winCount = Convert.ToInt32(param[3]);
+            pc.pcPvp.defeatCount = Convert.ToInt32(param[4]);
+
+            S_Login.Login_S(pc);
         }
     }
 }

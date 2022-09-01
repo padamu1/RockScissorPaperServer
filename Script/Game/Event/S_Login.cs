@@ -1,4 +1,5 @@
-﻿using SimulFactory.Common.Instance;
+﻿using SimulFactory.Common.Bean;
+using SimulFactory.Common.Instance;
 using SimulFactory.Core;
 using System;
 using System.Collections.Generic;
@@ -10,11 +11,11 @@ namespace SimulFactory.Game.Event
 {
     public class S_Login
     {
-        public static void Login_S()
+        public static void Login_S(PcInstance pc)
         {
-            DataFormat dataFormat = new DataFormat();
-            dataFormat.evCode = 0;
-            PcInstance.GetInstance().GetWebSocketController().SendData(ByteUtillity.ObjectToByte(dataFormat));
+            Dictionary<byte, object> dic = new Dictionary<byte, object>();
+            dic.Add(0, "success");
+            pc.SendPacket((byte)Define.EVENT_CODE.LoginS, dic);
         }
     }
 }

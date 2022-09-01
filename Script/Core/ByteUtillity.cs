@@ -6,8 +6,8 @@ namespace SimulFactory.Core
 {
     public class DataFormat
     {
-        public byte evCode = 0;
-        public Dictionary<byte, object> data = new Dictionary<byte, object>();
+        public byte eventCode;
+        public Dictionary<byte, object>? data;
     }
     public class ByteUtillity
     {
@@ -15,14 +15,15 @@ namespace SimulFactory.Core
         {
             try
             {
-                DataFormat dataFormat = new DataFormat();
                 string data = Encoding.UTF8.GetString(buffer);
                 if (data == null)
                 {
                     return null;
                 }
-                data = "";
-                dataFormat = JsonConvert.DeserializeObject<DataFormat>(data);
+                DataFormat dataFormat = JsonConvert.DeserializeObject<DataFormat>(data);
+
+                Console.WriteLine(data);
+                Console.WriteLine(dataFormat.eventCode);
                 return dataFormat;
             }
             catch (Exception exception)
