@@ -22,5 +22,26 @@ namespace SimulFactory.Common.Bean
             MatchingResponseS = 4,  // 매칭 수락 응답에 대한 답변 -> 성공 / 실패
             MatchingCancelS = 5,    // 매칭 취소 요청 응답
         }
+        public enum WEB_SOCKET_STATE
+        {
+            None = 0,
+            Connecting = 1,
+            Open = 2,
+            CloseSent = 3,
+            CloseReceived = 4,
+            Closed = 5,
+            Aborted = 6
+        }
+
+        public enum PAYLOAD_DATA_TYPE
+        {
+            Unknown = -1,
+            Continuation = 0,
+            Text = 1,
+            Binary = 2,
+            ConnectionClose = 8,
+            Ping = 9,
+            Pong = 10
+        }
     }
 }
