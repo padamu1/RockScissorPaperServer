@@ -13,6 +13,7 @@ namespace SimulFactory.Common.Bean
         public int DefeatCount { get; set; }
         public int MatchId { get; set; }
         public bool IsWin { get; set; }
+        public bool MatchAccept { get; set; }
         public PcPvp()
         {
             IsWin = false;

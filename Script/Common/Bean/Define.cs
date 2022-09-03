@@ -43,5 +43,14 @@ namespace SimulFactory.Common.Bean
             Ping = 9,
             Pong = 10
         }
+
+        public enum MATCH_STATE
+        {
+            MATCH_START_WAIT = 0,       // 매칭 시작 대기중
+            MATCH_START_SUCCESS = 1,    // 매칭 시작에 성공
+            MATCH_START_FAILED = 2,     // 매칭 시작에 실패
+        }
+        public const int MATCH_SYSTEM_DELAY_TIME = 2;
+        public const int MATCH_USER_WAIT_TIME = 10;
     }
 }

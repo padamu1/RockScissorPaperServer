@@ -1,5 +1,6 @@
-﻿using SimulFactory.Common.Instance;
-
+﻿using SimulFactory.Common.Bean;
+using SimulFactory.Common.Instance;
+using SimulFactory.Game.Matching;
 namespace SimulFactory.Game
 {
     public class MatchSystem
@@ -12,13 +13,13 @@ namespace SimulFactory.Game
         private List<PcInstance> matchList;
         private List<PcInstance> addMatchList;
         private List<PcInstance> removeMatchList;
-        private List<PcInstance> readyMatchList;
+        private List<Match> readyMatchList;
         public MatchSystem()
         {
             matchList = new List<PcInstance>();
             addMatchList = new List<PcInstance>();
             removeMatchList = new List<PcInstance>();
-            readyMatchList = new List<PcInstance>();
+            readyMatchList = new List<Match>();
         }
         public void Matching()
         {
@@ -40,22 +41,44 @@ namespace SimulFactory.Game
                     }
                     removeMatchList.Clear();
                 }
-                // 매칭 전 정렬
-                matchList.OrderBy(x => x.pcPvp.Rating);
-                // 실제 로직 처리
-                for (int count = 0; count < matchList.Count - 1;) 
+                lock(matchList)
                 {
-                    bool matchSuccess = false;
-                    if(matchSuccess)
+                    // 매칭 전 정렬
+                    matchList.OrderBy(x => x.pcPvp.Rating);
+                    // 실제 로직 처리
+                    for (int count = 0; count < matchList.Count - 1;)
                     {
-                        count += 2;
-                    }
-                    else
-                    {
-                        count += 1;
+                        bool matchSuccess = false;
+                        if (matchSuccess)
+                        {
+                            Match match = new Match();
+                            match.AddPcInstance(matchList[count]);
+                            match.AddPcInstance(matchList[count + 1]);
+                            match.SendMatchSuccess();
+                            count += 2;
+                        }
+                        else
+                        {
+                            count += 1;
+                        }
                     }
                 }
-                Thread.Sleep(3000);
+                lock(readyMatchList)
+                {
+                    foreach (Match match in readyMatchList)
+                    {
+                        switch (match.CheckUserWaitState())
+                        {
+                            case Define.MATCH_STATE.MATCH_START_WAIT:
+                                break;
+                            case Define.MATCH_STATE.MATCH_START_SUCCESS:
+                                break;
+                            case Define.MATCH_STATE.MATCH_START_FAILED:
+                                break;
+                        }
+                    }
+                }
+                Thread.Sleep(Define.MATCH_SYSTEM_DELAY_TIME);
             }
         }
         public void AddPcInsatnce(PcInstance pcInstance)
