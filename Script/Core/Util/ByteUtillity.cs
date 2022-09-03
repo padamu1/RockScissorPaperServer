@@ -20,10 +20,10 @@ namespace SimulFactory.Core.Util
                 {
                     return null;
                 }
-                DataFormat dataFormat = JsonConvert.DeserializeObject<DataFormat>(data);
+                DataFormat? dataFormat = JsonConvert.DeserializeObject<DataFormat>(data);
 
                 Console.WriteLine(data);
-                Console.WriteLine(dataFormat.eventCode);
+                Console.WriteLine(dataFormat?.eventCode);
                 return dataFormat;
             }
             catch (Exception exception)

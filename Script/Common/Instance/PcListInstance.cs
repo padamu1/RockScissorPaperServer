@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace SimulFactory.Common.Instance
 {
+    /// <summary>
+    /// 전체 유저를 관리하기 위한 객체 - 아직 미사용
+    /// </summary>
     public class PcListInstance
     {
         static readonly Lazy<PcListInstance> instanceHolder = new Lazy<PcListInstance>(() => new PcListInstance());

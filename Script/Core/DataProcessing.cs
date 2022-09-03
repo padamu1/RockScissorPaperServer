@@ -21,14 +21,14 @@ namespace SimulFactory.Core
         protected readonly TcpClient targetClient;
         protected readonly NetworkStream messageStream;
         protected readonly byte[] dataBuffer = new byte[1024];
-        protected PcInstance pc;
+        protected PcInstance? pc;
         public DataProcessing(TcpClient tcpClient)
         {
+            dataFormat = new DataFormat();
             State = Define.WEB_SOCKET_STATE.Connecting;  //완전한 WebSocket 연결이 아니므로 연결 중 표시
             targetClient = tcpClient;
             messageStream = targetClient.GetStream();
             messageStream.BeginRead(dataBuffer, 0, dataBuffer.Length, OnReadData, null);
-            dataFormat = new DataFormat();
         }
         protected void OnReadData(IAsyncResult ar)
         {
@@ -85,6 +85,11 @@ namespace SimulFactory.Core
         }
         protected bool ProcessClientRequest(int dataSize)
         {
+            if(pc == null)  // pc가 없다면 연결을 끊어버림
+            {
+                Dispose();
+                return false;
+            }
             bool fin = (dataBuffer[0] & 0b10000000) != 0;   // 혹시 false일 경우 다음 데이터와 이어주는 처리를 해야 함
             bool mask = (dataBuffer[1] & 0b10000000) != 0;  // 클라이언트에서 받는 경우 무조건 true
             Define.PAYLOAD_DATA_TYPE opcode = (Define.PAYLOAD_DATA_TYPE)(dataBuffer[0] & 0b00001111); // enum으로 변환
@@ -159,7 +164,6 @@ namespace SimulFactory.Core
                     false,  //RSV1
                     true,   //Fin
                 });
-            //위 코드는 아래 설명 참조
 
             if (data.Length < 126)
             {
@@ -196,7 +200,7 @@ namespace SimulFactory.Core
 
         public void Dispose()
         {
-            Console.WriteLine("Client Disconnected");
+            Console.WriteLine(pc?.UserData.UserName+" Client Disconnected");
             targetClient.Close();
             targetClient.Dispose(); //모든 소켓에 관련된 자원 해제
         }
