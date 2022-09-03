@@ -8,8 +8,14 @@ namespace SimulFactory.Common.Bean
 {
     public class PcPvp
     {
-        public int rating;
-        public int winCount;
-        public int defeatCount;
+        public int Rating { get; set; }
+        public int WinCount { get; set; }
+        public int DefeatCount { get; set; }
+        public int MatchId { get; set; }
+        public bool IsWin { get; set; }
+        public PcPvp()
+        {
+            IsWin = false;
+        }
     }
 }

@@ -32,7 +32,7 @@ namespace SimulFactory.Game
                     }
                     addMatchList.Clear();
                 }
-                lock (addMatchList)
+                lock (removeMatchList)
                 {
                     foreach (PcInstance instance in removeMatchList)
                     {
@@ -41,7 +41,7 @@ namespace SimulFactory.Game
                     removeMatchList.Clear();
                 }
                 // 매칭 전 정렬
-                matchList.OrderBy(x => x.pcPvp.rating);
+                matchList.OrderBy(x => x.pcPvp.Rating);
                 // 실제 로직 처리
                 for (int count = 0; count < matchList.Count - 1;) 
                 {
