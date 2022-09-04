@@ -69,11 +69,13 @@ namespace SimulFactory.Game
                     {
                         switch (match.CheckUserWaitState())
                         {
-                            case Define.MATCH_STATE.MATCH_START_WAIT:
+                            case Define.MATCH_STATE.MATCH_START_WAIT:   // 매칭 시작 대기중
                                 break;
-                            case Define.MATCH_STATE.MATCH_START_SUCCESS:
+                            case Define.MATCH_STATE.MATCH_START_SUCCESS:// 매칭 시작 성공
+                                match.SendMatchStartResult(Define.MATCH_STATE.MATCH_START_SUCCESS);
                                 break;
-                            case Define.MATCH_STATE.MATCH_START_FAILED:
+                            case Define.MATCH_STATE.MATCH_START_FAILED: // 매칭 시작 실패
+                                match.SendMatchStartResult(Define.MATCH_STATE.MATCH_START_FAILED);
                                 break;
                         }
                     }

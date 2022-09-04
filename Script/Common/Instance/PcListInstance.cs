@@ -16,7 +16,7 @@ namespace SimulFactory.Common.Instance
         {
             return instanceHolder.Value;
         }
-        public Dictionary<string, PcInstance> pcDic;
+        private Dictionary<string, PcInstance> pcDic;
         public PcListInstance()
         {
             pcDic = new Dictionary<string,PcInstance>();
@@ -39,6 +39,24 @@ namespace SimulFactory.Common.Instance
                 {
                     pcDic.Remove(pc.UserData.UserId);
                 }
+            }
+        }
+        /// <summary>
+        /// 현재 접속중인 유저와 비교해 접속 가능한지 확인 - 임시
+        /// </summary>
+        /// <returns></returns>
+        public bool CheckUser(PcInstance pc)
+        {
+            lock(pcDic)
+            {
+                foreach(KeyValuePair<string,PcInstance> pcData  in pcDic)
+                {
+                    if(pcData.Key == pc.UserData.UserId)
+                    {
+                        return false;
+                    }
+                }
+                return true;
             }
         }
     }

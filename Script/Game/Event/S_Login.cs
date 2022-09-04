@@ -11,10 +11,10 @@ namespace SimulFactory.Game.Event
 {
     public class S_Login
     {
-        public static void Login_S(PcInstance pc)
+        public static void Login_S(PcInstance pc,bool result)
         {
             Dictionary<byte, object> dic = new Dictionary<byte, object>();
-            dic.Add(0, "success");
+            dic.Add(0, result);
             pc.SendPacket((byte)Define.EVENT_CODE.LoginS, dic);
         }
     }

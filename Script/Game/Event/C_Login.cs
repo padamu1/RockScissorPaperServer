@@ -12,8 +12,17 @@ namespace SimulFactory.Game.Event
             pc.pcPvp.Rating = Convert.ToInt32(param[2]);
             pc.pcPvp.WinCount = Convert.ToInt32(param[3]);
             pc.pcPvp.DefeatCount = Convert.ToInt32(param[4]);
-
-            S_Login.Login_S(pc);
+            // 유저 확인
+            bool result = true;
+            if (PcListInstance.GetInstance().CheckUser(pc))
+            {
+                PcListInstance.GetInstance().AddInstance(pc);
+            }
+            else
+            {
+                result = false;
+            }
+            S_Login.Login_S(pc,result);
         }
     }
 }
