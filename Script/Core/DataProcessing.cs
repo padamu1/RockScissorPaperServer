@@ -2,14 +2,10 @@
 using SimulFactory.Common.Instance;
 using SimulFactory.Core.Util;
 using SimulFactory.Game;
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Sockets;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace SimulFactory.Core
 {
@@ -28,7 +24,6 @@ namespace SimulFactory.Core
             State = Define.WEB_SOCKET_STATE.Connecting;  //완전한 WebSocket 연결이 아니므로 연결 중 표시
             targetClient = tcpClient;
             messageStream = targetClient.GetStream();
-            messageStream.BeginRead(dataBuffer, 0, dataBuffer.Length, OnReadData, null);
         }
         protected void OnReadData(IAsyncResult ar)
         {

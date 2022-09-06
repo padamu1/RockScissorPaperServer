@@ -48,8 +48,8 @@ namespace SimulFactory.Game
                     // 실제 로직 처리
                     for (int count = 0; count < matchList.Count - 1;)
                     {
-                        bool matchSuccess = false;
-                        if (matchSuccess)
+                        //bool matchSuccess = false;
+                        if (count + 1 <= matchList.Count - 1)
                         {
                             Match match = new Match();
                             match.AddPcInstance(matchList[count]);

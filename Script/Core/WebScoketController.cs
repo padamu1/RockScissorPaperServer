@@ -13,6 +13,7 @@ namespace SimulFactory.Core
         public WebSocketController(TcpClient tcpClient) : base(tcpClient)
         {
             pc = new PcInstance(this);  // 유저가 접속하면 PcInstance를 생성해줌
+            messageStream.BeginRead(dataBuffer, 0, dataBuffer.Length, OnReadData, null);
         }
         /// <summary>
         /// pc에 데이터를 전달하기 위한 함수
