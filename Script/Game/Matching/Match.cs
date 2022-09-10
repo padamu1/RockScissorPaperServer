@@ -55,7 +55,7 @@ namespace SimulFactory.Game.Matching
                 foreach (PcInstance pc in pcList)
                 {
                     pc.SendPacket((byte)Define.EVENT_CODE.MatchingResponseS, param);
-                    if (pc.pcPvp.MatchAccept)
+                    if (pc.GetPcPvp().MatchAccept)
                     {
                         // 수락을 한 유저는 실패를 했지만 다시 매칭을 이어갈 수 있도록 넣어줌
                         MatchSystem.GetInstance().AddPcInsatnce(pc);
@@ -71,7 +71,7 @@ namespace SimulFactory.Game.Matching
             int acceptCount = 0;    // 매칭 수락을 한 유저 수
             foreach (PcInstance pc in pcList)
             {
-                if (pc.pcPvp.MatchAccept)
+                if (pc.GetPcPvp().MatchAccept)
                 {
                     acceptCount++;
                 }

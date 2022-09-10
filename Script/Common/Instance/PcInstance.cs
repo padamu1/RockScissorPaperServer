@@ -8,18 +8,37 @@ namespace SimulFactory.Common.Instance
 {
     public class PcInstance
     {
-        public UserData UserData { get; set; }
-        public PcPvp pcPvp { get; set; }
         private WebSocketController socketController;
+
+        private UserData userData;
+        private PcPvp pcPvp;
+
         public PcInstance(WebSocketController socketController)
         {
             this.socketController = socketController;
-            UserData = new UserData();
-            pcPvp = new PcPvp();
+            SetupUser();
         }
         public void SendPacket(byte evCode, Dictionary<byte, object> param)
         {
             socketController.SendPacket(evCode,param);
         }
+        /// <summary>
+        /// 유저 로그인 시 로딩되어야 할 정보들
+        /// </summary>
+        private void SetupUser()
+        {
+            userData = new UserData();
+            pcPvp = new PcPvp();
+        }
+        #region Gettser
+        public PcPvp GetPcPvp()
+        {
+            return pcPvp;
+        }
+        public UserData GetUserData()
+        {
+            return userData;
+        }
+        #endregion
     }
 }

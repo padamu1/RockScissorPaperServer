@@ -2,9 +2,9 @@
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Data.SqlClient;
 using System.Data;
 using System;
+using MySql.Data.MySqlClient;
 
 namespace SimulFactory.Core
 {
@@ -18,25 +18,18 @@ namespace SimulFactory.Core
         {
             return instanceHolder.Value;
         }
-        private SqlConnection mssqlconn;
         /// <summary>
         /// SqlController 생성자
         /// </summary>
         public SqlController()
         {
-            string strConn = "Data Source=192.168.0.1,1433:Initial Catalog=DataBase;User Id =user1;Password=1234";
-            mssqlconn = new SqlConnection(strConn);
-            mssqlconn.Open();
-            SqlCommand cmd = new SqlCommand();
-            cmd.Connection = mssqlconn;
-        }
-        /// <summary>
-        /// SqlConnection 반환
-        /// </summary>
-        /// <returns></returns>
-        public SqlConnection GetSqlConnection()
-        {
-            return mssqlconn;
+            string strConn = "Server=127.0.0.1;Port=3001;Database=rspuserdb; Uid=root;Pwd=#Qudtk#20050;";
+            MySqlConnection connection = new MySqlConnection(strConn);
+            Console.WriteLine(connection.DataSource);
+            Console.WriteLine(connection.Database);
+
+            connection.Open();
+            connection.Close();
         }
     }
 }

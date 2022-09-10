@@ -44,7 +44,7 @@ namespace SimulFactory.Game
                 lock(matchList)
                 {
                     // 매칭 전 정렬
-                    matchList.OrderBy(x => x.pcPvp.Rating);
+                    matchList.OrderBy(x => x.GetPcPvp().Rating);
                     // 실제 로직 처리
                     for (int count = 0; count < matchList.Count - 1;)
                     {

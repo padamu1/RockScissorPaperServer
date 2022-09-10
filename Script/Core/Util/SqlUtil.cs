@@ -11,8 +11,6 @@ namespace SimulFactory.Core.Util
     {
         public static bool UpdateSql()
         {
-            SqlConnection connection = SqlController.GetInstance().GetSqlConnection();
-            connection.Open();
 
             return false;
         }

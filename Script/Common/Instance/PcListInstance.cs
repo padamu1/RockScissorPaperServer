@@ -25,19 +25,19 @@ namespace SimulFactory.Common.Instance
         {
             lock(pcDic)
             {
-                if (pcDic.ContainsKey(pc.UserData.UserId))
+                if (pcDic.ContainsKey(pc.GetUserData().UserId))
                 {
                 }
-                pcDic.Add(pc.UserData.UserId,pc);
+                pcDic.Add(pc.GetUserData().UserId,pc);
             }
         }
         public void RemoveInstance(PcInstance pc)
         {
             lock (pcDic)
             {
-                if (pcDic.ContainsKey(pc.UserData.UserId))
+                if (pcDic.ContainsKey(pc.GetUserData().UserId))
                 {
-                    pcDic.Remove(pc.UserData.UserId);
+                    pcDic.Remove(pc.GetUserData().UserId);
                 }
             }
         }
@@ -51,7 +51,7 @@ namespace SimulFactory.Common.Instance
             {
                 foreach(KeyValuePair<string,PcInstance> pcData  in pcDic)
                 {
-                    if(pcData.Key == pc.UserData.UserId)
+                    if(pcData.Key == pc.GetUserData().UserId)
                     {
                         return false;
                     }
