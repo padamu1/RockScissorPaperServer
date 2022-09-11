@@ -7,8 +7,10 @@ namespace SimulFactory.Core
         public ConnectionManager ConnectionManager { get; set; }
         public NetworkStarter()
         {
+            // DB서버 확인
+            SqlController.CheckSqlConnection();
+
             // 서버 시작 전 준비 작업
-            SqlController.GetInstance();
             PcListInstance.GetInstance();
 
             // 매칭 서버 준비
