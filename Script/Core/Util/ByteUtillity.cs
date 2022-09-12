@@ -47,5 +47,9 @@ namespace SimulFactory.Core.Util
             }
             return null;
         }
+        public static long BytesToLong(byte[] bytes)
+        {
+            return BitConverter.ToInt64(bytes,0);
+        }
     }
 }

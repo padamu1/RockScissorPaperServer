@@ -10,5 +10,6 @@ namespace SimulFactory.Common.Bean
     {
         public string UserName = "";
         public string UserId = "";
+        public long UserNo = 0;
     }
 }

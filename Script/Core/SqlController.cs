@@ -20,7 +20,7 @@ namespace SimulFactory.Core
             MySqlConnection connection = new MySqlConnection(strConn);
             connection.Open();
             connection.Close();
-            SqlUtil.InsertSql();
+            UserDBSqlUtil.InsertSql();
         }
         public static MySqlConnection GetMySqlConnection()
         {

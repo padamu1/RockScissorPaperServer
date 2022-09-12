@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace SimulFactory.Core.Util
 {
-    public class SqlUtil
+    public class UserDBSqlUtil
     {
         public static bool InsertSql()
         {
@@ -53,6 +53,37 @@ namespace SimulFactory.Core.Util
         {
 
             return false;
+        }
+        public static bool CheckUserNo(long userNo)
+        {
+            bool result = false; // 실패로 선언
+            // 사용할 커넥션 가져오기
+            using (MySqlConnection connection = SqlController.GetMySqlConnection())
+            {
+                string insertQuery = "Select * From sample_table Where uid=@uid";
+                try //예외 처리
+                {
+                    // 커넥션 연결
+                    connection.Open();
+
+                    // 커맨드 설정
+                    MySqlCommand command = new MySqlCommand(insertQuery, connection);
+
+                    // 파라메터 정의
+                    command.Parameters.AddWithValue("@uid", userNo);
+
+                    if(command.ExecuteNonQuery() < 1)// 성공시 1 들어감
+                    {
+                        result = true;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("실패");
+                    Console.WriteLine(ex.ToString());
+                }
+            }
+            return result;
         }
     }
 }

@@ -22,7 +22,7 @@ namespace SimulFactory.Game.Event
             {
                 result = false;
             }
-            S_Login.Login_S(pc,result);
+            S_Login.LoginS(pc,result);
         }
     }
 }
