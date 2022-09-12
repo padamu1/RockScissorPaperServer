@@ -7,42 +7,6 @@ using System.Threading.Tasks;
 
 namespace SimulFactory.Core
 {
-    /// <summary>
-    /// 스레드 테스트용 클래스
-    /// </summary>
-    public class Worker : ThreadBase
-    {
-        private int workCount=0;
-        public Worker():base()
-        {
-            // 생성자
-        }
-        protected override void ThreadAction()
-        {
-            while (!isThreadStop)
-            {
-                Work();
-                Console.Write(thread.Name);
-                Thread.Sleep(delayTime);
-            }
-        }
-        public void Work()
-        {
-            Console.WriteLine("Working..." + workCount++);
-        }
-        public override ThreadBase Clone()
-        {
-            Worker worker = new Worker();
-            worker.workCount = workCount;
-            worker.delayTime = delayTime;
-            return worker;
-        }
-        public override string GetThreadName()
-        {
-            return "Worker";
-        }
-
-    }
     public class ThreadManager
     {
         static readonly Lazy<ThreadManager> instanceHolder = new Lazy<ThreadManager>(() => new ThreadManager());
