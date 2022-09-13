@@ -16,9 +16,9 @@ namespace SimulFactory.Core.Util
         /// </summary>
         /// <param name="pc"></param>
         /// <param name="userNo"></param>
-        public static void CheckLogin(PcInstance pc, long userNo)
+        public static void CheckLogin(PcInstance pc)
         {
-            if(userNo == 0)
+            if(pc.GetUserData().UserNo == 0)
             {
                 // 유저 생성
                 MakeUser(pc);
@@ -26,6 +26,10 @@ namespace SimulFactory.Core.Util
             else
             {
                 // 유저 정보 조회
+                if(UserDBSqlUtil.CheckUserNo(pc))
+                {
+
+                }
 
                 // 로그인 성공 메시지 보냄
                 S_Login.LoginS(pc, true);
@@ -46,7 +50,7 @@ namespace SimulFactory.Core.Util
             }
         }
         /// <summary>
-        /// 생성된 유저 넘버가 중복되지 않는지 체크해주는 함수
+        /// 생성된 유저 넘버를 넣어서 아이디를 생성하는 함수
         /// </summary>
         /// <param name="pc"></param>
         /// <param name="userNo"></param>
@@ -54,7 +58,8 @@ namespace SimulFactory.Core.Util
         {
             // DB 내용과 비교
             long newUserNo = ByteUtillity.BytesToLong(userNo);
-            if(UserDBSqlUtil.CheckUserNo(newUserNo))
+            pc.GetUserData().UserNo = newUserNo;
+            if (UserDBSqlUtil.InsertUserSql(pc))
             {
                 S_Login.LoginS(pc,true);
             }

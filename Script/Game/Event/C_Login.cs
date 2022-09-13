@@ -1,4 +1,5 @@
 ﻿using SimulFactory.Common.Instance;
+using SimulFactory.Core.Util;
 
 namespace SimulFactory.Game.Event
 {
@@ -6,23 +7,11 @@ namespace SimulFactory.Game.Event
     {
         public static void LoginC(PcInstance pc, Dictionary<byte,object> param)
         {
-            // 정보 받은 후 로그인 처리
-            pc.GetUserData().UserId = (string)param[0];
-            pc.GetUserData().UserName = (string)param[1];
-            pc.GetPcPvp().Rating = Convert.ToInt32(param[2]);
-            pc.GetPcPvp().WinCount = Convert.ToInt32(param[3]);
-            pc.GetPcPvp().DefeatCount = Convert.ToInt32(param[4]);
+            // 정보 받은 후 유저 데이터에 저장
+            pc.GetUserData().UserNo = (long)param[0];
+
             // 유저 확인
-            bool result = true;
-            if (PcListInstance.GetInstance().CheckUser(pc))
-            {
-                PcListInstance.GetInstance().AddInstance(pc);
-            }
-            else
-            {
-                result = false;
-            }
-            S_Login.LoginS(pc,result);
+            LoginUtil.CheckLogin(pc);
         }
     }
 }

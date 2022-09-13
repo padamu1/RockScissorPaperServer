@@ -14,13 +14,12 @@ namespace SimulFactory.Core
     /// </summary>
     public class SqlController
     {
-        private static string strConn = "Server=127.0.0.1;Port=3001;Database=rspuserdb; Uid=root;Pwd=#Qudtk#20050;";
+        private static string strConn = "Server=127.0.0.1;Port=3001;Database=rsp_db; Uid=root;Pwd=#Qudtk#20050;";
         public static void CheckSqlConnection()
         {
             MySqlConnection connection = new MySqlConnection(strConn);
             connection.Open();
             connection.Close();
-            UserDBSqlUtil.InsertSql();
         }
         public static MySqlConnection GetMySqlConnection()
         {

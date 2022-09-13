@@ -1,4 +1,5 @@
 ﻿using MySql.Data.MySqlClient;
+using SimulFactory.Common.Instance;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
@@ -10,14 +11,14 @@ namespace SimulFactory.Core.Util
 {
     public class UserDBSqlUtil
     {
-        public static bool InsertSql()
+        public static bool InsertUserSql(PcInstance pc)
         {
             int result = 0; // 실패로 정의
 
             // 사용할 커넥션 가져오기
             using (MySqlConnection connection = SqlController.GetMySqlConnection())
             {
-                string insertQuery = "INSERT INTO sample_table(uid,idx) VALUES(@uid, @idx)";
+                string insertQuery = "INSERT INTO user_db(user_no,user_name) VALUES(@user_no, @user_name)";
                 try //예외 처리
                 {
                     // 커넥션 연결
@@ -27,8 +28,8 @@ namespace SimulFactory.Core.Util
                     MySqlCommand command = new MySqlCommand(insertQuery, connection);
 
                     // 파라메터 정의
-                    command.Parameters.AddWithValue("@uid", 1);
-                    command.Parameters.AddWithValue("@idx", 2);
+                    command.Parameters.AddWithValue("@user_no", pc.GetUserData().UserNo);
+                    command.Parameters.AddWithValue("@user_name", pc.GetUserData().UserName);
 
                     result = command.ExecuteNonQuery(); // 성공시 1 들어감
                 }
@@ -54,13 +55,13 @@ namespace SimulFactory.Core.Util
 
             return false;
         }
-        public static bool CheckUserNo(long userNo)
+        public static bool CheckUserNo(PcInstance pc)
         {
             bool result = false; // 실패로 선언
             // 사용할 커넥션 가져오기
             using (MySqlConnection connection = SqlController.GetMySqlConnection())
             {
-                string insertQuery = "Select * From sample_table Where uid=@uid";
+                string insertQuery = "Select * From user_db Where user_no=@userNo";
                 try //예외 처리
                 {
                     // 커넥션 연결
@@ -70,11 +71,17 @@ namespace SimulFactory.Core.Util
                     MySqlCommand command = new MySqlCommand(insertQuery, connection);
 
                     // 파라메터 정의
-                    command.Parameters.AddWithValue("@uid", userNo);
+                    command.Parameters.AddWithValue("@userNo", pc.GetUserData().UserNo);
 
-                    if(command.ExecuteNonQuery() < 1)// 성공시 1 들어감
+                    MySqlDataReader dr = command.ExecuteReader();
+                    if(dr.Read())
                     {
                         result = true;
+                        pc.GetUserData().UserName = dr.GetString("user_name");
+                    }
+                    else
+                    {
+                        Console.WriteLine("UnKnown UserNo");
                     }
                 }
                 catch (Exception ex)

@@ -8,8 +8,7 @@ namespace SimulFactory.Common.Bean
 {
     public class UserData
     {
-        public string UserName = "";
-        public string UserId = "";
         public long UserNo = 0;
+        public string UserName = "";
     }
 }
