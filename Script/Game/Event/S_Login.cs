@@ -15,6 +15,10 @@ namespace SimulFactory.Game.Event
         {
             Dictionary<byte, object> dic = new Dictionary<byte, object>();
             dic.Add(0, result);
+            if(result)
+            {
+                dic.Add(1, pc.GetUserData().UserNo);
+            }
             pc.SendPacket((byte)Define.EVENT_CODE.LoginS, dic);
         }
     }
