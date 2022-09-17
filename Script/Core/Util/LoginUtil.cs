@@ -7,7 +7,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SimulFactory.Core.Util
+namespace SimulFactory.Core.Sql
 {
     public class LoginUtil
     {
@@ -18,7 +18,7 @@ namespace SimulFactory.Core.Util
         /// <param name="userNo"></param>
         public static void CheckLogin(PcInstance pc)
         {
-            if(pc.GetUserData().UserNo == 0)
+            if (pc.GetUserData().UserNo == 0)
             {
                 // 유저 생성
                 MakeUser(pc);
@@ -26,13 +26,19 @@ namespace SimulFactory.Core.Util
             else
             {
                 // 유저 정보 조회
-                if(UserDBSqlUtil.CheckUserNo(pc))
+                if (UserDBSql.GetUserNo(pc))
                 {
+                    // 로그인 성공 시 관련 DB 로딩
+                    PcPvpSql.GetUserPvp(pc);
 
+                    // 로그인 성공 메시지 보냄
+                    S_Login.LoginS(pc, true);
+                    return;
                 }
 
-                // 로그인 성공 메시지 보냄
-                S_Login.LoginS(pc, true);
+                // 로그인 실패시
+                S_Login.LoginS(pc, false);
+                return;
             }
         }
         /// <summary>
@@ -59,9 +65,10 @@ namespace SimulFactory.Core.Util
             // DB 내용과 비교
             long newUserNo = ByteUtillity.BytesToLong(userNo);
             pc.GetUserData().UserNo = newUserNo;
-            if (UserDBSqlUtil.InsertUserSql(pc))
+            if (UserDBSql.InsertUserSql(pc))
             {
-                S_Login.LoginS(pc,true);
+                PcPvpSql.InsertUserPvpSql(pc);
+                S_Login.LoginS(pc, true);
             }
             else
             {

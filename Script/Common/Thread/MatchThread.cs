@@ -1,4 +1,6 @@
-﻿using SimulFactory.Core.Base;
+﻿using SimulFactory.Common.Instance;
+using SimulFactory.Core.Base;
+using SimulFactory.Game.Matching;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,9 +11,10 @@ namespace SimulFactory.Common.Thread
 {
     public class MatchThread : ThreadBase
     {
-        public MatchThread():base()
+        private Match match;
+        public MatchThread(Match match):base()
         {
-            // 생성자
+            this.match = match;
         }
         protected override void ThreadAction()
         {

@@ -1,5 +1,7 @@
 ﻿using SimulFactory.Common.Bean;
 using SimulFactory.Common.Instance;
+using SimulFactory.Common.Thread;
+using SimulFactory.Game.Event;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,12 +12,21 @@ namespace SimulFactory.Game.Matching
 {
     public class Match
     {
-        private List<PcInstance> pcList;    // 현재 매칭된 유저가 들어가 있는 객체
-        private int matchUserWaitTime;      // 유저가 매칭을 수락하는 것을 기다린 시간
+        private List<PcInstance> pcList;            // 현재 매칭된 유저가 들어가 있는 객체
+        private int matchUserWaitTime;              // 유저가 매칭을 수락하는 것을 기다린 시간
+        private MatchThread mt;                     // 매칭 쓰레드
+        private Define.MATCH_STATE matchState;      // 현재 매치 상태
+        private int matchRound;                     // 현재 진행중인 매치 라운드
+        private long winUserNo;                     // 라운드에서 승리한 유저 넘버
+        private List<int> userWinCountList;         // 각 유저가 승리한 카운트
         public Match()
         {
             matchUserWaitTime = 0;
+            matchRound = 0;
             pcList = new List<PcInstance>();
+            userWinCountList = new List<int>();
+            mt = new MatchThread(this);
+            matchState = Define.MATCH_STATE.MATCH_READY;
         }
         /// <summary>
         /// 매칭에 참여할 유저 추가
@@ -23,7 +34,60 @@ namespace SimulFactory.Game.Matching
         public void AddPcInstance(PcInstance pcInstance)
         {
             pcList.Add(pcInstance);
+            int teamNo = userWinCountList.Count;
+            pcInstance.GetPcPvp().SetTeamNo(teamNo);
+            userWinCountList.Add(teamNo);
         }
+        #region 매칭 관련된 상태 Getter 메서드
+        /// <summary>
+        /// 현재 매칭의 상태 확인
+        /// </summary>
+        /// <returns></returns>
+        public Define.MATCH_STATE GetMatchState()
+        {
+            return matchState;
+        }
+        /// <summary>
+        /// 매칭 대기중인 유저의 상태 확인
+        /// </summary>
+        public Define.MATCH_READY_STATE CheckUserWaitState()
+        {
+            int acceptCount = 0;    // 매칭 수락을 한 유저 수
+            foreach (PcInstance pc in pcList)
+            {
+                if (pc.GetPcPvp().GetMatchAccept())
+                {
+                    acceptCount++;
+                }
+            }
+
+            if (acceptCount == pcList.Count) // 유저 리스트 수와 매칭 수락한 유저 수가 같은 경우
+            {
+                return Define.MATCH_READY_STATE.MATCH_START_SUCCESS;
+            }
+            else
+            {
+                if (CheckWaitTime()) // 대기 시간이 남아있는지 확인
+                {
+                    return Define.MATCH_READY_STATE.MATCH_START_WAIT;
+                }
+                else
+                {
+                    return Define.MATCH_READY_STATE.MATCH_START_FAILED;
+                }
+            }
+        }
+        /// <summary>
+        /// 현재 진행중인 라운드 번호 반환하는 함수
+        /// </summary>
+        /// <returns></returns>
+        public int GetMatchRound()
+        {
+            return matchRound;
+        }
+        #endregion
+
+        #region 매칭 대기 ~ 시작
         /// <summary>
         /// 매칭이 성사 되었음을 클라이언트에 보냄
         /// </summary>
@@ -38,15 +102,17 @@ namespace SimulFactory.Game.Matching
         /// <summary>
         /// 매칭 시작에 대한 결과를 클라이언트에 보냄
         /// </summary>
-        public void SendMatchStartResult(Define.MATCH_STATE result)
+        public void SendMatchStartResult(Define.MATCH_READY_STATE result)
         {
             Dictionary<byte, object> param = new Dictionary<byte, object>();
-            if(result == Define.MATCH_STATE.MATCH_START_SUCCESS)
+            if (result == Define.MATCH_READY_STATE.MATCH_START_SUCCESS)
             {
                 param.Add(0, 0);    // 성공인 경우
                 foreach (PcInstance pc in pcList)
                 {
-                    pc.SendPacket((byte)Define.EVENT_CODE.MatchingResponseS,param);
+                    matchState = Define.MATCH_STATE.MATCH_START;
+                    mt.ThreadStart(Define.MATCH_SYSTEM_DELAY_TIME);
+                    pc.SendPacket((byte)Define.EVENT_CODE.MatchingResponseS, param);
                 }
             }
             else
@@ -55,41 +121,11 @@ namespace SimulFactory.Game.Matching
                 foreach (PcInstance pc in pcList)
                 {
                     pc.SendPacket((byte)Define.EVENT_CODE.MatchingResponseS, param);
-                    if (pc.GetPcPvp().MatchAccept)
+                    if (pc.GetPcPvp().GetMatchAccept())
                     {
                         // 수락을 한 유저는 실패를 했지만 다시 매칭을 이어갈 수 있도록 넣어줌
                         MatchSystem.GetInstance().AddPcInsatnce(pc);
                     }
-                }    
-            }
-        }
-        /// <summary>
-        /// 매칭 대기중인 유저의 상태 확인
-        /// </summary>
-        public Define.MATCH_STATE CheckUserWaitState()
-        {
-            int acceptCount = 0;    // 매칭 수락을 한 유저 수
-            foreach (PcInstance pc in pcList)
-            {
-                if (pc.GetPcPvp().MatchAccept)
-                {
-                    acceptCount++;
-                }
-            }
-
-            if (acceptCount == pcList.Count) // 유저 리스트 수와 매칭 수락한 유저 수가 같은 경우
-            {
-                return Define.MATCH_STATE.MATCH_START_SUCCESS;
-            }
-            else
-            {
-                if(CheckWaitTime()) // 대기 시간이 남아있는지 확인
-                {
-                    return Define.MATCH_STATE.MATCH_START_WAIT;
-                }
-                else
-                {
-                    return Define.MATCH_STATE.MATCH_START_FAILED;
                 }
             }
         }
@@ -105,6 +141,44 @@ namespace SimulFactory.Game.Matching
             }
             matchUserWaitTime += Define.MATCH_SYSTEM_DELAY_TIME;    // 유저를 대기하는 시간을 증가시킴
             return true;    // 매칭 대기 시간이 남은 경우
+        }
+        #endregion
+
+        #region 매칭 진행 중 로직
+
+        private int CheckRoundResult()
+        {
+            return 0;
+        }
+        private void EndRound()
+        {
+
+        }
+        #endregion
+
+        private void EndGame()
+        {
+            int winUserNo = 0;
+            if (userWinCountList[0] > userWinCountList[1])
+            {
+                winUserNo = 0;
+            }
+            else
+            {
+                winUserNo = 1;
+            }
+
+            foreach(PcInstance pc in pcList)
+            {
+                if (winUserNo == pc.GetPcPvp().GetTeamNo())
+                {
+                    S_MatchingResult.MatchingResultS(pc, true);
+                }
+                else
+                {
+                    S_MatchingResult.MatchingResultS(pc, false);
+                }
+            }
         }
     }
 }

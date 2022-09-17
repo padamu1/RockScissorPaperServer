@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Security.Cryptography;
 
-namespace SimulFactory.Core.Util
+namespace SimulFactory.Core.Sql
 {
     public class Util
     {

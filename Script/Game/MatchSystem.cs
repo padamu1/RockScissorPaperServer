@@ -10,13 +10,13 @@ namespace SimulFactory.Game
         {
             return instanceHolder.Value;
         }
-        private List<PcInstance> matchList;
+        private List<PcInstance> matchSearchList;
         private List<PcInstance> addMatchList;
         private List<PcInstance> removeMatchList;
         private List<Match> readyMatchList;
         public MatchSystem()
         {
-            matchList = new List<PcInstance>();
+            matchSearchList = new List<PcInstance>();
             addMatchList = new List<PcInstance>();
             removeMatchList = new List<PcInstance>();
             readyMatchList = new List<Match>();
@@ -29,7 +29,7 @@ namespace SimulFactory.Game
                 {
                     foreach(PcInstance instance in addMatchList)
                     {
-                        matchList.Add(instance);
+                        matchSearchList.Add(instance);
                     }
                     addMatchList.Clear();
                 }
@@ -37,23 +37,23 @@ namespace SimulFactory.Game
                 {
                     foreach (PcInstance instance in removeMatchList)
                     {
-                        matchList.Remove(instance);
+                        matchSearchList.Remove(instance);
                     }
                     removeMatchList.Clear();
                 }
-                lock(matchList)
+                lock(matchSearchList)
                 {
                     // 매칭 전 정렬
-                    matchList.OrderBy(x => x.GetPcPvp().Rating);
+                    matchSearchList.OrderBy(x => x.GetPcPvp().GetRating());
                     // 실제 로직 처리
-                    for (int count = 0; count < matchList.Count - 1;)
+                    for (int count = 0; count < matchSearchList.Count - 1;)
                     {
                         //bool matchSuccess = false;
-                        if (count + 1 <= matchList.Count - 1)
+                        if (count + 1 <= matchSearchList.Count - 1)
                         {
                             Match match = new Match();
-                            match.AddPcInstance(matchList[count]);
-                            match.AddPcInstance(matchList[count + 1]);
+                            match.AddPcInstance(matchSearchList[count]);
+                            match.AddPcInstance(matchSearchList[count + 1]);
                             match.SendMatchSuccess();
                             count += 2;
                         }
@@ -67,15 +67,22 @@ namespace SimulFactory.Game
                 {
                     foreach (Match match in readyMatchList)
                     {
-                        switch (match.CheckUserWaitState())
+                        switch(match.GetMatchState())
                         {
-                            case Define.MATCH_STATE.MATCH_START_WAIT:   // 매칭 시작 대기중
+                            case Define.MATCH_STATE.MATCH_READY: // 매칭 대기 상태
+                                switch (match.CheckUserWaitState())
+                                {
+                                    case Define.MATCH_READY_STATE.MATCH_START_WAIT:   // 매칭 시작 대기중
+                                        break;
+                                    case Define.MATCH_READY_STATE.MATCH_START_SUCCESS:// 매칭 시작 성공
+                                        match.SendMatchStartResult(Define.MATCH_READY_STATE.MATCH_START_SUCCESS);
+                                        break;
+                                    case Define.MATCH_READY_STATE.MATCH_START_FAILED: // 매칭 시작 실패
+                                        match.SendMatchStartResult(Define.MATCH_READY_STATE.MATCH_START_FAILED);
+                                        break;
+                                }
                                 break;
-                            case Define.MATCH_STATE.MATCH_START_SUCCESS:// 매칭 시작 성공
-                                match.SendMatchStartResult(Define.MATCH_STATE.MATCH_START_SUCCESS);
-                                break;
-                            case Define.MATCH_STATE.MATCH_START_FAILED: // 매칭 시작 실패
-                                match.SendMatchStartResult(Define.MATCH_STATE.MATCH_START_FAILED);
+                            case Define.MATCH_STATE.MATCH_START: // 매칭 진행중 상태
                                 break;
                         }
                     }

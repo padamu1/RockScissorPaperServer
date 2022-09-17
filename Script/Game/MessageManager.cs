@@ -1,7 +1,7 @@
 ﻿using SimulFactory.Common.Bean;
 using SimulFactory.Common.Instance;
 using SimulFactory.Core;
-using SimulFactory.Core.Util;
+using SimulFactory.Core.Sql;
 using SimulFactory.Game.Event;
 
 namespace SimulFactory.Game

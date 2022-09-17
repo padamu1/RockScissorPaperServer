@@ -2,23 +2,22 @@
 using SimulFactory.Common.Instance;
 using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SimulFactory.Core.Util
+namespace SimulFactory.Core.Sql
 {
-    public class UserDBSqlUtil
+    public class PcPvpSql
     {
-        public static bool InsertUserSql(PcInstance pc)
+        public static bool InsertUserPvpSql(PcInstance pc)
         {
             int result = 0; // 실패로 정의
 
             // 사용할 커넥션 가져오기
             using (MySqlConnection connection = SqlController.GetMySqlConnection())
             {
-                string insertQuery = "INSERT INTO user_db(user_no,user_name) VALUES(@user_no, @user_name)";
+                string insertQuery = "INSERT INTO user_pvp_db(user_no, rating, win_count, defeat_count) VALUES(@user_no, @rating, @win_count, @defeat_count)";
                 try //예외 처리
                 {
                     // 커넥션 연결
@@ -29,7 +28,9 @@ namespace SimulFactory.Core.Util
 
                     // 파라메터 정의
                     command.Parameters.AddWithValue("@user_no", pc.GetUserData().UserNo);
-                    command.Parameters.AddWithValue("@user_name", pc.GetUserData().UserName);
+                    command.Parameters.AddWithValue("@rating", pc.GetPcPvp().GetRating());
+                    command.Parameters.AddWithValue("@win_count", pc.GetPcPvp().GetWinCount());
+                    command.Parameters.AddWithValue("@defeat_count", pc.GetPcPvp().GetDefeatCount());
 
                     result = command.ExecuteNonQuery(); // 성공시 1 들어감
                 }
@@ -50,18 +51,13 @@ namespace SimulFactory.Core.Util
 
             return result >= 1;
         }
-        public static bool UpdateSql()
-        {
-
-            return false;
-        }
-        public static bool CheckUserNo(PcInstance pc)
+        public static bool GetUserPvp(PcInstance pc)
         {
             bool result = false; // 실패로 선언
             // 사용할 커넥션 가져오기
             using (MySqlConnection connection = SqlController.GetMySqlConnection())
             {
-                string insertQuery = "Select * From user_db Where user_no=@userNo";
+                string insertQuery = "Select * From user_pvp_db Where user_no=@userNo";
                 try //예외 처리
                 {
                     // 커넥션 연결
@@ -74,10 +70,12 @@ namespace SimulFactory.Core.Util
                     command.Parameters.AddWithValue("@userNo", pc.GetUserData().UserNo);
 
                     MySqlDataReader dr = command.ExecuteReader();
-                    if(dr.Read())
+                    if (dr.Read())
                     {
                         result = true;
-                        pc.GetUserData().UserName = dr.GetString("user_name");
+                        pc.GetPcPvp().SetRating(dr.GetInt32("rating"));
+                        pc.GetPcPvp().SetWinCount(dr.GetInt32("win_count"));
+                        pc.GetPcPvp().SetDefeatCount(dr.GetInt32("defeat_count"));
                     }
                     else
                     {

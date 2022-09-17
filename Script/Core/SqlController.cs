@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using System.Data;
 using System;
 using MySql.Data.MySqlClient;
-using SimulFactory.Core.Util;
+using SimulFactory.Core.Sql;
 
 namespace SimulFactory.Core
 {
