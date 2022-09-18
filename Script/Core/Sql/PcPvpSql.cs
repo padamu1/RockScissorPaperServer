@@ -90,5 +90,39 @@ namespace SimulFactory.Core.Sql
             }
             return result;
         }
+        public static bool UpdateUserPvpSql(PcInstance pc)
+        {
+            // UPDATE[테이블] SET[열] = '변경할값' WHERE[조건]
+            int result = 0;
+
+            // 사용할 커넥션 가져오기
+            using (MySqlConnection connection = SqlController.GetMySqlConnection())
+            {
+                string insertQuery = "Update user_pvp_db Set rating=@rating, win_count=@winCount, defeat_count=@defeatCount Where user_no=@userNo";
+                try //예외 처리
+                {
+                    // 커넥션 연결
+                    connection.Open();
+
+                    // 커맨드 설정
+                    MySqlCommand command = new MySqlCommand(insertQuery, connection);
+
+                    // 파라메터 정의
+                    command.Parameters.AddWithValue("@userNo", pc.GetUserData().UserNo);
+                    command.Parameters.AddWithValue("@winCount", pc.GetPcPvp().GetWinCount());
+                    command.Parameters.AddWithValue("@defeatCount", pc.GetPcPvp().GetDefeatCount());
+                    command.Parameters.AddWithValue("@rating", pc.GetPcPvp().GetRating());
+
+                    result = command.ExecuteNonQuery(); // 성공시 1 들어감
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("실패");
+                    Console.WriteLine(ex.ToString());
+                }
+            }
+
+            return result >= 1;
+        }
     }
 }
