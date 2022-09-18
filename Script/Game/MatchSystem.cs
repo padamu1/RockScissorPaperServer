@@ -104,5 +104,12 @@ namespace SimulFactory.Game
                 removeMatchList.Add(pcInstance);
             }
         }
+        public void RemoveReadyMatchLit(Match match)
+        {
+            lock(readyMatchList)
+            {
+                readyMatchList.Remove(match);
+            }
+        }
     }
 }

@@ -260,6 +260,7 @@ namespace SimulFactory.Game.Matching
                     S_MatchingResult.MatchingResultS(pc, false);
                 }
             }
+            MatchSystem.GetInstance().RemoveReadyMatchLit(this);
 
             // 스레드 종료
             ThreadManager.GetInstance().RemoveWorker(mt);
