@@ -1,6 +1,7 @@
 ﻿using SimulFactory.Common.Bean;
 using SimulFactory.Common.Instance;
 using SimulFactory.Common.Thread;
+using SimulFactory.Core;
 using SimulFactory.Game.Event;
 using System;
 using System.Collections.Generic;
@@ -13,20 +14,22 @@ namespace SimulFactory.Game.Matching
     public class Match
     {
         private List<PcInstance> pcList;            // 현재 매칭된 유저가 들어가 있는 객체
-        private int matchUserWaitTime;              // 유저가 매칭을 수락하는 것을 기다린 시간
+        private int matchUserWaitTime;              // 유저의 행동을 기다린 시간
         private MatchThread mt;                     // 매칭 쓰레드
         private Define.MATCH_STATE matchState;      // 현재 매치 상태
         private int matchRound;                     // 현재 진행중인 매치 라운드
         private long winUserNo;                     // 라운드에서 승리한 유저 넘버
-        private List<int> userWinCountList;         // 각 유저가 승리한 카운트
+        private Dictionary<int,int> userWinCountDic;// 각 유저가 승리한 카운트
+        private Dictionary<int, double> dmgDic;     // 데미지 게산을 위한 임시 보관소
         public Match()
         {
             matchUserWaitTime = 0;
             matchRound = 0;
             pcList = new List<PcInstance>();
-            userWinCountList = new List<int>();
+            userWinCountDic = new Dictionary<int, int>();
             mt = new MatchThread(this);
             matchState = Define.MATCH_STATE.MATCH_READY;
+            dmgDic = new Dictionary<int, double>();
         }
         /// <summary>
         /// 매칭에 참여할 유저 추가
@@ -34,10 +37,11 @@ namespace SimulFactory.Game.Matching
         public void AddPcInstance(PcInstance pcInstance)
         {
             pcList.Add(pcInstance);
-            int teamNo = userWinCountList.Count;
+            int teamNo = userWinCountDic.Count+1;
             pcInstance.GetPcPvp().SetTeamNo(teamNo);
-            userWinCountList.Add(teamNo);
+            userWinCountDic.Add(teamNo,0);
         }
+
         #region 매칭 관련된 상태 Getter 메서드
         /// <summary>
         /// 현재 매칭의 상태 확인
@@ -111,6 +115,7 @@ namespace SimulFactory.Game.Matching
                 foreach (PcInstance pc in pcList)
                 {
                     matchState = Define.MATCH_STATE.MATCH_START;
+                    matchUserWaitTime = 0;
                     mt.ThreadStart(Define.MATCH_SYSTEM_DELAY_TIME);
                     pc.SendPacket((byte)Define.EVENT_CODE.MatchingResponseS, param);
                 }
@@ -130,7 +135,7 @@ namespace SimulFactory.Game.Matching
             }
         }
         /// <summary>
-        /// 현재 매칭 대기 중 기다린 시간 확인
+        /// 유저가 매칭 수락하는 것을 기다림
         /// </summary>
         /// <returns></returns>
         private bool CheckWaitTime()
@@ -145,29 +150,105 @@ namespace SimulFactory.Game.Matching
         #endregion
 
         #region 매칭 진행 중 로직
-
-        private int CheckRoundResult()
+        /// <summary>
+        /// 진행중인 매치 라운드 확인
+        /// </summary>
+        public void MatchRoundChecker()
         {
-            return 0;
-        }
-        private void EndRound()
-        {
-
-        }
-        #endregion
-
-        private void EndGame()
-        {
-            int winUserNo = 0;
-            if (userWinCountList[0] > userWinCountList[1])
+            if(matchRound > Define.MAX_ROUND_COUNT)
             {
-                winUserNo = 0;
+                EndGame();
             }
             else
             {
-                winUserNo = 1;
+                if(matchUserWaitTime++ > Define.MATCH_USER_WAIT_TIME)
+                {
+                    EndRound(-1);
+                    return;
+                }
+                else
+                {
+                    EndRound(CheckRoundResult());
+                }
+            }
+        }
+        /// <summary>
+        /// 라운드의 결과를 확인 0 : 결과 제출이 안됨, 1 : 1p 승리, 2 : 2p 승리
+        /// </summary>
+        /// <returns>승리한 유저 넘버</returns>
+        private int CheckRoundResult()
+        {
+            if(dmgDic.Count == 2)
+            {
+                int winUserNo = 1;
+                // 데미지 비교
+                if (dmgDic[1] < dmgDic[2])
+                {
+                    winUserNo = 2;
+                }
+                // 다음 계산을 위해 초기화
+                dmgDic.Clear();
+                return winUserNo;
+            }
+            return 0;
+        }
+        /// <summary>
+        /// 라운드 종료시 동작 메서드 - winUserNo 가 0이 들어온 경우 다음 라운드로 진행 안함, -1이 들어온 경우 플레이어 누군가가 제출을 안함
+        /// </summary>
+        /// <param name="winUserNo"></param>
+        private void EndRound(int winUserNo = 0)
+        {
+            if(winUserNo == 0)
+            {
+                return;
+            }
+            if(winUserNo == -1)
+            {
+                // 제출을 한 유저만 승리 처리 - 인터넷 상태가 안좋은 유저의 경우 자동 제출이 안됐을 것으로 가정
+                if(!dmgDic.ContainsKey(1))
+                {
+                    userWinCountDic[2] = Define.MAX_ROUND_COUNT;
+                }
+                else
+                {
+                    userWinCountDic[1] = Define.MAX_ROUND_COUNT;
+                }
+                EndGame();
+                return;
             }
 
+            userWinCountDic[winUserNo]++;
+            matchRound++;
+        }
+        /// <summary>
+        /// 각 유저의 데미지 설정
+        /// </summary>
+        /// <param name="teamNo"></param>
+        /// <param name="dmg"></param>
+        public void SetDmg(int teamNo, double dmg)
+        {
+            dmgDic.Add(teamNo, dmg);
+        }
+        #endregion
+
+        #region 매칭 종료 후 로직
+        /// <summary>
+        /// 게임 종료시 호출된 메서드
+        /// </summary>
+        private void EndGame()
+        {
+            // 승리한 유저 설정
+            int winUserNo = 1;
+            if (userWinCountDic[1] > userWinCountDic[2])
+            {
+                winUserNo = 1;
+            }
+            else
+            {
+                winUserNo = 2;
+            }
+
+            // 결과 각 유저에게 전송
             foreach(PcInstance pc in pcList)
             {
                 if (winUserNo == pc.GetPcPvp().GetTeamNo())
@@ -179,6 +260,10 @@ namespace SimulFactory.Game.Matching
                     S_MatchingResult.MatchingResultS(pc, false);
                 }
             }
+
+            // 스레드 종료
+            ThreadManager.GetInstance().RemoveWorker(mt);
         }
+        #endregion
     }
 }

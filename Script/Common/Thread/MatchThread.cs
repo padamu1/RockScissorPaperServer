@@ -18,7 +18,7 @@ namespace SimulFactory.Common.Thread
         }
         protected override void ThreadAction()
         {
-            base.ThreadAction();
+            match.MatchRoundChecker();
         }
         public override ThreadBase Clone()
         {
