@@ -22,8 +22,8 @@ namespace SimulFactory.Core.Sql
                 }
                 DataFormat? dataFormat = JsonConvert.DeserializeObject<DataFormat>(data);
 
-                Console.WriteLine(data);
-                Console.WriteLine(dataFormat?.eventCode);
+                //Console.WriteLine(data);
+                //Console.WriteLine(dataFormat?.eventCode);
                 return dataFormat;
             }
             catch (Exception exception)

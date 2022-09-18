@@ -104,7 +104,7 @@ namespace SimulFactory.Core.Sql
                     if(dr.Read())
                     {
                         result = true;
-                        pc.GetUserData().UserName = dr.GetString("user_name");
+                        pc.GetUserData().UserName = "";//dr.GetString("user_name");
                     }
                     else
                     {

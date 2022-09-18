@@ -29,6 +29,7 @@ namespace SimulFactory.Game
                 case (byte)Define.EVENT_CODE.MatchingResponseC:
                     break;
                 case (byte)Define.EVENT_CODE.MatchingCancelC:
+                    C_MatchingCancel.MatchingCancel(pc);
                     break;
             }
         }

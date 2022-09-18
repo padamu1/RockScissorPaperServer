@@ -1,0 +1,20 @@
+﻿using SimulFactory.Common.Bean;
+using SimulFactory.Common.Instance;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace SimulFactory.Game.Event
+{
+    public class S_MatchingSuccess
+    {
+        public static void MatchingSuccessS(PcInstance pc)
+        {
+            Dictionary<byte, object> param = new Dictionary<byte, object>();
+            Console.WriteLine("매칭 성공 메시지 보냄");
+            pc.SendPacket((byte)Define.EVENT_CODE.MatchingSuccessS, param);
+        }
+    }
+}

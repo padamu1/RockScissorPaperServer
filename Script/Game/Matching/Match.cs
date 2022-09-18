@@ -13,6 +13,7 @@ namespace SimulFactory.Game.Matching
 {
     public class Match
     {
+        private bool sendMatchSuccessMessage;       // 매칭 성공 메시지를 보냈는지 확인
         private List<PcInstance> pcList;            // 현재 매칭된 유저가 들어가 있는 객체
         private int matchUserWaitTime;              // 유저의 행동을 기다린 시간
         private MatchThread mt;                     // 매칭 쓰레드
@@ -23,6 +24,7 @@ namespace SimulFactory.Game.Matching
         private Dictionary<int, double> dmgDic;     // 데미지 게산을 위한 임시 보관소
         public Match()
         {
+            sendMatchSuccessMessage = false;
             matchUserWaitTime = 0;
             matchRound = 0;
             pcList = new List<PcInstance>();
@@ -56,6 +58,12 @@ namespace SimulFactory.Game.Matching
         /// </summary>
         public Define.MATCH_READY_STATE CheckUserWaitState()
         {
+            if(!sendMatchSuccessMessage)
+            {
+                sendMatchSuccessMessage = true;
+                SendMatchSuccess();
+                return Define.MATCH_READY_STATE.MATCH_START_BEFORE_WAIT;
+            }
             int acceptCount = 0;    // 매칭 수락을 한 유저 수
             foreach (PcInstance pc in pcList)
             {
@@ -95,12 +103,11 @@ namespace SimulFactory.Game.Matching
         /// <summary>
         /// 매칭이 성사 되었음을 클라이언트에 보냄
         /// </summary>
-        public void SendMatchSuccess()
+        private void SendMatchSuccess()
         {
-            Dictionary<byte, object> param = new Dictionary<byte, object>();
             foreach (PcInstance pc in pcList)
             {
-                pc.SendPacket((byte)Define.EVENT_CODE.MatchingSuccessS, param);
+                S_MatchingSuccess.MatchingSuccessS(pc);
             }
         }
         /// <summary>
@@ -131,7 +138,12 @@ namespace SimulFactory.Game.Matching
                         // 수락을 한 유저는 실패를 했지만 다시 매칭을 이어갈 수 있도록 넣어줌
                         MatchSystem.GetInstance().AddPcInsatnce(pc);
                     }
+                    else
+                    {
+                        MatchSystem.GetInstance().RemovePcInstance(pc);
+                    }
                 }
+                MatchSystem.GetInstance().RemoveReadyMatchList(this);
             }
         }
         /// <summary>
@@ -260,7 +272,7 @@ namespace SimulFactory.Game.Matching
                     S_MatchingResult.MatchingResultS(pc, false);
                 }
             }
-            MatchSystem.GetInstance().RemoveReadyMatchLit(this);
+            MatchSystem.GetInstance().RemoveReadyMatchList(this);
 
             // 스레드 종료
             ThreadManager.GetInstance().RemoveWorker(mt);

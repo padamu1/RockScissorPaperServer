@@ -63,7 +63,7 @@ namespace SimulFactory.Core.Sql
         public static void CheckUserIdValid(PcInstance pc, byte[] userNo)
         {
             // DB 내용과 비교
-            long newUserNo = ByteUtillity.BytesToLong(userNo);
+            long newUserNo = Math.Abs(ByteUtillity.BytesToLong(userNo));
             pc.GetUserData().UserNo = newUserNo;
             if (UserDBSql.InsertUserSql(pc))
             {

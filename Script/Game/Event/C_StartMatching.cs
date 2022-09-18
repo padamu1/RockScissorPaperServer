@@ -7,6 +7,7 @@ namespace SimulFactory.Game.Event
         public static void StartMatchingC(PcInstance pc)
         {
             MatchSystem.GetInstance().AddPcInsatnce(pc);
+            
         }
     }
 }

@@ -13,11 +13,12 @@ namespace SimulFactory.Game.Event
     {
         public static void LoginS(PcInstance pc,bool result)
         {
-            Dictionary<byte, object> dic = new Dictionary<byte, object>();
+            Dictionary<byte, object> dic = new Dictionary<byte, object>(); // 주석
             dic.Add(0, result);
             if(result)
             {
                 dic.Add(1, pc.GetUserData().UserNo);
+                dic.Add(2, pc.GetUserData().UserName);
             }
             pc.SendPacket((byte)Define.EVENT_CODE.LoginS, dic);
         }
