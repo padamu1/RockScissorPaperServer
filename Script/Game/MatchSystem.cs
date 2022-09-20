@@ -82,26 +82,31 @@ namespace SimulFactory.Game
                     {
                         switch (match.GetMatchState())
                         {
-                            case Define.MATCH_STATE.MATCH_READY: // 매칭 대기 상태
+                            case Define.MATCH_STATE.MATCH_READY:
+                                // 매칭 대기 상태
                                 switch (match.CheckUserWaitState())
                                 {
                                     case Define.MATCH_READY_STATE.MATCH_START_BEFORE_WAIT:
                                         Console.WriteLine("매칭 성공 시작 대기중 ...");
                                         break;
-                                    case Define.MATCH_READY_STATE.MATCH_START_WAIT:   // 매칭 시작 대기중
+                                    case Define.MATCH_READY_STATE.MATCH_START_WAIT:   
+                                        // 매칭 시작 대기중
                                         Console.WriteLine("매칭 시작 대기중 ...");
                                         break;
-                                    case Define.MATCH_READY_STATE.MATCH_START_SUCCESS:// 매칭 시작 성공
+                                    case Define.MATCH_READY_STATE.MATCH_START_SUCCESS:
+                                        // 매칭 시작 성공
                                         match.SendMatchStartResult(Define.MATCH_READY_STATE.MATCH_START_SUCCESS);
                                         Console.WriteLine("매칭 성공 ...");
                                         break;
-                                    case Define.MATCH_READY_STATE.MATCH_START_FAILED: // 매칭 시작 실패
+                                    case Define.MATCH_READY_STATE.MATCH_START_FAILED: 
+                                        // 매칭 시작 실패
                                         match.SendMatchStartResult(Define.MATCH_READY_STATE.MATCH_START_FAILED);
                                         Console.WriteLine("매칭 실패 ...");
                                         break;
                                 }
                                 break;
-                            case Define.MATCH_STATE.MATCH_START: // 매칭 진행중 상태
+                            case Define.MATCH_STATE.MATCH_START: 
+                                // 매칭 진행중 상태
                                 break;
                         }
                     }
