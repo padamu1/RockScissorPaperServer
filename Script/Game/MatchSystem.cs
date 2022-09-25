@@ -1,5 +1,6 @@
 ﻿using SimulFactory.Common.Bean;
 using SimulFactory.Common.Instance;
+using SimulFactory.Game.Event;
 using SimulFactory.Game.Matching;
 namespace SimulFactory.Game
 {
@@ -131,6 +132,7 @@ namespace SimulFactory.Game
                 if (matchSearchList.Contains(pcInstance))
                 {
                     removeMatchList.Add(pcInstance);
+                    S_MatchingCancel.MatchingCancelS(pcInstance);
                 }
             }
         }

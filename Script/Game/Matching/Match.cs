@@ -3,11 +3,6 @@ using SimulFactory.Common.Instance;
 using SimulFactory.Common.Thread;
 using SimulFactory.Core;
 using SimulFactory.Game.Event;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SimulFactory.Game.Matching
 {
@@ -21,7 +16,7 @@ namespace SimulFactory.Game.Matching
         private int matchRound;                     // 현재 진행중인 매치 라운드
         private long winUserNo;                     // 라운드에서 승리한 유저 넘버
         private Dictionary<int,int> userWinCountDic;// 각 유저가 승리한 카운트
-        private Dictionary<int, double> dmgDic;     // 데미지 게산을 위한 임시 보관소
+        private Dictionary<int, int> roundResponseDic;     // 데미지 게산을 위한 임시 보관소
         public Match()
         {
             sendMatchSuccessMessage = false;
@@ -31,17 +26,19 @@ namespace SimulFactory.Game.Matching
             userWinCountDic = new Dictionary<int, int>();
             mt = new MatchThread(this);
             matchState = Define.MATCH_STATE.MATCH_READY;
-            dmgDic = new Dictionary<int, double>();
+            roundResponseDic = new Dictionary<int, int>();
         }
         /// <summary>
         /// 매칭에 참여할 유저 추가
         /// </summary>
         public void AddPcInstance(PcInstance pcInstance)
         {
-            pcList.Add(pcInstance);
             int teamNo = userWinCountDic.Count+1;
             pcInstance.GetPcPvp().SetTeamNo(teamNo);
+            pcInstance.GetPcPvp().SetMatchAccept(false);
+            pcInstance.GetPcPvp().SetMatch(this);
             userWinCountDic.Add(teamNo,0);
+            pcList.Add(pcInstance);
         }
 
         #region 매칭 관련된 상태 Getter 메서드
@@ -115,24 +112,21 @@ namespace SimulFactory.Game.Matching
         /// </summary>
         public void SendMatchStartResult(Define.MATCH_READY_STATE result)
         {
-            Dictionary<byte, object> param = new Dictionary<byte, object>();
             if (result == Define.MATCH_READY_STATE.MATCH_START_SUCCESS)
             {
-                param.Add(0, 0);    // 성공인 경우
+                matchState = Define.MATCH_STATE.MATCH_START;
+                matchUserWaitTime = 0;
+                mt.ThreadStart(Define.MATCH_SYSTEM_DELAY_TIME);
                 foreach (PcInstance pc in pcList)
                 {
-                    matchState = Define.MATCH_STATE.MATCH_START;
-                    matchUserWaitTime = 0;
-                    mt.ThreadStart(Define.MATCH_SYSTEM_DELAY_TIME);
-                    pc.SendPacket((byte)Define.EVENT_CODE.MatchingResponseS, param);
+                    S_MatchingResponse.MatchingReponseS(pc, 0);
                 }
             }
             else
             {
-                param.Add(0, 1);    // 실패인 경우
                 foreach (PcInstance pc in pcList)
                 {
-                    pc.SendPacket((byte)Define.EVENT_CODE.MatchingResponseS, param);
+                    S_MatchingResponse.MatchingReponseS(pc, 1);
                     if (pc.GetPcPvp().GetMatchAccept())
                     {
                         // 수락을 한 유저는 실패를 했지만 다시 매칭을 이어갈 수 있도록 넣어줌
@@ -190,34 +184,80 @@ namespace SimulFactory.Game.Matching
         /// <returns>승리한 유저 넘버</returns>
         private int CheckRoundResult()
         {
-            if(dmgDic.Count == 2)
+            if(roundResponseDic.Count == 2)
             {
-                int winUserNo = 1;
-                // 데미지 비교
-                if (dmgDic[1] < dmgDic[2])
+                int winTeamNo = 1;
+
+                switch ((Define.ROCK_SCISSOR_PAPER)roundResponseDic[1])
                 {
-                    winUserNo = 2;
+                    case Define.ROCK_SCISSOR_PAPER.Rock:
+                        switch((Define.ROCK_SCISSOR_PAPER)roundResponseDic[2])
+                        {
+                            case Define.ROCK_SCISSOR_PAPER.Rock:
+                                winTeamNo = 3;
+                                break;
+                            case Define.ROCK_SCISSOR_PAPER.Scissor:
+                                winTeamNo = 1;
+                                break;
+                            case Define.ROCK_SCISSOR_PAPER.Paper:
+                                winTeamNo = 2;
+                                break;
+                        }
+                        break;
+                    case Define.ROCK_SCISSOR_PAPER.Scissor:
+                        switch ((Define.ROCK_SCISSOR_PAPER)roundResponseDic[2])
+                        {
+                            case Define.ROCK_SCISSOR_PAPER.Rock:
+                                winTeamNo = 2;
+                                break;
+                            case Define.ROCK_SCISSOR_PAPER.Scissor:
+                                winTeamNo = 3;
+                                break;
+                            case Define.ROCK_SCISSOR_PAPER.Paper:
+                                winTeamNo = 1;
+                                break;
+                        }
+                        break;
+                    case Define.ROCK_SCISSOR_PAPER.Paper:
+                        switch ((Define.ROCK_SCISSOR_PAPER)roundResponseDic[2])
+                        {
+                            case Define.ROCK_SCISSOR_PAPER.Rock:
+                                winTeamNo = 1;
+                                break;
+                            case Define.ROCK_SCISSOR_PAPER.Scissor:
+                                winTeamNo = 2;
+                                break;
+                            case Define.ROCK_SCISSOR_PAPER.Paper:
+                                winTeamNo = 3;
+                                break;
+                        }
+                        break;
                 }
-                // 다음 계산을 위해 초기화
-                dmgDic.Clear();
-                return winUserNo;
+                // 데미지 비교
+                if (roundResponseDic[1] < roundResponseDic[2])
+                {
+                }
+                return winTeamNo;
             }
             return 0;
         }
         /// <summary>
-        /// 라운드 종료시 동작 메서드 - winUserNo 가 0이 들어온 경우 다음 라운드로 진행 안함, -1이 들어온 경우 플레이어 누군가가 제출을 안함
+        /// 라운드 종료시 동작 메서드 - winTeamNo 가 0이 들어온 경우 다음 라운드로 진행 안함, -1이 들어온 경우 플레이어 누군가가 제출을 안함
         /// </summary>
-        /// <param name="winUserNo"></param>
-        private void EndRound(int winUserNo = 0)
+        /// <param name="winTeamNo"></param>
+        private void EndRound(int winTeamNo = 0)
         {
-            if(winUserNo == 0)
+            Console.WriteLine("매칭 결과 확인");
+            if (winTeamNo == 0)
             {
+                // 다음 라운드 진행 안함
                 return;
             }
-            if(winUserNo == -1)
+            else if(winTeamNo == -1)
             {
+                Console.WriteLine("한 쪽 연결 끊김");
                 // 제출을 한 유저만 승리 처리 - 인터넷 상태가 안좋은 유저의 경우 자동 제출이 안됐을 것으로 가정
-                if(!dmgDic.ContainsKey(1))
+                if (!roundResponseDic.ContainsKey(1))
                 {
                     userWinCountDic[2] = Define.MAX_ROUND_COUNT;
                 }
@@ -228,18 +268,49 @@ namespace SimulFactory.Game.Matching
                 EndGame();
                 return;
             }
+            else if(winTeamNo == 3)
+            {
+                Console.WriteLine("무승부");
+                // 두 플레이어 모두 승리 처리
+                userWinCountDic[1]++;
+                userWinCountDic[2]++;
+                matchRound++;
 
-            userWinCountDic[winUserNo]++;
-            matchRound++;
+                // 서로에게 상대방의 결과를 보냄
+                S_UserBattleResponse.UserBattleResponseS(pcList[0], roundResponseDic[pcList[1].GetPcPvp().GetTeamNo()]);
+                S_UserBattleResponse.UserBattleResponseS(pcList[1], roundResponseDic[pcList[0].GetPcPvp().GetTeamNo()]);
+            }
+            else
+            {
+                Console.WriteLine("한명 승리");
+                userWinCountDic[winTeamNo]++;
+                matchRound++;
+                S_UserBattleResponse.UserBattleResponseS(pcList[0], roundResponseDic[pcList[1].GetPcPvp().GetTeamNo()]);
+                S_UserBattleResponse.UserBattleResponseS(pcList[1], roundResponseDic[pcList[0].GetPcPvp().GetTeamNo()]);
+            }
+            // 다음 계산을 위해 초기화
+            roundResponseDic.Clear();
+            SendRoundResult(winTeamNo);
+        }
+
+        private void SendRoundResult(int winTeamNo)
+        {
+            foreach(PcInstance pc in pcList)
+            {
+                S_RoundResult.RoundResultS(pc, winTeamNo);
+            }
         }
         /// <summary>
         /// 각 유저의 데미지 설정
         /// </summary>
         /// <param name="teamNo"></param>
         /// <param name="dmg"></param>
-        public void SetDmg(int teamNo, double dmg)
+        public void SetDmg(int teamNo, int response)
         {
-            dmgDic.Add(teamNo, dmg);
+            if(!roundResponseDic.ContainsKey(teamNo))
+            {
+                roundResponseDic.Add(teamNo, response);
+            }
         }
         #endregion
 

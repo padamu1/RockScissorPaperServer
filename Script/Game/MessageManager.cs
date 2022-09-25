@@ -1,7 +1,7 @@
 ﻿using SimulFactory.Common.Bean;
 using SimulFactory.Common.Instance;
 using SimulFactory.Core;
-using SimulFactory.Core.Sql;
+using SimulFactory.Core.Util;
 using SimulFactory.Game.Event;
 
 namespace SimulFactory.Game
@@ -27,9 +27,16 @@ namespace SimulFactory.Game
                     C_StartMatching.StartMatchingC(pc);
                     break;
                 case (byte)Define.EVENT_CODE.MatchingResponseC:
+                    C_MatchingResponse.MatchingResponseC(pc,param);
                     break;
                 case (byte)Define.EVENT_CODE.MatchingCancelC:
                     C_MatchingCancel.MatchingCancel(pc);
+                    break;
+                case (byte)Define.EVENT_CODE.PingC:
+
+                    break;
+                case (byte)Define.EVENT_CODE.UserBattleButtonClickedC:
+                    C_UserBattleButtonClicked.UserBattleButtonClickedC(pc, param);
                     break;
             }
         }

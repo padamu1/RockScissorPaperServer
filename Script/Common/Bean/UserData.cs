@@ -10,5 +10,6 @@ namespace SimulFactory.Common.Bean
     {
         public long UserNo { get; set; }
         public string UserName { get; set; }
+        public long PingTime { get; set; }
     }
 }

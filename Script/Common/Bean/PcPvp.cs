@@ -1,4 +1,5 @@
 ﻿using SimulFactory.Common.Instance;
+using SimulFactory.Game.Matching;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,10 +14,11 @@ namespace SimulFactory.Common.Bean
         private int winCount;
         private int defeatCount;
         private int matchId;
-        private double dmg;
+        private int cardNo;
         private bool matchAccept;
         private int teamNo;
         private PcInstance pc;
+        private Match match;
         public PcPvp(PcInstance pc)
         {
             this.pc = pc;
@@ -54,13 +56,13 @@ namespace SimulFactory.Common.Bean
         {
             return matchId;
         }
-        public void SetDmg(double dmg)
+        public void SetCardNo(int cardNo)
         {
-            this.dmg = dmg;
+            this.cardNo = cardNo;
         }
-        public double GetDmg()
+        public int GetCardNo()
         {
-            return dmg;
+            return cardNo;
         }
         public void SetMatchAccept(bool matchAccept)
         {
@@ -89,6 +91,14 @@ namespace SimulFactory.Common.Bean
                 defeatCount++;
             }
             this.rating += rating;
+        }
+        public void SetMatch(Match match)
+        {
+            this.match = match;
+        }
+        public Match GetMatch()
+        {
+            return match;
         }
     }
 }

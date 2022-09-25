@@ -2,7 +2,7 @@
 using System.Text;
 using System.Text.Json;
 
-namespace SimulFactory.Core.Sql
+namespace SimulFactory.Core.Util
 {
     public class DataFormat
     {

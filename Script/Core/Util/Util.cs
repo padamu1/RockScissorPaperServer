@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Security.Cryptography;
 
-namespace SimulFactory.Core.Sql
+namespace SimulFactory.Core.Util
 {
     public class Util
     {
@@ -66,6 +66,11 @@ namespace SimulFactory.Core.Sql
 
                 return null;
             }
+        }
+
+        public static long GetServerTime()
+        {
+            return DateTimeOffset.Now.ToUnixTimeMilliseconds();
         }
     }
 }

@@ -1,5 +1,5 @@
 ﻿using SimulFactory.Common.Instance;
-using SimulFactory.Core.Sql;
+using SimulFactory.Core.Util;
 
 namespace SimulFactory.Game.Event
 {

@@ -1,6 +1,7 @@
 ﻿using SimulFactory.Common.Bean;
 using SimulFactory.Common.Instance;
 using SimulFactory.Core.Sql;
+using SimulFactory.Core.Util;
 using SimulFactory.Game;
 using System.Collections;
 using System.Net.Sockets;

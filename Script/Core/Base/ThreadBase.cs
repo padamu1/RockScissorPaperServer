@@ -39,7 +39,7 @@ namespace SimulFactory.Core.Base
         /// <summary>
         /// 스레드 삭제
         /// </summary>
-        public void Dispose()
+        public virtual void Dispose()
         {
             isThreadStop = true;
             Console.WriteLine(GetThreadName() + " thread stopped");

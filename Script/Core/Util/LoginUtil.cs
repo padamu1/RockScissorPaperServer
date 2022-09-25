@@ -1,4 +1,5 @@
 ﻿using SimulFactory.Common.Instance;
+using SimulFactory.Core.Sql;
 using SimulFactory.Game.Event;
 using System;
 using System.Collections.Generic;
@@ -7,7 +8,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SimulFactory.Core.Sql
+namespace SimulFactory.Core.Util
 {
     public class LoginUtil
     {
