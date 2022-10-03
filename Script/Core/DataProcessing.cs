@@ -197,6 +197,10 @@ namespace SimulFactory.Core
         public void Dispose()
         {
             Console.WriteLine(pc?.GetUserData().UserName+" Client Disconnected");
+
+            // pc 자원 먼저 해제
+            pc.Dispose();
+
             targetClient.Close();
             targetClient.Dispose(); //모든 소켓에 관련된 자원 해제
         }

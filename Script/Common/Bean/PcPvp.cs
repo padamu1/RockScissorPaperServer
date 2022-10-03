@@ -18,7 +18,7 @@ namespace SimulFactory.Common.Bean
         private bool matchAccept;
         private int teamNo;
         private PcInstance pc;
-        private Match match;
+        private Match? match;
         public PcPvp(PcInstance pc)
         {
             this.pc = pc;
@@ -92,9 +92,16 @@ namespace SimulFactory.Common.Bean
             }
             this.rating += rating;
         }
-        public void SetMatch(Match match)
+        public void SetMatch(Match? match)
         {
-            this.match = match;
+            if(match == null)
+            {
+                this.match = null;
+            }
+            else
+            {
+                this.match = match;
+            }
         }
         public Match GetMatch()
         {

@@ -1,12 +1,13 @@
 ﻿using SimulFactory.Common.Bean;
 using SimulFactory.Core;
 using SimulFactory.Game;
+using SimulFactory.Game.Matching;
 using System.Net.Sockets;
 using System.Text;
 
 namespace SimulFactory.Common.Instance
 {
-    public class PcInstance
+    public class PcInstance : IDisposable
     {
         private WebSocketController socketController;
 
@@ -30,7 +31,7 @@ namespace SimulFactory.Common.Instance
             userData = new UserData();
             pcPvp = new PcPvp(this);
         }
-        #region Gettser
+        #region Getter
         public PcPvp GetPcPvp()
         {
             return pcPvp;
@@ -40,5 +41,19 @@ namespace SimulFactory.Common.Instance
             return userData;
         }
         #endregion
+
+        /// <summary>
+        /// 유저 객체 사라질 때 호출
+        /// </summary>
+        public void Dispose()
+        {
+            if(pcPvp.GetMatch() != null)
+            {
+                Match match = pcPvp.GetMatch();
+                match.UserDisconnect(this);
+            }
+
+            MatchSystem.GetInstance().RemovePcInstance(this);
+        }
     }
 }

@@ -161,7 +161,7 @@ namespace SimulFactory.Game.Matching
         /// </summary>
         public void MatchRoundChecker()
         {
-            if(matchRound > Define.MAX_ROUND_COUNT)
+            if(matchRound >= Define.MAX_ROUND_COUNT)
             {
                 EndGame();
             }
@@ -274,7 +274,6 @@ namespace SimulFactory.Game.Matching
                 // 두 플레이어 모두 승리 처리
                 userWinCountDic[1]++;
                 userWinCountDic[2]++;
-                matchRound++;
 
                 // 서로에게 상대방의 결과를 보냄
                 S_UserBattleResponse.UserBattleResponseS(pcList[0], roundResponseDic[pcList[1].GetPcPvp().GetTeamNo()]);
@@ -284,10 +283,11 @@ namespace SimulFactory.Game.Matching
             {
                 Console.WriteLine("한명 승리");
                 userWinCountDic[winTeamNo]++;
-                matchRound++;
                 S_UserBattleResponse.UserBattleResponseS(pcList[0], roundResponseDic[pcList[1].GetPcPvp().GetTeamNo()]);
                 S_UserBattleResponse.UserBattleResponseS(pcList[1], roundResponseDic[pcList[0].GetPcPvp().GetTeamNo()]);
             }
+            // 매치 라운드 증가
+            matchRound++;
             // 다음 계산을 위해 초기화
             roundResponseDic.Clear();
             SendRoundResult(winTeamNo);
@@ -298,6 +298,7 @@ namespace SimulFactory.Game.Matching
             foreach(PcInstance pc in pcList)
             {
                 S_RoundResult.RoundResultS(pc, winTeamNo);
+                pc.GetPcPvp().SetMatch(null);
             }
         }
         /// <summary>
@@ -349,5 +350,25 @@ namespace SimulFactory.Game.Matching
             ThreadManager.GetInstance().RemoveWorker(mt);
         }
         #endregion
+
+        /// <summary>
+        /// 유저 연결 끊겼을 경우 처리
+        /// </summary>
+        /// <param name="pc"></param>
+        public void UserDisconnect(PcInstance pc)
+        {
+            foreach(KeyValuePair<int, int> teamNo in userWinCountDic)
+            {
+                if(pc.GetPcPvp().GetTeamNo() == teamNo.Key)
+                {
+                    userWinCountDic[teamNo.Key] = 0;
+                }
+                else
+                {
+                    userWinCountDic[teamNo.Key] = 10;
+                }
+            }
+            EndGame();
+        }
     }
 }
