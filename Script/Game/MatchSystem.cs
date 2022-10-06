@@ -56,7 +56,7 @@ namespace SimulFactory.Game
                         //bool matchSuccess = false;
                         if (count + 1 <= matchSearchList.Count - 1)
                         {
-                            Match match = new Match();
+                            NormalMatch match = new NormalMatch();
                             match.AddPcInstance(matchSearchList[count]);
                             RemovePcInstance(matchSearchList[count]);
                             match.AddPcInstance(matchSearchList[count + 1]);
