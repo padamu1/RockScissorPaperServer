@@ -192,7 +192,7 @@ namespace SimulFactory.Game.Matching
         protected void EndGame()
         {
             // 승리한 유저 설정
-            int winUserNo = 1;
+            int winUserNo;
             if (userWinCountDic[1] > userWinCountDic[2])
             {
                 winUserNo = 1;

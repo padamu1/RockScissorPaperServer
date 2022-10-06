@@ -27,7 +27,7 @@ namespace SimulFactory.Common.Thread
                 Thread.Sleep(delayTime);
             }
         }
-        protected virtual void GameRun()
+        protected void GameRun()
         {
             if (matchRound >= Define.MAX_ROUND_COUNT)
             {
