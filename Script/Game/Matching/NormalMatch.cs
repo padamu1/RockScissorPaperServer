@@ -77,7 +77,6 @@ namespace SimulFactory.Game.Matching
         }
         protected override void EndRound(int winTeamNo = 0)
         {
-            base.EndRound(winTeamNo);
             Console.WriteLine("매칭 결과 확인");
             if (winTeamNo == 0)
             {
@@ -117,11 +116,11 @@ namespace SimulFactory.Game.Matching
                 S_UserBattleResponse.UserBattleResponseS(pcDic[1], roundResponseDic[pcDic[2].GetPcPvp().GetTeamNo()]);
                 S_UserBattleResponse.UserBattleResponseS(pcDic[2], roundResponseDic[pcDic[1].GetPcPvp().GetTeamNo()]);
             }
-            // 매치 라운드 증가
-            matchRound++;
             // 다음 계산을 위해 초기화
             roundResponseDic.Clear();
             SendRoundResult(winTeamNo);
+
+            base.EndRound(winTeamNo);
         }
     }
 }

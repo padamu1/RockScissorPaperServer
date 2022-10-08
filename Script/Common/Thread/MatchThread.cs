@@ -61,6 +61,10 @@ namespace SimulFactory.Common.Thread
         /// <param name="winTeamNo"></param>
         protected virtual void EndRound(int winTeamNo = 0)
         {
+            if(winTeamNo != 0)
+            {
+                matchRound++;
+            }
         }
 
         public override void Dispose()
