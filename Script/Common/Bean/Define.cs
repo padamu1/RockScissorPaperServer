@@ -73,5 +73,8 @@ namespace SimulFactory.Common.Bean
         public readonly static int MATCH_USER_WAIT_TIME = 10000;
         public readonly static int MAX_ROUND_COUNT = 7;
         public readonly static int INIT_RATING = 1000;                 // 레이팅 초기값
+        public readonly static int DEFAULT_SEARCH_RATING = 150;
+        public readonly static int INCREASE_SEARCH_RATING = 150;
+        public readonly static float K_FACTOR = 32;
     }
 }

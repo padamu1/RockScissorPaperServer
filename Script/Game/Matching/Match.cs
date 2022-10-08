@@ -3,6 +3,8 @@ using SimulFactory.Common.Instance;
 using SimulFactory.Common.Thread;
 using SimulFactory.Core;
 using SimulFactory.Core.Base;
+using SimulFactory.Core.Sql;
+using SimulFactory.Core.Util;
 using SimulFactory.Game.Event;
 
 namespace SimulFactory.Game.Matching
@@ -10,34 +12,36 @@ namespace SimulFactory.Game.Matching
     public class Match : ThreadBase
     {
         protected bool sendMatchSuccessMessage;       // 매칭 성공 메시지를 보냈는지 확인
-        protected List<PcInstance> pcList;            // 현재 매칭된 유저가 들어가 있는 객체
+        protected Dictionary<int, PcInstance> pcDic;            // 현재 매칭된 유저가 들어가 있는 객체
         protected int matchUserWaitTime;              // 유저의 행동을 기다린 시간
         protected Define.MATCH_STATE matchState;      // 현재 매치 상태
         protected int matchRound;                     // 현재 진행중인 매치 라운드
         protected long winUserNo;                     // 라운드에서 승리한 유저 넘버
-        protected Dictionary<int,int> userWinCountDic;// 각 유저가 승리한 카운트
+        protected Dictionary<int, int> userWinCountDic;// 각 유저가 승리한 카운트
         protected Dictionary<int, int> roundResponseDic;     // 데미지 게산을 위한 임시 보관소
+        protected Dictionary<int, Dictionary<bool, float>> eloDic;   // elo probability
         public Match()
         {
             sendMatchSuccessMessage = false;
             matchUserWaitTime = 0;
             matchRound = 0;
-            pcList = new List<PcInstance>();
+            pcDic = new Dictionary<int, PcInstance>();
             userWinCountDic = new Dictionary<int, int>();
             matchState = Define.MATCH_STATE.MATCH_READY;
             roundResponseDic = new Dictionary<int, int>();
+            eloDic = new Dictionary<int, Dictionary<bool, float>>();
         }
         /// <summary>
         /// 매칭에 참여할 유저 추가
         /// </summary>
         public void AddPcInstance(PcInstance pcInstance)
         {
-            int teamNo = userWinCountDic.Count+1;
+            int teamNo = userWinCountDic.Count + 1;
             pcInstance.GetPcPvp().SetTeamNo(teamNo);
             pcInstance.GetPcPvp().SetMatchAccept(false);
             pcInstance.GetPcPvp().SetMatch(this);
-            userWinCountDic.Add(teamNo,0);
-            pcList.Add(pcInstance);
+            userWinCountDic.Add(teamNo, 0);
+            pcDic.Add(teamNo, pcInstance);
         }
         /// <summary>
         /// 현재 매칭의 상태 확인
@@ -52,22 +56,22 @@ namespace SimulFactory.Game.Matching
         /// </summary>
         public Define.MATCH_READY_STATE CheckUserWaitState()
         {
-            if(!sendMatchSuccessMessage)
+            if (!sendMatchSuccessMessage)
             {
                 sendMatchSuccessMessage = true;
                 SendMatchSuccess();
                 return Define.MATCH_READY_STATE.MATCH_START_BEFORE_WAIT;
             }
             int acceptCount = 0;    // 매칭 수락을 한 유저 수
-            foreach (PcInstance pc in pcList)
+            foreach (KeyValuePair<int, PcInstance> pc in pcDic)
             {
-                if (pc.GetPcPvp().GetMatchAccept())
+                if (pc.Value.GetPcPvp().GetMatchAccept())
                 {
                     acceptCount++;
                 }
             }
 
-            if (acceptCount == pcList.Count) // 유저 리스트 수와 매칭 수락한 유저 수가 같은 경우
+            if (acceptCount == pcDic.Count) // 유저 리스트 수와 매칭 수락한 유저 수가 같은 경우
             {
                 return Define.MATCH_READY_STATE.MATCH_START_SUCCESS;
             }
@@ -96,9 +100,9 @@ namespace SimulFactory.Game.Matching
         /// </summary>
         private void SendMatchSuccess()
         {
-            foreach (PcInstance pc in pcList)
+            foreach (KeyValuePair<int, PcInstance> pc in pcDic)
             {
-                S_MatchingSuccess.MatchingSuccessS(pc);
+                S_MatchingSuccess.MatchingSuccessS(pc.Value);
             }
         }
         /// <summary>
@@ -111,24 +115,24 @@ namespace SimulFactory.Game.Matching
                 matchState = Define.MATCH_STATE.MATCH_START;
                 matchUserWaitTime = 0;
                 ThreadStart(Define.MATCH_SYSTEM_DELAY_TIME);
-                foreach (PcInstance pc in pcList)
+                foreach (KeyValuePair<int, PcInstance> pc in pcDic)
                 {
-                    S_MatchingResponse.MatchingReponseS(pc, 0);
+                    S_MatchingResponse.MatchingReponseS(pc.Value, 0);
                 }
             }
             else
             {
-                foreach (PcInstance pc in pcList)
+                foreach (KeyValuePair<int, PcInstance> pc in pcDic)
                 {
-                    S_MatchingResponse.MatchingReponseS(pc, 1);
-                    if (pc.GetPcPvp().GetMatchAccept())
+                    S_MatchingResponse.MatchingReponseS(pc.Value, 1);
+                    if (pc.Value.GetPcPvp().GetMatchAccept())
                     {
                         // 수락을 한 유저는 실패를 했지만 다시 매칭을 이어갈 수 있도록 넣어줌
-                        MatchSystem.GetInstance().AddPcInsatnce(pc);
+                        MatchSystem.GetInstance().AddPcInsatnce(pc.Value);
                     }
                     else
                     {
-                        MatchSystem.GetInstance().RemovePcInstance(pc);
+                        MatchSystem.GetInstance().RemovePcInstance(pc.Value);
                     }
                 }
                 MatchSystem.GetInstance().RemoveReadyMatchList(this);
@@ -149,10 +153,10 @@ namespace SimulFactory.Game.Matching
         }
         protected void SendRoundResult(int winTeamNo)
         {
-            foreach(PcInstance pc in pcList)
+            foreach (KeyValuePair<int, PcInstance> pc in pcDic)
             {
-                S_RoundResult.RoundResultS(pc, winTeamNo);
-                pc.GetPcPvp().SetMatch(null);
+                S_RoundResult.RoundResultS(pc.Value, winTeamNo);
+                pc.Value.GetPcPvp().SetMatch(null);
             }
         }
         /// <summary>
@@ -162,7 +166,7 @@ namespace SimulFactory.Game.Matching
         /// <param name="dmg"></param>
         public void SetDmg(int teamNo, int response)
         {
-            if(!roundResponseDic.ContainsKey(teamNo))
+            if (!roundResponseDic.ContainsKey(teamNo))
             {
                 roundResponseDic.Add(teamNo, response);
             }
@@ -173,9 +177,9 @@ namespace SimulFactory.Game.Matching
         /// <param name="pc"></param>
         public void UserDisconnect(PcInstance pc)
         {
-            foreach(KeyValuePair<int, int> teamNo in userWinCountDic)
+            foreach (KeyValuePair<int, int> teamNo in userWinCountDic)
             {
-                if(pc.GetPcPvp().GetTeamNo() == teamNo.Key)
+                if (pc.GetPcPvp().GetTeamNo() == teamNo.Key)
                 {
                     userWinCountDic[teamNo.Key] = 0;
                 }
@@ -203,22 +207,28 @@ namespace SimulFactory.Game.Matching
             }
 
             // 결과 각 유저에게 전송
-            foreach (PcInstance pc in pcList)
+            foreach (KeyValuePair<int, PcInstance> pc in pcDic)
             {
-                if (winUserNo == pc.GetPcPvp().GetTeamNo())
+                if (winUserNo == pc.Value.GetPcPvp().GetTeamNo())
                 {
-                    S_MatchingResult.MatchingResultS(pc, true);
+                    pc.Value.GetPcPvp().SetRating(pc.Value.GetPcPvp().GetRating() + (int)(eloDic[pc.Key][true] * Define.K_FACTOR));
+                    S_MatchingResult.MatchingResultS(pc.Value, true);
                 }
                 else
                 {
-                    S_MatchingResult.MatchingResultS(pc, false);
+                    pc.Value.GetPcPvp().SetRating(pc.Value.GetPcPvp().GetRating() - (int)(eloDic[pc.Key][false] * Define.K_FACTOR));
+                    S_MatchingResult.MatchingResultS(pc.Value, false);
                 }
+                PcPvpSql.UpdateUserPvpSql(pc.Value);
             }
             MatchSystem.GetInstance().RemoveReadyMatchList(this);
 
             // 스레드 종료
             ThreadManager.GetInstance().RemoveWorker(this);
         }
-
+        public void CalculateEloRating()
+        {
+            MatchUtil.SetPvpEloRating(pcDic, ref eloDic);
+        }
     }
 }

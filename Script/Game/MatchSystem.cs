@@ -54,25 +54,27 @@ namespace SimulFactory.Game
                     for (int count = 0; count < matchSearchList.Count - 1;)
                     {
                         //bool matchSuccess = false;
-                        if (count + 1 <= matchSearchList.Count - 1)
+                        if (matchSearchList[count + 1].GetPcPvp().GetRating() - matchSearchList[count].GetPcPvp().GetRating() <= Define.DEFAULT_SEARCH_RATING + matchSearchList[count].GetPcPvp().GetWaitCount() * Define.INCREASE_SEARCH_RATING)
                         {
                             NormalMatch match = new NormalMatch();
                             match.AddPcInstance(matchSearchList[count]);
                             RemovePcInstance(matchSearchList[count]);
                             match.AddPcInstance(matchSearchList[count + 1]);
                             RemovePcInstance(matchSearchList[count + 1]);
+                            match.CalculateEloRating();
                             readyMatchList.Add(match);
                             count += 2;
                         }
                         else
                         {
+                            matchSearchList[count].GetPcPvp().SetWaitCount(matchSearchList[count].GetPcPvp().GetWaitCount() + 1);
                             count += 1;
                         }
                     }
                 }
                 lock (removeReadyMatchList)
                 {
-                    foreach(Match match in removeReadyMatchList)
+                    foreach (Match match in removeReadyMatchList)
                     {
                         readyMatchList.Remove(match);
                     }
@@ -90,7 +92,7 @@ namespace SimulFactory.Game
                                     case Define.MATCH_READY_STATE.MATCH_START_BEFORE_WAIT:
                                         Console.WriteLine("매칭 성공 시작 대기중 ...");
                                         break;
-                                    case Define.MATCH_READY_STATE.MATCH_START_WAIT:   
+                                    case Define.MATCH_READY_STATE.MATCH_START_WAIT:
                                         // 매칭 시작 대기중
                                         Console.WriteLine("매칭 시작 대기중 ...");
                                         break;
@@ -99,14 +101,14 @@ namespace SimulFactory.Game
                                         match.SendMatchStartResult(Define.MATCH_READY_STATE.MATCH_START_SUCCESS);
                                         Console.WriteLine("매칭 성공 ...");
                                         break;
-                                    case Define.MATCH_READY_STATE.MATCH_START_FAILED: 
+                                    case Define.MATCH_READY_STATE.MATCH_START_FAILED:
                                         // 매칭 시작 실패
                                         match.SendMatchStartResult(Define.MATCH_READY_STATE.MATCH_START_FAILED);
                                         Console.WriteLine("매칭 실패 ...");
                                         break;
                                 }
                                 break;
-                            case Define.MATCH_STATE.MATCH_START: 
+                            case Define.MATCH_STATE.MATCH_START:
                                 // 매칭 진행중 상태
                                 break;
                         }
@@ -121,6 +123,7 @@ namespace SimulFactory.Game
             {
                 if (!matchSearchList.Contains(pcInstance))
                 {
+                    pcInstance.GetPcPvp().SetWaitCount(0);
                     addMatchList.Add(pcInstance);
                 }
             }

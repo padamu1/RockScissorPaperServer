@@ -17,12 +17,21 @@ namespace SimulFactory.Common.Bean
         private int cardNo;
         private bool matchAccept;
         private int teamNo;
+        private int waitCount;
         private PcInstance pc;
         private Match? match;
         public PcPvp(PcInstance pc)
         {
             this.pc = pc;
             rating = Define.INIT_RATING;
+        }
+        public void SetWaitCount(int waitCount)
+        {
+            this.waitCount = waitCount;
+        }
+        public int GetWaitCount()
+        {
+            return waitCount;
         }
         public void SetRating(int rating)
         {
