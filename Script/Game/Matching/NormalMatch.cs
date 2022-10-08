@@ -107,15 +107,15 @@ namespace SimulFactory.Game.Matching
                 userWinCountDic[2]++;
 
                 // 서로에게 상대방의 결과를 보냄
-                S_UserBattleResponse.UserBattleResponseS(pcList[0], roundResponseDic[pcList[1].GetPcPvp().GetTeamNo()]);
-                S_UserBattleResponse.UserBattleResponseS(pcList[1], roundResponseDic[pcList[0].GetPcPvp().GetTeamNo()]);
+                S_UserBattleResponse.UserBattleResponseS(pcDic[1], roundResponseDic[pcDic[2].GetPcPvp().GetTeamNo()]);
+                S_UserBattleResponse.UserBattleResponseS(pcDic[2], roundResponseDic[pcDic[1].GetPcPvp().GetTeamNo()]);
             }
             else
             {
                 Console.WriteLine("한명 승리");
                 userWinCountDic[winTeamNo]++;
-                S_UserBattleResponse.UserBattleResponseS(pcList[0], roundResponseDic[pcList[1].GetPcPvp().GetTeamNo()]);
-                S_UserBattleResponse.UserBattleResponseS(pcList[1], roundResponseDic[pcList[0].GetPcPvp().GetTeamNo()]);
+                S_UserBattleResponse.UserBattleResponseS(pcDic[1], roundResponseDic[pcDic[2].GetPcPvp().GetTeamNo()]);
+                S_UserBattleResponse.UserBattleResponseS(pcDic[2], roundResponseDic[pcDic[1].GetPcPvp().GetTeamNo()]);
             }
             // 매치 라운드 증가
             matchRound++;
