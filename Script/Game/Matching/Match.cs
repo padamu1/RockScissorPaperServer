@@ -156,7 +156,6 @@ namespace SimulFactory.Game.Matching
             foreach (KeyValuePair<int, PcInstance> pc in pcDic)
             {
                 S_RoundResult.RoundResultS(pc.Value, winTeamNo);
-                pc.Value.GetPcPvp().SetMatch(null);
             }
         }
         /// <summary>
@@ -219,6 +218,7 @@ namespace SimulFactory.Game.Matching
                     pc.Value.GetPcPvp().SetRating(pc.Value.GetPcPvp().GetRating() - (int)(eloDic[pc.Key][false] * Define.K_FACTOR));
                     S_MatchingResult.MatchingResultS(pc.Value, false);
                 }
+                pc.Value.GetPcPvp().SetMatch(null);
                 PcPvpSql.UpdateUserPvpSql(pc.Value);
             }
             MatchSystem.GetInstance().RemoveReadyMatchList(this);

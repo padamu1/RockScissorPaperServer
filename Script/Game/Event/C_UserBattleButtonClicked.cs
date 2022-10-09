@@ -11,8 +11,9 @@ namespace SimulFactory.Game.Event
     {
         public static void UserBattleButtonClickedC(PcInstance pc, Dictionary<byte,object> param)
         {
+            int buttonNo = Convert.ToInt32(param[0]);
             // 버튼 클릭
-            pc.GetPcPvp().GetMatch().SetDmg(pc.GetPcPvp().GetTeamNo(),Convert.ToInt32(param[0]));
+            pc.GetPcPvp().GetMatch().SetDmg(pc.GetPcPvp().GetTeamNo(),buttonNo);
         }
     }
 }
