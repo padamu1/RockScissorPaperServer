@@ -210,12 +210,12 @@ namespace SimulFactory.Game.Matching
             {
                 if (winUserNo == pc.Value.GetPcPvp().GetTeamNo())
                 {
-                    pc.Value.GetPcPvp().SetRating(pc.Value.GetPcPvp().GetRating() + (int)(eloDic[pc.Key][true] * Define.K_FACTOR));
+                    pc.Value.GetPcPvp().SetRating(pc.Value.GetPcPvp().GetRating() + (int)(Define.K_FACTOR * (1- (eloDic[pc.Key][true]))));
                     S_MatchingResult.MatchingResultS(pc.Value, true);
                 }
                 else
                 {
-                    pc.Value.GetPcPvp().SetRating(pc.Value.GetPcPvp().GetRating() - (int)(eloDic[pc.Key][false] * Define.K_FACTOR));
+                    pc.Value.GetPcPvp().SetRating(pc.Value.GetPcPvp().GetRating() - (int)(Define.K_FACTOR * (0 - (eloDic[pc.Key][false]))));
                     S_MatchingResult.MatchingResultS(pc.Value, false);
                 }
                 pc.Value.GetPcPvp().SetMatch(null);
