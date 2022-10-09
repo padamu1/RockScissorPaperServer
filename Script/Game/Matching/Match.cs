@@ -19,7 +19,7 @@ namespace SimulFactory.Game.Matching
         protected long winUserNo;                     // 라운드에서 승리한 유저 넘버
         protected Dictionary<int, int> userWinCountDic;// 각 유저가 승리한 카운트
         protected Dictionary<int, int> roundResponseDic;     // 데미지 게산을 위한 임시 보관소
-        protected Dictionary<int, Dictionary<bool, float>> eloDic;   // elo probability
+        protected Dictionary<int,  float> eloDic;   // elo probability
         public Match()
         {
             sendMatchSuccessMessage = false;
@@ -29,7 +29,7 @@ namespace SimulFactory.Game.Matching
             userWinCountDic = new Dictionary<int, int>();
             matchState = Define.MATCH_STATE.MATCH_READY;
             roundResponseDic = new Dictionary<int, int>();
-            eloDic = new Dictionary<int, Dictionary<bool, float>>();
+            eloDic = new Dictionary<int, float>();
         }
         /// <summary>
         /// 매칭에 참여할 유저 추가
@@ -210,12 +210,12 @@ namespace SimulFactory.Game.Matching
             {
                 if (winUserNo == pc.Value.GetPcPvp().GetTeamNo())
                 {
-                    pc.Value.GetPcPvp().SetRating(pc.Value.GetPcPvp().GetRating() + (int)(Define.K_FACTOR * (1- (eloDic[pc.Key][true]))));
+                    pc.Value.GetPcPvp().SetRating(pc.Value.GetPcPvp().GetRating() + (int)(Define.K_FACTOR * (1- (eloDic[pc.Key]))));
                     S_MatchingResult.MatchingResultS(pc.Value, true);
                 }
                 else
                 {
-                    pc.Value.GetPcPvp().SetRating(pc.Value.GetPcPvp().GetRating() - (int)(Define.K_FACTOR * (0 - (eloDic[pc.Key][false]))));
+                    pc.Value.GetPcPvp().SetRating(pc.Value.GetPcPvp().GetRating() + (int)(Define.K_FACTOR * (0 - (eloDic[pc.Key]))));
                     S_MatchingResult.MatchingResultS(pc.Value, false);
                 }
                 pc.Value.GetPcPvp().SetMatch(null);

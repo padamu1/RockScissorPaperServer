@@ -8,7 +8,7 @@ namespace SimulFactory.Core.Util
 {
     public class MatchUtil
     {
-        public static void SetPvpEloRating(Dictionary<int, Common.Instance.PcInstance> userRating, ref Dictionary<int, Dictionary<bool, float>> eloDic)
+        public static void SetPvpEloRating(Dictionary<int, Common.Instance.PcInstance> userRating, ref Dictionary<int, float> eloDic)
         {
             int teamARating = userRating[1].GetPcPvp().GetRating();
             int teamBRating = userRating[2].GetPcPvp().GetRating();
@@ -16,16 +16,8 @@ namespace SimulFactory.Core.Util
             float teamAProbability = Probability(teamARating, teamBRating);
             float teamBProbability = Probability(teamBRating, teamARating);
 
-            eloDic.Add(1,new Dictionary<bool, float>()
-            {
-                {true, teamAProbability},
-                {false, teamBProbability},
-            });
-            eloDic.Add(2,new Dictionary<bool, float>()
-            {
-                {true, teamBProbability},
-                {false, teamAProbability},
-            });
+            eloDic.Add(1, teamAProbability);
+            eloDic.Add(2, teamBProbability);
         }
         private static float Probability(int ratingA, int ratingB)
         {
