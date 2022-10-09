@@ -21,9 +21,22 @@ namespace SimulFactory.Core
             connection.Open();
             connection.Close();
         }
-        public static MySqlConnection GetMySqlConnection()
+        /// <summary>
+        /// 연결에 따른 커넥션 반환 - 파라메터를 넣지 않을 경우 rsp_db
+        /// </summary>
+        /// <param name="sqlName"></param>
+        /// <returns>커넥션</returns>
+        public static MySqlConnection GetMySqlConnection(string sqlName = "")
         {
-            return new MySqlConnection(strConn);
+            MySqlConnection connection = new MySqlConnection(strConn);
+            if("".Equals(sqlName))
+            {
+            }
+            else
+            {
+                connection.ChangeDatabase(sqlName);
+            }
+            return connection;
         }
     }
 }
