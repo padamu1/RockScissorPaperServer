@@ -199,10 +199,10 @@ namespace SimulFactory.Core
             Console.WriteLine(pc?.GetUserData().UserName+" Client Disconnected");
 
             // pc 자원 먼저 해제
-            pc.Dispose();
+            pc?.Dispose();
 
-            targetClient.Close();
-            targetClient.Dispose(); //모든 소켓에 관련된 자원 해제
+            targetClient?.Close();
+            targetClient?.Dispose(); //모든 소켓에 관련된 자원 해제
         }
     }
 }
