@@ -76,5 +76,8 @@ namespace SimulFactory.Common.Bean
         public readonly static int DEFAULT_SEARCH_RATING = 150;
         public readonly static int INCREASE_SEARCH_RATING = 150;
         public readonly static float K_FACTOR = 32;
+        public readonly static int RANDOM_NICKNAME_START_LENGHT = 6;
+        public readonly static int RANDOM_NICKNAME_END_LENGHT = 10;
+        public readonly static string[] RANDOM_STRING = new string[] { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "N", "M", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" };
     }
 }

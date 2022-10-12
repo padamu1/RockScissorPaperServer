@@ -1,4 +1,5 @@
-﻿using SimulFactory.Common.Instance;
+﻿using SimulFactory.Common.Bean;
+using SimulFactory.Common.Instance;
 using SimulFactory.Core.Sql;
 using SimulFactory.Game.Event;
 using System;
@@ -57,6 +58,21 @@ namespace SimulFactory.Core.Util
             }
         }
         /// <summary>
+        /// 임시 유저 닉네임 생성 함수
+        /// </summary>
+        /// <returns></returns>
+        public static string MakeUserNickName()
+        {
+            int randomLength = Random.Shared.Next(Define.RANDOM_NICKNAME_START_LENGHT, Define.RANDOM_NICKNAME_END_LENGHT);
+            StringBuilder sb = new StringBuilder();
+            for (int count = 0; count < randomLength; count++)
+            {
+                int randomNum = Random.Shared.Next(0, Define.RANDOM_STRING.Length - 1);
+                sb.Append(Define.RANDOM_STRING[randomNum]);
+            }
+            return sb.ToString();
+        }
+        /// <summary>
         /// 생성된 유저 넘버를 넣어서 아이디를 생성하는 함수
         /// </summary>
         /// <param name="pc"></param>
@@ -65,7 +81,9 @@ namespace SimulFactory.Core.Util
         {
             // DB 내용과 비교
             long newUserNo = Math.Abs(ByteUtillity.BytesToLong(userNo));
+            string newUserName = MakeUserNickName();
             pc.GetUserData().UserNo = newUserNo;
+            pc.GetUserData().UserName = newUserName;
             if (UserDBSql.InsertUserSql(pc))
             {
                 PcPvpSql.InsertUserPvpSql(pc);
