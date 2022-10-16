@@ -10,6 +10,11 @@ public class Program
     public static void Main()
     {
         NetworkStarter.GetInstance();
+        while(true)
+        {
+
+        }
+        /*
         bool isServerStop = false;
         while (!isServerStop)
         {
@@ -33,5 +38,6 @@ public class Program
                     break;
             }
         }
+        */
     }
 }
