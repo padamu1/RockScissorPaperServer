@@ -20,6 +20,7 @@ namespace SimulFactory.Core.Base
         {
             isThreadStop = false;
             thread = new Thread(ThreadAction);
+            thread.IsBackground = true;
         }
         /// <summary>
         /// 스레드 시작
