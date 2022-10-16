@@ -32,5 +32,10 @@ namespace SimulFactory.Core
             //다음 클라이언트를 대기
             tcpListener.BeginAcceptTcpClient(OnAcceptClient, null);
         }
+
+        public void StopTcpListen()
+        {
+            tcpListener.Stop();
+        }
     }
 }

@@ -9,7 +9,7 @@ public class Program
 {
     public static void Main()
     {
-        NetworkStarter networkStarter = new NetworkStarter();
+        NetworkStarter.GetInstance();
         bool isServerStop = false;
         while (!isServerStop)
         {
@@ -17,7 +17,16 @@ public class Program
             Console.WriteLine("서버를 종료하시려면 \"quit\"를 입력해주세요.");
             switch (Console.ReadLine())
             {
-                case "quit":
+                case "Stop":
+                    Console.WriteLine("서비스가 종료됩니다.");
+                    NetworkStarter.GetInstance().ServiceStop();
+                    break;
+                case "Start":
+                    Console.WriteLine("서비스가 시작됩니다.");
+                    NetworkStarter.GetInstance().ServiceStart();
+                    break;
+                case "Quit":
+                    Console.WriteLine("프로그램이 종료됩니다.");
                     isServerStop = true;
                     break;
                 default:
