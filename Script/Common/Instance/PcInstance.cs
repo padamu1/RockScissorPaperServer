@@ -28,7 +28,7 @@ namespace SimulFactory.Common.Instance
         /// </summary>
         private void SetupUser()
         {
-            userData = new UserData();
+            userData = new UserData(this);
             pcPvp = new PcPvp(this);
         }
         #region Getter

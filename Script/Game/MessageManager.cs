@@ -38,6 +38,11 @@ namespace SimulFactory.Game
                 case (byte)Define.EVENT_CODE.UserBattleButtonClickedC:
                     C_UserBattleButtonClicked.UserBattleButtonClickedC(pc, param);
                     break;
+                case (byte)Define.EVENT_CODE.UserNameC:
+                    C_UserName.UserNameC(pc, param);
+                    break;
+                default:
+                    break;
             }
         }
     }

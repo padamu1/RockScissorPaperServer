@@ -50,7 +50,7 @@ namespace SimulFactory.Core.Sql
 
             return result >= 1;
         }
-        public static bool UpdateUserSql(PcInstance pc)
+        public static bool UpdateUserSql(PcInstance pc, string changeName)
         {
             // UPDATE[테이블] SET[열] = '변경할값' WHERE[조건]
             int result = 0;
@@ -69,7 +69,7 @@ namespace SimulFactory.Core.Sql
 
                     // 파라메터 정의
                     command.Parameters.AddWithValue("@userNo", pc.GetUserData().UserNo);
-                    command.Parameters.AddWithValue("@user_name", pc.GetUserData().UserName);
+                    command.Parameters.AddWithValue("@user_name", changeName);
 
                     result = command.ExecuteNonQuery(); // 성공시 1 들어감
                 }
