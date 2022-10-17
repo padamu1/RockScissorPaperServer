@@ -28,13 +28,12 @@ namespace SimulFactory.Core
             matchThread.IsBackground = true;
             matchThread.Start();
 
+            ConnectionManager = new ConnectionManager(3000);
             // 서버 시작
-            // 네트워크 쓰레드 시작
-            ServiceStart();
         }
         public void NetWorkThreadAction()
         {
-            ConnectionManager = new ConnectionManager(3000);
+            ConnectionManager.StartTcpListen();
             while (isThreadRun)
             {
 
@@ -44,7 +43,7 @@ namespace SimulFactory.Core
 
         public void ServiceStop()
         {
-            isThreadRun = true;
+            isThreadRun = false;
             Console.WriteLine("service stopped");
         }
         public void ServiceStart()

@@ -11,31 +11,52 @@ namespace SimulFactory.Core
         {
             tcpListener = new TcpListener(IPAddress.Any, port);
             clients = new Dictionary<TcpClient,WebSocketController>();
+        }
+
+        private void OnAcceptClient(IAsyncResult ar)
+        {
+            try
+            {
+                TcpClient client = tcpListener.EndAcceptTcpClient(ar);
+                Console.WriteLine("Client Connected");
+
+                //if(clients.ContainsKey(client))
+                //{
+                //    clients[client].Dispose();
+                //    clients.Remove(client);
+                //}
+
+                WebSocketController webSocketController = new WebSocketController(client);
+                //다음 클라이언트를 대기
+                tcpListener.BeginAcceptTcpClient(OnAcceptClient, null);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+        }
+        public void StartTcpListen()
+        {
             tcpListener.Start();
             //비동기 Listening 시작
             tcpListener.BeginAcceptTcpClient(OnAcceptClient, null);
         }
 
-        private void OnAcceptClient(IAsyncResult ar)
-        {
-            TcpClient client = tcpListener.EndAcceptTcpClient(ar);
-            Console.WriteLine("Client Connected");
-
-            //if(clients.ContainsKey(client))
-            //{
-            //    clients[client].Dispose();
-            //    clients.Remove(client);
-            //}
-
-            WebSocketController webSocketController = new WebSocketController(client);
-            //clients.Add(client, webSocketController);
-            //다음 클라이언트를 대기
-            tcpListener.BeginAcceptTcpClient(OnAcceptClient, null);
-        }
-
         public void StopTcpListen()
         {
-            tcpListener.Stop();
+            try
+            {
+                tcpListener.Server.Shutdown(SocketShutdown.Both);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+            finally
+            {
+                tcpListener.Server.Close();
+                tcpListener.Stop();
+            }
         }
     }
 }
