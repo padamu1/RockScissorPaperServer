@@ -1,4 +1,5 @@
 ﻿using SimulFactory.Common.Instance;
+using SimulFactory.Core.Sql;
 using SimulFactory.Game;
 namespace SimulFactory.Core
 {
@@ -33,6 +34,10 @@ namespace SimulFactory.Core
         }
         public void NetWorkThreadAction()
         {
+            // DB 로드
+            LoadData();
+
+            // TCP Listen 시작
             ConnectionManager.StartTcpListen();
             while (isThreadRun)
             {
@@ -52,6 +57,10 @@ namespace SimulFactory.Core
             networkThread = new Thread(NetWorkThreadAction);
             networkThread.IsBackground = true;
             networkThread.Start();
+        }
+        public void LoadData()
+        {
+            ShopItemTable.GetInstance().LoadShopTable();
         }
     }
 }

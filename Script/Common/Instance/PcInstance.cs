@@ -1,6 +1,7 @@
 ﻿using SimulFactory.Common.Bean;
 using SimulFactory.Core;
 using SimulFactory.Game;
+using SimulFactory.Game.Event;
 using SimulFactory.Game.Matching;
 using System.Net.Sockets;
 using System.Text;
@@ -41,7 +42,10 @@ namespace SimulFactory.Common.Instance
             return userData;
         }
         #endregion
-
+        public void SendUserData()
+        {
+            S_UserInfo.UserInfoS(this);
+        }
         /// <summary>
         /// 유저 객체 사라질 때 호출
         /// </summary>

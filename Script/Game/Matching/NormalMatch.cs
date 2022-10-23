@@ -1,5 +1,6 @@
 ﻿using SimulFactory.Common.Bean;
 using SimulFactory.Common.Thread;
+using SimulFactory.Core.Util;
 using SimulFactory.Game.Event;
 using System;
 using System.Collections.Generic;
@@ -20,57 +21,8 @@ namespace SimulFactory.Game.Matching
         {
             if (roundResponseDic.Count == 2)
             {
-                int winTeamNo = 1;
+                int winTeamNo = MatchUtil.GetRSPResult(roundResponseDic);
 
-                switch ((Define.ROCK_SCISSOR_PAPER)roundResponseDic[1])
-                {
-                    case Define.ROCK_SCISSOR_PAPER.Rock:
-                        switch ((Define.ROCK_SCISSOR_PAPER)roundResponseDic[2])
-                        {
-                            case Define.ROCK_SCISSOR_PAPER.Rock:
-                                winTeamNo = 3;
-                                break;
-                            case Define.ROCK_SCISSOR_PAPER.Scissor:
-                                winTeamNo = 1;
-                                break;
-                            case Define.ROCK_SCISSOR_PAPER.Paper:
-                                winTeamNo = 2;
-                                break;
-                        }
-                        break;
-                    case Define.ROCK_SCISSOR_PAPER.Scissor:
-                        switch ((Define.ROCK_SCISSOR_PAPER)roundResponseDic[2])
-                        {
-                            case Define.ROCK_SCISSOR_PAPER.Rock:
-                                winTeamNo = 2;
-                                break;
-                            case Define.ROCK_SCISSOR_PAPER.Scissor:
-                                winTeamNo = 3;
-                                break;
-                            case Define.ROCK_SCISSOR_PAPER.Paper:
-                                winTeamNo = 1;
-                                break;
-                        }
-                        break;
-                    case Define.ROCK_SCISSOR_PAPER.Paper:
-                        switch ((Define.ROCK_SCISSOR_PAPER)roundResponseDic[2])
-                        {
-                            case Define.ROCK_SCISSOR_PAPER.Rock:
-                                winTeamNo = 1;
-                                break;
-                            case Define.ROCK_SCISSOR_PAPER.Scissor:
-                                winTeamNo = 2;
-                                break;
-                            case Define.ROCK_SCISSOR_PAPER.Paper:
-                                winTeamNo = 3;
-                                break;
-                        }
-                        break;
-                }
-                // 데미지 비교
-                if (roundResponseDic[1] < roundResponseDic[2])
-                {
-                }
                 return winTeamNo;
             }
             return 0;

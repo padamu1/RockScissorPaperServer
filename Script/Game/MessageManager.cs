@@ -41,6 +41,9 @@ namespace SimulFactory.Game
                 case (byte)Define.EVENT_CODE.UserNameC:
                     C_UserName.UserNameC(pc, param);
                     break;
+                case (byte)Define.EVENT_CODE.LoginCompleteC:
+                    C_LoginComplete.LoginCompleteC(pc, param);
+                    break;
                 default:
                     break;
             }
