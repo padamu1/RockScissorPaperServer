@@ -35,7 +35,7 @@ namespace SimulFactory.Core
         public void NetWorkThreadAction()
         {
             // DB 로드
-            LoadData();
+            //LoadData();
 
             // TCP Listen 시작
             ConnectionManager.StartTcpListen();
