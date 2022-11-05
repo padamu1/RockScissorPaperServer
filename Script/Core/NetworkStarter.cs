@@ -1,6 +1,8 @@
 ﻿using SimulFactory.Common.Instance;
 using SimulFactory.Core.Sql;
 using SimulFactory.Game;
+using SimulFactory.Game.Matching;
+
 namespace SimulFactory.Core
 {
     public class NetworkStarter
@@ -13,7 +15,7 @@ namespace SimulFactory.Core
         public ConnectionManager ConnectionManager { get; set; }
         private bool isThreadRun;
         private Thread networkThread;
-        private Thread matchThread;
+        private Thread normalMatchThread;
 
         public NetworkStarter()
         {
@@ -25,9 +27,9 @@ namespace SimulFactory.Core
             PcListInstance.GetInstance();
 
             // 매칭 서버 준비
-            matchThread = new Thread(MatchSystem.GetInstance().Matching);
-            matchThread.IsBackground = true;
-            matchThread.Start();
+            normalMatchThread = new Thread(NormalMatchSystem.GetInstance().Matching);
+            normalMatchThread.IsBackground = true;
+            normalMatchThread.Start();
 
             ConnectionManager = new ConnectionManager(3000);
             // 서버 시작

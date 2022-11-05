@@ -9,12 +9,13 @@ using System.Threading.Tasks;
 
 namespace SimulFactory.Common.Thread
 {
+    using SimulFactory.Game;
     using SimulFactory.Game.Event;
     using System.Threading;
     public class MatchThread : Match
     {
         private bool threadRun;
-        public MatchThread():base()
+        public MatchThread(MatchSystem matchSystem) :base(matchSystem)
         {
 
         }

@@ -8,39 +8,24 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SimulFactory.Game.Matching
+namespace SimulFactory.Game.Matching.Mode
 {
-    public class CardMatch : MatchThread
+    public class NormalMatch : MatchThread
     {
-        public CardMatch():base()
+        public NormalMatch(MatchSystem matchSystem) : base(matchSystem)
         {
 
         }
+
         protected override int CheckRoundResult()
         {
             if (roundResponseDic.Count == 2)
             {
-                int winTeamNo = 1;
-                switch(MatchUtil.GetRSPResult(roundResponseDic))
-                {
-                    case 1:
-                        break;
-                    case 2:
-                        break;
-                    case 3:
-                        break;
-                    default:
-                        Console.WriteLine(" 매치 result가 잘못됨 ???? ");
-                        winTeamNo = 2;
-                        break;
-                }
-                // 데미지 비교
-                if (roundResponseDic[1] < roundResponseDic[2])
-                {
-                }
+                int winTeamNo = MatchUtil.GetRSPResult(roundResponseDic);
+
                 return winTeamNo;
             }
-            return base.CheckRoundResult();
+            return 0;
         }
         protected override void EndRound(int winTeamNo = 0)
         {

@@ -14,7 +14,7 @@ namespace SimulFactory.Common.Instance
 
         private UserData userData;
         private PcPvp pcPvp;
-
+        private MatchSystem matchSystem;
         public PcInstance(WebSocketController socketController)
         {
             this.socketController = socketController;
@@ -46,6 +46,14 @@ namespace SimulFactory.Common.Instance
         {
             S_UserInfo.UserInfoS(this);
         }
+        public void SetMatchSystem(MatchSystem matchSystem)
+        {
+            this.matchSystem = matchSystem;
+        }
+        public MatchSystem GetMatchSystem()
+        {
+            return matchSystem;
+        }
         /// <summary>
         /// 유저 객체 사라질 때 호출
         /// </summary>
@@ -57,7 +65,7 @@ namespace SimulFactory.Common.Instance
                 match.UserDisconnect(this);
             }
 
-            MatchSystem.GetInstance().RemovePcInstance(this);
+            matchSystem?.RemovePcInstance(this);
         }
     }
 }

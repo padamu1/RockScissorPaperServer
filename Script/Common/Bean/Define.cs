@@ -75,7 +75,8 @@ namespace SimulFactory.Common.Bean
         public enum MATCH_TYPE
         {
             Normal = 0,
-            Card = 1,
+            Multi = 1,
+            Card = 2,
         }
 
         public readonly static int MATCH_SYSTEM_DELAY_TIME = 2000;

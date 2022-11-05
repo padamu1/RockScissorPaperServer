@@ -4,6 +4,7 @@ using System.Text.Json;
 
 namespace SimulFactory.Core.Util
 {
+    [Serializable]
     public class DataFormat
     {
         public byte eventCode;

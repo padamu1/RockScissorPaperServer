@@ -1,4 +1,5 @@
 ﻿using SimulFactory.Common.Instance;
+using SimulFactory.Game.Matching;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,7 @@ namespace SimulFactory.Game.Event
     {
         public static void MatchingCancel(PcInstance pc)
         {
-            MatchSystem.GetInstance().RemovePcInstance(pc);
+            pc.GetMatchSystem()?.RemovePcInstance(pc);
         }
     }
 }

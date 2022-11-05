@@ -20,8 +20,10 @@ namespace SimulFactory.Game.Matching
         protected Dictionary<int, int> userWinCountDic;// 각 유저가 승리한 카운트
         protected Dictionary<int, int> roundResponseDic;     // 데미지 게산을 위한 임시 보관소
         protected Dictionary<int,  float> eloDic;   // elo probability
-        public Match()
+        protected MatchSystem matchSystem;
+        public Match(MatchSystem matchSystem)
         {
+            this.matchSystem = matchSystem;
             sendMatchSuccessMessage = false;
             matchUserWaitTime = 0;
             matchRound = 0;
@@ -128,14 +130,14 @@ namespace SimulFactory.Game.Matching
                     if (pc.Value.GetPcPvp().GetMatchAccept())
                     {
                         // 수락을 한 유저는 실패를 했지만 다시 매칭을 이어갈 수 있도록 넣어줌
-                        MatchSystem.GetInstance().AddPcInsatnce(pc.Value);
+                        matchSystem.AddPcInsatnce(pc.Value);
                     }
                     else
                     {
-                        MatchSystem.GetInstance().RemovePcInstance(pc.Value);
+                        matchSystem.RemovePcInstance(pc.Value);
                     }
                 }
-                MatchSystem.GetInstance().RemoveReadyMatchList(this);
+                matchSystem.RemoveReadyMatchList(this);
             }
         }
         /// <summary>
@@ -221,7 +223,7 @@ namespace SimulFactory.Game.Matching
                 pc.Value.GetPcPvp().SetMatch(null);
                 PcPvpSql.UpdateUserPvpSql(pc.Value);
             }
-            MatchSystem.GetInstance().RemoveReadyMatchList(this);
+            matchSystem.RemoveReadyMatchList(this);
 
             // 스레드 종료
             ThreadManager.GetInstance().RemoveWorker(this);

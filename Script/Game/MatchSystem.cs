@@ -1,4 +1,5 @@
-﻿using SimulFactory.Common.Bean;
+﻿using SimulFactory.Game.Matching.Mode;
+using SimulFactory.Common.Bean;
 using SimulFactory.Common.Instance;
 using SimulFactory.Game.Event;
 using SimulFactory.Game.Matching;
@@ -11,11 +12,11 @@ namespace SimulFactory.Game
         {
             return instanceHolder.Value;
         }
-        private List<PcInstance> matchSearchList;
-        private List<PcInstance> addMatchList;
-        private List<PcInstance> removeMatchList;
-        private List<Match> removeReadyMatchList;
-        private List<Match> readyMatchList;
+        protected List<PcInstance> matchSearchList;
+        protected List<PcInstance> addMatchList;
+        protected List<PcInstance> removeMatchList;
+        protected List<Match> removeReadyMatchList;
+        protected List<Match> readyMatchList;
         public MatchSystem()
         {
             matchSearchList = new List<PcInstance>();
@@ -48,29 +49,7 @@ namespace SimulFactory.Game
                 }
                 lock (matchSearchList)
                 {
-                    // 매칭 전 정렬
-                    matchSearchList.OrderBy(x => x.GetPcPvp().GetRating());
-                    // 실제 로직 처리
-                    for (int count = 0; count < matchSearchList.Count - 1;)
-                    {
-                        //bool matchSuccess = false;
-                        if (matchSearchList[count + 1].GetPcPvp().GetRating() - matchSearchList[count].GetPcPvp().GetRating() <= Define.DEFAULT_SEARCH_RATING + matchSearchList[count].GetPcPvp().GetWaitCount() * Define.INCREASE_SEARCH_RATING)
-                        {
-                            NormalMatch match = new NormalMatch();
-                            match.AddPcInstance(matchSearchList[count]);
-                            RemovePcInstance(matchSearchList[count]);
-                            match.AddPcInstance(matchSearchList[count + 1]);
-                            RemovePcInstance(matchSearchList[count + 1]);
-                            match.CalculateEloRating();
-                            readyMatchList.Add(match);
-                            count += 2;
-                        }
-                        else
-                        {
-                            matchSearchList[count].GetPcPvp().SetWaitCount(matchSearchList[count].GetPcPvp().GetWaitCount() + 1);
-                            count += 1;
-                        }
-                    }
+                    CheckSearchUser();
                 }
                 lock (removeReadyMatchList)
                 {
@@ -148,6 +127,10 @@ namespace SimulFactory.Game
                     removeReadyMatchList.Add(match);
                 }
             }
+        }
+        protected virtual void CheckSearchUser()
+        {
+
         }
     }
 }

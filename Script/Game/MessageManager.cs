@@ -24,7 +24,7 @@ namespace SimulFactory.Game
                     C_Login.LoginC(pc,param);
                     break;
                 case (byte)Define.EVENT_CODE.StartMatchingC:
-                    C_StartMatching.StartMatchingC(pc);
+                    C_StartMatching.StartMatchingC(pc, param);
                     break;
                 case (byte)Define.EVENT_CODE.MatchingResponseC:
                     C_MatchingResponse.MatchingResponseC(pc,param);
