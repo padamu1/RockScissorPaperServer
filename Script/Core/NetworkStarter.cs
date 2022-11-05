@@ -16,6 +16,7 @@ namespace SimulFactory.Core
         private bool isThreadRun;
         private Thread networkThread;
         private Thread normalMatchThread;
+        private Thread multiMatchThread;
 
         public NetworkStarter()
         {
@@ -30,6 +31,10 @@ namespace SimulFactory.Core
             normalMatchThread = new Thread(NormalMatchSystem.GetInstance().Matching);
             normalMatchThread.IsBackground = true;
             normalMatchThread.Start();
+
+            multiMatchThread = new Thread(MultiMatchSystem.GetInstance().Matching);
+            multiMatchThread.IsBackground = true;
+            multiMatchThread.Start();
 
             ConnectionManager = new ConnectionManager(3000);
             // 서버 시작

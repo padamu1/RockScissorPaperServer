@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 
 namespace SimulFactory.Game.Matching
 {
-    public class NormalMatchSystem : MatchSystem
+    public class MultiMatchSystem : MatchSystem
     {
-        static readonly Lazy<NormalMatchSystem> instanceHolder = new Lazy<NormalMatchSystem>(() => new NormalMatchSystem());
-        public static NormalMatchSystem GetInstance()
+        static readonly Lazy<MultiMatchSystem> instanceHolder = new Lazy<MultiMatchSystem>(() => new MultiMatchSystem());
+        public static MultiMatchSystem GetInstance()
         {
             return instanceHolder.Value;
         }
@@ -27,7 +27,7 @@ namespace SimulFactory.Game.Matching
                 //bool matchSuccess = false;
                 if (matchSearchList[count + 1].GetPcPvp().GetRating() - matchSearchList[count].GetPcPvp().GetRating() <= Define.DEFAULT_SEARCH_RATING + matchSearchList[count].GetPcPvp().GetWaitCount() * Define.INCREASE_SEARCH_RATING)
                 {
-                    NormalMatch match = new NormalMatch(this);
+                    MultiMatch match = new MultiMatch(this);
                     match.AddPcInstance(matchSearchList[count]);
                     RemovePcInstance(matchSearchList[count]);
                     match.AddPcInstance(matchSearchList[count + 1]);

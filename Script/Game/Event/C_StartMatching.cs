@@ -14,6 +14,7 @@ namespace SimulFactory.Game.Event
                     NormalMatchSystem.GetInstance().AddPcInsatnce(pc);
                     break;
                 case Define.MATCH_TYPE.Multi:
+                    MultiMatchSystem.GetInstance().AddPcInsatnce(pc);
                     break;
                 case Define.MATCH_TYPE.Card:
                     break;

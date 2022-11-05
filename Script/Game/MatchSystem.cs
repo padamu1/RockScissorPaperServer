@@ -7,11 +7,6 @@ namespace SimulFactory.Game
 {
     public class MatchSystem
     {
-        static readonly Lazy<MatchSystem> instanceHolder = new Lazy<MatchSystem>(() => new MatchSystem());
-        public static MatchSystem GetInstance()
-        {
-            return instanceHolder.Value;
-        }
         protected List<PcInstance> matchSearchList;
         protected List<PcInstance> addMatchList;
         protected List<PcInstance> removeMatchList;
@@ -33,6 +28,7 @@ namespace SimulFactory.Game
                 {
                     foreach (PcInstance instance in addMatchList)
                     {
+                        instance.SetMatchSystem(this);
                         Console.WriteLine(instance.GetUserData().UserNo + " 매칭 리스트 추가");
                         matchSearchList.Add(instance);
                     }
