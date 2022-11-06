@@ -18,34 +18,41 @@ namespace SimulFactory.Game
             {
                 param = dataFormat.data;
             }
-            switch (eventCode)
+            try
             {
-                case (byte)Define.EVENT_CODE.LoginC:
-                    C_Login.LoginC(pc,param);
-                    break;
-                case (byte)Define.EVENT_CODE.StartMatchingC:
-                    C_StartMatching.StartMatchingC(pc, param);
-                    break;
-                case (byte)Define.EVENT_CODE.MatchingResponseC:
-                    C_MatchingResponse.MatchingResponseC(pc,param);
-                    break;
-                case (byte)Define.EVENT_CODE.MatchingCancelC:
-                    C_MatchingCancel.MatchingCancel(pc);
-                    break;
-                case (byte)Define.EVENT_CODE.PingC:
+                switch (eventCode)
+                {
+                    case (byte)Define.EVENT_CODE.LoginC:
+                        C_Login.LoginC(pc, param);
+                        break;
+                    case (byte)Define.EVENT_CODE.StartMatchingC:
+                        C_StartMatching.StartMatchingC(pc, param);
+                        break;
+                    case (byte)Define.EVENT_CODE.MatchingResponseC:
+                        C_MatchingResponse.MatchingResponseC(pc, param);
+                        break;
+                    case (byte)Define.EVENT_CODE.MatchingCancelC:
+                        C_MatchingCancel.MatchingCancel(pc);
+                        break;
+                    case (byte)Define.EVENT_CODE.PingC:
 
-                    break;
-                case (byte)Define.EVENT_CODE.UserBattleButtonClickedC:
-                    C_UserBattleButtonClicked.UserBattleButtonClickedC(pc, param);
-                    break;
-                case (byte)Define.EVENT_CODE.UserNameC:
-                    C_UserName.UserNameC(pc, param);
-                    break;
-                case (byte)Define.EVENT_CODE.LoginCompleteC:
-                    C_LoginComplete.LoginCompleteC(pc, param);
-                    break;
-                default:
-                    break;
+                        break;
+                    case (byte)Define.EVENT_CODE.UserBattleButtonClickedC:
+                        C_UserBattleButtonClicked.UserBattleButtonClickedC(pc, param);
+                        break;
+                    case (byte)Define.EVENT_CODE.UserNameC:
+                        C_UserName.UserNameC(pc, param);
+                        break;
+                    case (byte)Define.EVENT_CODE.LoginCompleteC:
+                        C_LoginComplete.LoginCompleteC(pc, param);
+                        break;
+                    default:
+                        break;
+                }
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine(e.Message);
             }
         }
     }

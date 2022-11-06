@@ -65,8 +65,9 @@ namespace SimulFactory.Common.Instance
                 Match match = pcPvp.GetMatch();
                 match.UserDisconnect(this);
             }
-
             matchSystem?.RemovePcInstance(this);
+
+            Console.WriteLine(GetUserData().UserName + " Client Disconnected");
         }
     }
 }

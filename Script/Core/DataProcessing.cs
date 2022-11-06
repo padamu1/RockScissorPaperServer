@@ -196,7 +196,6 @@ namespace SimulFactory.Core
 
         public void Dispose()
         {
-            Console.WriteLine(pc?.GetUserData().UserName+" Client Disconnected");
 
             // pc 자원 먼저 해제
             pc?.Dispose();

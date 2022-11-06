@@ -33,6 +33,12 @@ namespace SimulFactory.Core.Util
                     // 로그인 성공 시 관련 DB 로딩
                     PcPvpSql.GetUserPvp(pc);
 
+                    if(!PcListInstance.GetInstance().CheckUser(pc.GetUserData().UserNo))
+                    {
+                        PcListInstance.GetInstance().RemoveInstance(pc.GetUserData().UserNo);
+                    }
+                    PcListInstance.GetInstance().AddInstance(pc);
+
                     // 로그인 성공 메시지 보냄
                     S_Login.LoginS(pc, true);
                     return;

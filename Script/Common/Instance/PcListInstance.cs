@@ -25,19 +25,17 @@ namespace SimulFactory.Common.Instance
         {
             lock(pcDic)
             {
-                if (pcDic.ContainsKey(pc.GetUserData().UserNo))
-                {
-                }
                 pcDic.Add(pc.GetUserData().UserNo, pc);
             }
         }
-        public void RemoveInstance(PcInstance pc)
+        public void RemoveInstance(long userNo)
         {
             lock (pcDic)
             {
-                if (pcDic.ContainsKey(pc.GetUserData().UserNo))
+                if (pcDic.ContainsKey(userNo))
                 {
-                    pcDic.Remove(pc.GetUserData().UserNo);
+                    pcDic[userNo].Dispose();
+                    pcDic.Remove(userNo);
                 }
             }
         }
@@ -45,13 +43,13 @@ namespace SimulFactory.Common.Instance
         /// 현재 접속중인 유저와 비교해 접속 가능한지 확인 - 임시
         /// </summary>
         /// <returns></returns>
-        public bool CheckUser(PcInstance pc)
+        public bool CheckUser(long userNo)
         {
             lock(pcDic)
             {
                 foreach(KeyValuePair<long,PcInstance> pcData  in pcDic)
                 {
-                    if(pcData.Key == pc.GetUserData().UserNo)
+                    if(pcData.Key == userNo)
                     {
                         return false;
                     }
