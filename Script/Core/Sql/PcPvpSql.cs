@@ -114,6 +114,8 @@ namespace SimulFactory.Core.Sql
                     command.Parameters.AddWithValue("@rating", pc.GetPcPvp().GetRating());
 
                     result = command.ExecuteNonQuery(); // 성공시 1 들어감
+
+                    Console.WriteLine(command.ToString());
                 }
                 catch (Exception ex)
                 {

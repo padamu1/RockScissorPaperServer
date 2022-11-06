@@ -216,6 +216,7 @@ namespace SimulFactory.Game.Matching
             {
                 if(winCount < teamNo.Value)
                 {
+                    winCount = teamNo.Value;
                     winTeamNos.Clear();
                     winTeamNos.Add(teamNo.Key);
                 }

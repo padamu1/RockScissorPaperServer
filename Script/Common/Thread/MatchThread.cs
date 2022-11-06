@@ -84,13 +84,17 @@ namespace SimulFactory.Common.Thread
                 EndGame();
                 return;
             }
-
+            int winCount = 0;
             foreach (KeyValuePair<int, PcInstance> pc in pcDic)
             {
                 int teamNo = pc.Value.GetPcPvp().GetTeamNo();
                 if ((Define.ROCK_SCISSOR_PAPER)roundResponseDic[teamNo] == winUserResult)
                 {
                     userWinCountDic[teamNo]++;
+                    if (userWinCountDic[teamNo] > winCount)
+                    {
+                        winCount = userWinCountDic[teamNo];
+                    }
                 }
             }
             SendBattleResponse();
@@ -99,6 +103,11 @@ namespace SimulFactory.Common.Thread
             roundResponseDic.Clear();
             SendRoundResult(winUserResult);
 
+            if (winCount == Define.MAX_WIN_COUNT)
+            {
+                EndGame();
+                return;
+            }
             if (winUserResult != Define.ROCK_SCISSOR_PAPER.None)
             {
                 matchRound++;
