@@ -63,7 +63,8 @@ namespace SimulFactory.Core
             }
             catch(Exception e)
             {
-                Console.WriteLine(e);
+                PcListInstance.GetInstance().RemoveInstance(pc.GetUserData().UserNo);
+                Console.WriteLine(e.Message);
             }
         }
 
