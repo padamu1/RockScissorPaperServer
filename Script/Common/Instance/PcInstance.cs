@@ -14,7 +14,7 @@ namespace SimulFactory.Common.Instance
 
         private UserData userData;
         private PcPvp pcPvp;
-        private MatchSystem matchSystem;
+        private MatchSystem? matchSystem;
         public PcInstance(WebSocketController socketController)
         {
             this.socketController = socketController;
@@ -46,9 +46,10 @@ namespace SimulFactory.Common.Instance
         {
             S_UserInfo.UserInfoS(this);
         }
-        public void SetMatchSystem(MatchSystem matchSystem)
+        public void SetMatchSystem(MatchSystem? matchSystem)
         {
             this.matchSystem = matchSystem;
+            // 매칭 시스템에 들어갔을 때 유저에게 매칭시스템에 들어간 패킷 처리 혹은 들어가지 못했을 때 패킷 처리
         }
         public MatchSystem GetMatchSystem()
         {

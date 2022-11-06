@@ -1,12 +1,4 @@
-﻿using SimulFactory.Common.Bean;
-using SimulFactory.Common.Thread;
-using SimulFactory.Core.Util;
-using SimulFactory.Game.Event;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using SimulFactory.Common.Thread;
 
 namespace SimulFactory.Game.Matching.Mode
 {
@@ -16,17 +8,7 @@ namespace SimulFactory.Game.Matching.Mode
         {
 
         }
-
-        protected override int CheckRoundResult()
-        {
-            if (roundResponseDic.Count == 2)
-            {
-                int winTeamNo = MatchUtil.GetRSPResult(roundResponseDic);
-
-                return winTeamNo;
-            }
-            return 0;
-        }
+        /*
         protected override void EndRound(int winTeamNo = 0)
         {
             Console.WriteLine("매칭 결과 확인");
@@ -74,5 +56,6 @@ namespace SimulFactory.Game.Matching.Mode
 
             base.EndRound(winTeamNo);
         }
+        */
     }
 }

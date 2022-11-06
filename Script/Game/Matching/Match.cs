@@ -16,7 +16,6 @@ namespace SimulFactory.Game.Matching
         protected int matchUserWaitTime;              // 유저의 행동을 기다린 시간
         protected Define.MATCH_STATE matchState;      // 현재 매치 상태
         protected int matchRound;                     // 현재 진행중인 매치 라운드
-        protected long winUserNo;                     // 라운드에서 승리한 유저 넘버
         protected Dictionary<int, int> userWinCountDic;// 각 유저가 승리한 카운트
         protected Dictionary<int, int> roundResponseDic;     // 데미지 게산을 위한 임시 보관소
         protected Dictionary<int,  float> eloDic;   // elo probability
@@ -153,11 +152,25 @@ namespace SimulFactory.Game.Matching
             matchUserWaitTime += Define.MATCH_SYSTEM_DELAY_TIME;    // 유저를 대기하는 시간을 증가시킴
             return true;    // 매칭 대기 시간이 남은 경우
         }
-        protected void SendRoundResult(int winTeamNo)
+        protected void SendRoundResult(Define.ROCK_SCISSOR_PAPER winUserResult)
         {
             foreach (KeyValuePair<int, PcInstance> pc in pcDic)
             {
-                S_RoundResult.RoundResultS(pc.Value, winTeamNo);
+                S_RoundResult.RoundResultS(pc.Value, winUserResult);
+            }
+        }
+        protected void SendBattleResponse()
+        {
+            foreach (KeyValuePair<int, PcInstance> pc in pcDic)
+            {
+                int teamNo = pc.Value.GetPcPvp().GetTeamNo();
+                foreach(KeyValuePair<int, int> response in roundResponseDic)
+                {
+                    if(teamNo != response.Key)
+                    {
+                        S_UserBattleResponse.UserBattleResponseS(pc.Value, response.Value);
+                    }
+                }
             }
         }
         /// <summary>
@@ -194,23 +207,28 @@ namespace SimulFactory.Game.Matching
         /// <summary>
         /// 게임 종료시 호출된 메서드
         /// </summary>
-        protected void EndGame()
+        protected virtual void EndGame()
         {
             // 승리한 유저 설정
-            int winUserNo;
-            if (userWinCountDic[1] > userWinCountDic[2])
+            List<int> winTeamNos = new List<int>();
+            int winCount = -1;
+            foreach(KeyValuePair<int, int> teamNo in userWinCountDic)
             {
-                winUserNo = 1;
-            }
-            else
-            {
-                winUserNo = 2;
+                if(winCount < teamNo.Value)
+                {
+                    winTeamNos.Clear();
+                    winTeamNos.Add(teamNo.Key);
+                }
+                else if(winCount == teamNo.Value)
+                {
+                    winTeamNos.Add(teamNo.Key);
+                }
             }
 
             // 결과 각 유저에게 전송
             foreach (KeyValuePair<int, PcInstance> pc in pcDic)
             {
-                if (winUserNo == pc.Value.GetPcPvp().GetTeamNo())
+                if (winTeamNos.Contains(pc.Value.GetPcPvp().GetTeamNo()))
                 {
                     pc.Value.GetPcPvp().SetRating(pc.Value.GetPcPvp().GetRating() + (int)(Define.K_FACTOR * (1- (eloDic[pc.Key]))));
                     S_MatchingResult.MatchingResultS(pc.Value, true);

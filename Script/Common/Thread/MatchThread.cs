@@ -2,13 +2,10 @@
 using SimulFactory.Common.Instance;
 using SimulFactory.Core.Base;
 using SimulFactory.Game.Matching;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SimulFactory.Common.Thread
 {
+    using SimulFactory.Core.Util;
     using SimulFactory.Game;
     using SimulFactory.Game.Event;
     using System.Threading;
@@ -38,7 +35,7 @@ namespace SimulFactory.Common.Thread
             {
                 if (matchUserWaitTime++ > Define.MATCH_USER_WAIT_TIME)
                 {
-                    EndRound(-1);
+                    EndRound(Define.ROCK_SCISSOR_PAPER.Break);
                     return;
                 }
                 else
@@ -52,17 +49,57 @@ namespace SimulFactory.Common.Thread
         /// 라운드의 결과를 확인 0 : 결과 제출이 안됨, 1 : 1p 승리, 2 : 2p 승리
         /// </summary>
         /// <returns>승리한 유저 넘버</returns>
-        protected virtual int CheckRoundResult()
+        protected virtual Define.ROCK_SCISSOR_PAPER CheckRoundResult()
         {
-            return 0;
+            if (roundResponseDic.Count == 2)
+            {
+                return MatchUtil.GetRSPResultV2(roundResponseDic);
+            }
+            return Define.ROCK_SCISSOR_PAPER.None;
         }
         /// <summary>
         /// 라운드 종료시 동작 메서드 - winTeamNo 가 0이 들어온 경우 다음 라운드로 진행 안함, -1이 들어온 경우 플레이어 누군가가 제출을 안함
         /// </summary>
         /// <param name="winTeamNo"></param>
-        protected virtual void EndRound(int winTeamNo = 0)
+        protected virtual void EndRound(Define.ROCK_SCISSOR_PAPER winUserResult)
         {
-            if(winTeamNo != 0)
+            Console.WriteLine("매칭 결과 확인");
+            if (winUserResult == Define.ROCK_SCISSOR_PAPER.None)
+            {
+                // 다음 라운드 진행 안함
+                return;
+            }
+            else if (winUserResult == Define.ROCK_SCISSOR_PAPER.Break)
+            {
+                Console.WriteLine("한 쪽 연결 끊김");
+
+                foreach (KeyValuePair<int, PcInstance> pc in pcDic)
+                {
+                    int teamNo = pc.Value.GetPcPvp().GetTeamNo();
+                    if (roundResponseDic.ContainsKey(teamNo))
+                    {
+                        userWinCountDic[teamNo] = Define.MAX_ROUND_COUNT;
+                    }
+                }
+                EndGame();
+                return;
+            }
+
+            foreach (KeyValuePair<int, PcInstance> pc in pcDic)
+            {
+                int teamNo = pc.Value.GetPcPvp().GetTeamNo();
+                if ((Define.ROCK_SCISSOR_PAPER)roundResponseDic[teamNo] == winUserResult)
+                {
+                    userWinCountDic[teamNo]++;
+                }
+            }
+            SendBattleResponse();
+
+            // 다음 계산을 위해 초기화
+            roundResponseDic.Clear();
+            SendRoundResult(winUserResult);
+
+            if (winUserResult != Define.ROCK_SCISSOR_PAPER.None)
             {
                 matchRound++;
             }

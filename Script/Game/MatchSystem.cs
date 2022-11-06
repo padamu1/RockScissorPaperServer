@@ -40,6 +40,7 @@ namespace SimulFactory.Game
                     {
                         Console.WriteLine(instance.GetUserData().UserNo + " 매칭 리스트 삭제");
                         matchSearchList.Remove(instance);
+                        instance.SetMatchSystem(null);
                     }
                     removeMatchList.Clear();
                 }
