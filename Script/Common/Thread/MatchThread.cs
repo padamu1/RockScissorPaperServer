@@ -51,7 +51,7 @@ namespace SimulFactory.Common.Thread
         /// <returns>승리한 유저 넘버</returns>
         protected virtual Define.ROCK_SCISSOR_PAPER CheckRoundResult()
         {
-            if (roundResponseDic.Count == 2)
+            if (roundResponseDic.Count == pcDic.Count)
             {
                 return MatchUtil.GetRSPResultV2(roundResponseDic);
             }

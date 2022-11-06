@@ -11,14 +11,23 @@ namespace SimulFactory.Core.Util
     {
         public static void SetPvpEloRating(Dictionary<int, Common.Instance.PcInstance> userRating, ref Dictionary<int, float> eloDic)
         {
-            int teamARating = userRating[1].GetPcPvp().GetRating();
-            int teamBRating = userRating[2].GetPcPvp().GetRating();
+            foreach(KeyValuePair<int, Common.Instance.PcInstance> calculatedTeam in userRating)
+            {
+                int teamRating = userRating[1].GetPcPvp().GetRating();
 
-            float teamAProbability = Probability(teamARating, teamBRating);
-            float teamBProbability = Probability(teamBRating, teamARating);
-
-            eloDic.Add(1, teamAProbability);
-            eloDic.Add(2, teamBProbability);
+                int enemyRating = 0; 
+                foreach (KeyValuePair<int, Common.Instance.PcInstance> team in userRating)
+                {
+                    // 키가 같으면 스킵
+                    if(calculatedTeam.Key == team.Key)
+                    {
+                        continue;
+                    }
+                    enemyRating += team.Value.GetPcPvp().GetRating();
+                }
+                float teamProbability = Probability(teamRating, enemyRating / userRating.Count - 1);
+                eloDic.Add(calculatedTeam.Key, teamProbability);
+            }
         }
         private static float Probability(int ratingA, int ratingB)
         {
@@ -47,19 +56,31 @@ namespace SimulFactory.Core.Util
 
             if(scissorCount == 0)
             {
+                if(rockCount == roundResponseDic.Count || paperCount == roundResponseDic.Count)
+                {
+                    return Define.ROCK_SCISSOR_PAPER.Tie;
+                }
                 return Define.ROCK_SCISSOR_PAPER.Paper;
             }
             else if(rockCount == 0)
             {
+                if (paperCount == roundResponseDic.Count || scissorCount == roundResponseDic.Count)
+                {
+                    return Define.ROCK_SCISSOR_PAPER.Tie;
+                }
                 return Define.ROCK_SCISSOR_PAPER.Scissor;
             }
             else if (paperCount == 0)
             {
+                if (scissorCount == roundResponseDic.Count || rockCount == roundResponseDic.Count)
+                {
+                    return Define.ROCK_SCISSOR_PAPER.Tie;
+                }
                 return Define.ROCK_SCISSOR_PAPER.Rock;
             }
             else
             {
-                return Define.ROCK_SCISSOR_PAPER.None;
+                return Define.ROCK_SCISSOR_PAPER.Tie;
             }
 
         }
