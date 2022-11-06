@@ -22,19 +22,21 @@ namespace SimulFactory.Game.Matching
             // 매칭 전 정렬
             matchSearchList.OrderBy(x => x.GetPcPvp().GetRating());
             // 실제 로직 처리
-            for (int count = 0; count < matchSearchList.Count - 1;)
+            for (int count = 0; count < matchSearchList.Count - 2;)
             {
                 //bool matchSuccess = false;
-                if (matchSearchList[count + 1].GetPcPvp().GetRating() - matchSearchList[count].GetPcPvp().GetRating() <= Define.DEFAULT_SEARCH_RATING + matchSearchList[count].GetPcPvp().GetWaitCount() * Define.INCREASE_SEARCH_RATING)
+                if (matchSearchList[count + 2].GetPcPvp().GetRating() - matchSearchList[count].GetPcPvp().GetRating() <= Define.DEFAULT_SEARCH_RATING + matchSearchList[count].GetPcPvp().GetWaitCount() * Define.INCREASE_SEARCH_RATING)
                 {
                     MultiMatch match = new MultiMatch(this);
                     match.AddPcInstance(matchSearchList[count]);
                     RemovePcInstance(matchSearchList[count]);
                     match.AddPcInstance(matchSearchList[count + 1]);
                     RemovePcInstance(matchSearchList[count + 1]);
+                    match.AddPcInstance(matchSearchList[count + 2]);
+                    RemovePcInstance(matchSearchList[count + 2]);
                     match.CalculateEloRating();
                     readyMatchList.Add(match);
-                    count += 2;
+                    count += 3;
                 }
                 else
                 {
