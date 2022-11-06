@@ -28,36 +28,43 @@ namespace SimulFactory.Core
         }
         protected void OnReadData(IAsyncResult ar)
         {
-            int size = messageStream.EndRead(ar);
-
-            byte[] httpRequestRaw = new byte[7];    //HTTP request method는 7자리를 넘지 않는다.
-                                                    //GET만 확인하면 되므로 new byte[3]해도 상관없음
-            Array.Copy(dataBuffer, httpRequestRaw, httpRequestRaw.Length);
-            string httpRequest = Encoding.UTF8.GetString(httpRequestRaw);
-
-            //GET 요청인지 여부 확인
-            if (Regex.IsMatch(httpRequest, "^GET", RegexOptions.IgnoreCase))
+            try
             {
-                if (State == Define.WEB_SOCKET_STATE.Open) // 이미 연결 중인 상태일 경우 다시 연결 요청에 대한 응답을 할 이유가 없으므로 dispose
+                int size = messageStream.EndRead(ar);
+
+                byte[] httpRequestRaw = new byte[7];    //HTTP request method는 7자리를 넘지 않는다.
+                                                        //GET만 확인하면 되므로 new byte[3]해도 상관없음
+                Array.Copy(dataBuffer, httpRequestRaw, httpRequestRaw.Length);
+                string httpRequest = Encoding.UTF8.GetString(httpRequestRaw);
+
+                //GET 요청인지 여부 확인
+                if (Regex.IsMatch(httpRequest, "^GET", RegexOptions.IgnoreCase))
                 {
-                    Dispose();
-                    return;
+                    if (State == Define.WEB_SOCKET_STATE.Open) // 이미 연결 중인 상태일 경우 다시 연결 요청에 대한 응답을 할 이유가 없으므로 dispose
+                    {
+                        Dispose();
+                        return;
+                    }
+                    HandshakeToClient(size);        // 연결 요청에 대한 응답
+                    State = Define.WEB_SOCKET_STATE.Open;    // 응답이 성공하여 연결 중으로 상태 전환
                 }
-                HandshakeToClient(size);        // 연결 요청에 대한 응답
-                State = Define.WEB_SOCKET_STATE.Open;    // 응답이 성공하여 연결 중으로 상태 전환
+                else
+                {
+                    if (size == 0) // 비어있는 데이터는 없으므로 dispose
+                    {
+                        Dispose();
+                        return;
+                    }
+                    // 메시지 수신에 대한 처리, 반환 값은 연결 종료 여부
+                    if (ProcessClientRequest(size) == false) { return; }
+                }
+                //데이터 수신 재시작
+                messageStream.BeginRead(dataBuffer, 0, dataBuffer.Length, OnReadData, null);
             }
-            else
+            catch(Exception e)
             {
-                if (size == 0) // 비어있는 데이터는 없으므로 dispose
-                {
-                    Dispose();
-                    return;
-                }
-                // 메시지 수신에 대한 처리, 반환 값은 연결 종료 여부
-                if (ProcessClientRequest(size) == false) { return; }
+                Console.WriteLine(e);
             }
-            //데이터 수신 재시작
-            messageStream.BeginRead(dataBuffer, 0, dataBuffer.Length, OnReadData, null);
         }
 
         protected void HandshakeToClient(int dataSize)
