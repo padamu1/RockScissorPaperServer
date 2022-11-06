@@ -26,6 +26,7 @@ namespace SimulFactory.Common.Instance
             lock(pcDic)
             {
                 pcDic.Add(pc.GetUserData().UserNo, pc);
+                Console.WriteLine(pc.GetUserData().UserName + " Client Connected");
             }
         }
         public void RemoveInstance(long userNo)

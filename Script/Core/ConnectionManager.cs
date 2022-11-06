@@ -18,7 +18,7 @@ namespace SimulFactory.Core
             try
             {
                 TcpClient client = tcpListener.EndAcceptTcpClient(ar);
-                Console.WriteLine("Client Connected");
+                Console.WriteLine("Client Connect Request On");
 
                 //if(clients.ContainsKey(client))
                 //{
