@@ -14,7 +14,7 @@ namespace SimulFactory.Game.Matching.Mode
     {
         public CardMatch(MatchSystem matchSystem) : base(matchSystem)
         {
-
+            // 데미지 로직 추가 필요
         }
     }
 }

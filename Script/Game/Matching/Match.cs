@@ -178,7 +178,7 @@ namespace SimulFactory.Game.Matching
         /// </summary>
         /// <param name="teamNo"></param>
         /// <param name="dmg"></param>
-        public void SetDmg(int teamNo, int response)
+        public virtual void SetDmg(int teamNo, int response)
         {
             if (!roundResponseDic.ContainsKey(teamNo))
             {
@@ -247,6 +247,10 @@ namespace SimulFactory.Game.Matching
             // 스레드 종료
             ThreadManager.GetInstance().RemoveWorker(this);
         }
+
+        /// <summary>
+        /// 등록된 모든 유저의 elo 평점 계산
+        /// </summary>
         public void CalculateEloRating()
         {
             MatchUtil.SetPvpEloRating(pcDic, ref eloDic);

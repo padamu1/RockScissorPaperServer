@@ -15,6 +15,11 @@ namespace SimulFactory.Game.Matching
         {
             return instanceHolder.Value;
         }
+        public MultiMatchSystem()
+        {
+            defaultSearchCount = Define.MULTI_MODE_SEARCH_USER_COUNT;
+            minSearchCount = Define.MULTI_MODE_SEARCH_USER_MIN_COUNT;
+        }
         /// <summary>
         /// 멀티 매칭일 경우 재정의 필요
         /// </summary>
