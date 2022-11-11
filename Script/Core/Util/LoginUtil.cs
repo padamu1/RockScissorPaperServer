@@ -20,34 +20,56 @@ namespace SimulFactory.Core.Util
         /// <param name="userNo"></param>
         public static void CheckLogin(PcInstance pc)
         {
-            if (pc.GetUserData().UserNo == 0)
+            // 타입 구분 필요
+            switch (pc.GetUserData().LoginType)
             {
-                // 유저 생성
-                MakeUser(pc);
-            }
-            else
-            {
-                // 유저 정보 조회
-                if (UserDBSql.GetUserNo(pc))
-                {
-                    // 로그인 성공 시 관련 DB 로딩
-                    PcPvpSql.GetUserPvp(pc);
-
-                    if(!PcListInstance.GetInstance().CheckUser(pc.GetUserData().UserNo))
+                case 1:
+                    bool result = GoogleUtil.CheckTokenAsync("").Result;
+                    
+                    // 구글 로그인
+                    break;
+                case 2:
+                    // 임시
+                    break;
+                case 0:
+                default:
+                    // Guest 로그인
+                    if (pc.GetUserData().UserNo == 0)
                     {
-                        PcListInstance.GetInstance().RemoveInstance(pc.GetUserData().UserNo);
+                        // 유저 생성
+                        MakeUser(pc);
+                        return;
                     }
-                    PcListInstance.GetInstance().AddInstance(pc);
+                    CheckUser(pc);
+                    break;
+            }
+        }
+        /// <summary>
+        /// 로그인 타입에 따라 UserNo 설정 후 호출되는 함수
+        /// </summary>
+        /// <param name="pc"></param>
+        private static void CheckUser(PcInstance pc)
+        {
+            // 유저 정보 조회
+            if (UserDBSql.GetUserNo(pc))
+            {
+                // 로그인 성공 시 관련 DB 로딩
+                PcPvpSql.GetUserPvp(pc);
 
-                    // 로그인 성공 메시지 보냄
-                    S_Login.LoginS(pc, true);
-                    return;
+                // 현재 접속중인 유저라면 이전 접속 상태를 끊고 새로 연결
+                if (!PcListInstance.GetInstance().CheckUser(pc.GetUserData().UserNo))
+                {
+                    PcListInstance.GetInstance().RemoveInstance(pc.GetUserData().UserNo);
                 }
+                PcListInstance.GetInstance().AddInstance(pc);
 
-                // 로그인 실패시
-                S_Login.LoginS(pc, false);
+                // 로그인 성공 메시지 보냄
+                S_Login.LoginS(pc, true);
                 return;
             }
+
+            // 로그인 실패시
+            S_Login.LoginS(pc, false);
         }
         /// <summary>
         /// 시간값과 임의로 정의된 값을 가지고 새로운 유저 넘버를 부여해주는 함수

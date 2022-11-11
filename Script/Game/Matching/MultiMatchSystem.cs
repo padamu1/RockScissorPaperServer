@@ -24,22 +24,21 @@ namespace SimulFactory.Game.Matching
             // 매칭 전 정렬 -> 점수 순으로 정렬
             matchSearchList.OrderBy(x => x.GetPcPvp().GetRating());
 
-            // 실제 로직 처리 -> 현재 두명이 잡히도록 되어있음
-            for (int count = 0; count < matchSearchList.Count - 2;)
+            // 실제 로직 처리
+            for (int count = 0; count < matchSearchList.Count - searchCount - 1;)
             {
                 //bool matchSuccess = false;
-                if (matchSearchList[count + 2].GetPcPvp().GetRating() - matchSearchList[count].GetPcPvp().GetRating() <= Define.DEFAULT_SEARCH_RATING + matchSearchList[count].GetPcPvp().GetWaitCount() * Define.INCREASE_SEARCH_RATING)
+                if (matchSearchList[count + searchCount].GetPcPvp().GetRating() - matchSearchList[count].GetPcPvp().GetRating() <= Define.DEFAULT_SEARCH_RATING + matchSearchList[count].GetPcPvp().GetWaitCount() * Define.INCREASE_SEARCH_RATING)
                 {
                     MultiMatch match = new MultiMatch(this);
-                    match.AddPcInstance(matchSearchList[count]);
-                    RemovePcInstance(matchSearchList[count]);
-                    match.AddPcInstance(matchSearchList[count + 1]);
-                    RemovePcInstance(matchSearchList[count + 1]);
-                    match.AddPcInstance(matchSearchList[count + 2]);
-                    RemovePcInstance(matchSearchList[count + 2]);
+                    for(int index = count; index < count + searchCount; index++)
+                    {
+                        match.AddPcInstance(matchSearchList[index]);
+                        RemovePcInstance(matchSearchList[index]);
+                    }
                     match.CalculateEloRating();
                     readyMatchList.Add(match);
-                    count += 3;
+                    count += searchCount;
                 }
                 else
                 {

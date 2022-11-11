@@ -11,6 +11,8 @@ namespace SimulFactory.Common.Bean
 {
     public class UserData
     {
+        public int LoginType { get; set; }
+        public string GoogleToken { get; set; }
         public long UserNo { get; set; }
         public string UserName { get; set; }
         public long PingTime { get; set; }
