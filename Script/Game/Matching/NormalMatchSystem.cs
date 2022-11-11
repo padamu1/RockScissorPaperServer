@@ -15,33 +15,14 @@ namespace SimulFactory.Game.Matching
         {
             return instanceHolder.Value;
         }
-        protected override void CheckSearchUser()
+        public NormalMatchSystem()
         {
-            base.CheckSearchUser();
-
-            // 매칭 전 정렬
-            matchSearchList.OrderBy(x => x.GetPcPvp().GetRating());
-            // 실제 로직 처리
-            for (int count = 0; count < matchSearchList.Count - 1;)
-            {
-                //bool matchSuccess = false;
-                if (matchSearchList[count + 1].GetPcPvp().GetRating() - matchSearchList[count].GetPcPvp().GetRating() <= Define.DEFAULT_SEARCH_RATING + matchSearchList[count].GetPcPvp().GetWaitCount() * Define.INCREASE_SEARCH_RATING)
-                {
-                    NormalMatch match = new NormalMatch(this);
-                    match.AddPcInstance(matchSearchList[count]);
-                    RemovePcInstance(matchSearchList[count]);
-                    match.AddPcInstance(matchSearchList[count + 1]);
-                    RemovePcInstance(matchSearchList[count + 1]);
-                    match.CalculateEloRating();
-                    readyMatchList.Add(match);
-                    count += 2;
-                }
-                else
-                {
-                    matchSearchList[count].GetPcPvp().SetWaitCount(matchSearchList[count].GetPcPvp().GetWaitCount() + 1);
-                    count += 1;
-                }
-            }
+            this.defaultSearchCount = Define.NORMAL_MODE_SEARCH_USER_COUNT;
+            this.minSearchCount = Define.NORMAL_MODE_SEARCH_USER_MIN_COUNT;
+        }
+        protected override void CheckSearchUser(int searchCount)
+        {
+            base.CheckSearchUser(searchCount);
         }
     }
 }

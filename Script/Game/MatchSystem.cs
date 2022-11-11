@@ -12,6 +12,11 @@ namespace SimulFactory.Game
         protected List<PcInstance> removeMatchList;
         protected List<Match> removeReadyMatchList;
         protected List<Match> readyMatchList;
+        protected int defaultSearchCount = 0;
+        protected int searchCount = 0;
+        protected int minSearchCount = 0;
+        protected bool decreaseSearchCount = false;
+
         public MatchSystem()
         {
             matchSearchList = new List<PcInstance>();
@@ -46,7 +51,21 @@ namespace SimulFactory.Game
                 }
                 lock (matchSearchList)
                 {
-                    CheckSearchUser();
+                    // 검색 카운트를 낮추어야 하는지 판단.
+                    if(decreaseSearchCount)
+                    {
+                        // 검색 카운트를 낮추어야 한다면, 최소보다 큰지 판단
+                        if(searchCount > minSearchCount)
+                        {
+                            searchCount--;
+                        }
+                    }
+                    else
+                    {
+                        searchCount = defaultSearchCount;
+                    }
+                    CheckSearchUser(searchCount);
+
                 }
                 lock (removeReadyMatchList)
                 {
@@ -104,6 +123,10 @@ namespace SimulFactory.Game
                 }
             }
         }
+        /// <summary>
+        /// 매칭 중인 유저 리스트에서 제거
+        /// </summary>
+        /// <param name="pcInstance"></param>
         public void RemovePcInstance(PcInstance pcInstance)
         {
             lock (removeMatchList)
@@ -125,9 +148,31 @@ namespace SimulFactory.Game
                 }
             }
         }
-        protected virtual void CheckSearchUser()
+        protected virtual void CheckSearchUser(int searchCount)
         {
-
+            // 매칭 전 정렬
+            matchSearchList.OrderBy(x => x.GetPcPvp().GetRating());
+            // 실제 로직 처리
+            for (int count = 0; count < matchSearchList.Count - (searchCount - 1);)
+            {
+                //bool matchSuccess = false;
+                if (matchSearchList[count + 1].GetPcPvp().GetRating() - matchSearchList[count].GetPcPvp().GetRating() <= Define.DEFAULT_SEARCH_RATING + matchSearchList[count].GetPcPvp().GetWaitCount() * Define.INCREASE_SEARCH_RATING)
+                {
+                    NormalMatch match = new NormalMatch(this);
+                    match.AddPcInstance(matchSearchList[count]);
+                    RemovePcInstance(matchSearchList[count]);
+                    match.AddPcInstance(matchSearchList[count + 1]);
+                    RemovePcInstance(matchSearchList[count + 1]);
+                    match.CalculateEloRating();
+                    readyMatchList.Add(match);
+                    count += searchCount;
+                }
+                else
+                {
+                    matchSearchList[count].GetPcPvp().SetWaitCount(matchSearchList[count].GetPcPvp().GetWaitCount() + 1);
+                    count += 1;
+                }
+            }
         }
     }
 }

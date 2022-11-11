@@ -15,13 +15,16 @@ namespace SimulFactory.Game.Matching
         {
             return instanceHolder.Value;
         }
-        protected override void CheckSearchUser()
+        /// <summary>
+        /// 멀티 매칭일 경우 재정의 필요
+        /// </summary>
+        /// <param name="searchCount"></param>
+        protected override void CheckSearchUser(int searchCount)
         {
-            base.CheckSearchUser();
-
-            // 매칭 전 정렬
+            // 매칭 전 정렬 -> 점수 순으로 정렬
             matchSearchList.OrderBy(x => x.GetPcPvp().GetRating());
-            // 실제 로직 처리
+
+            // 실제 로직 처리 -> 현재 두명이 잡히도록 되어있음
             for (int count = 0; count < matchSearchList.Count - 2;)
             {
                 //bool matchSuccess = false;
@@ -42,6 +45,12 @@ namespace SimulFactory.Game.Matching
                 {
                     matchSearchList[count].GetPcPvp().SetWaitCount(matchSearchList[count].GetPcPvp().GetWaitCount() + 1);
                     count += 1;
+
+                    // 멀티 매칭 중 카운트가 최대 대기 카운트 보다 크다면, 유저 3명, 유저 2명에 대한 매칭이 이루어지도록 설정
+                    if (matchSearchList[count].GetPcPvp().GetWaitCount() >= Define.MULTI_MATCH_WAIT_COUNT)
+                    {
+                        this.decreaseSearchCount = true;
+                    }
                 }
             }
         }

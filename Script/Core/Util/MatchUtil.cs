@@ -9,6 +9,11 @@ namespace SimulFactory.Core.Util
 {
     public class MatchUtil
     {
+        /// <summary>
+        /// 상대 평점 계산
+        /// </summary>
+        /// <param name="userRating"></param>
+        /// <param name="eloDic"></param>
         public static void SetPvpEloRating(Dictionary<int, Common.Instance.PcInstance> userRating, ref Dictionary<int, float> eloDic)
         {
             foreach(KeyValuePair<int, Common.Instance.PcInstance> calculatedTeam in userRating)
