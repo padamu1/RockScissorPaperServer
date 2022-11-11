@@ -54,6 +54,7 @@ namespace SimulFactory.Game
                     // 검색 카운트를 낮추어야 하는지 판단.
                     if(decreaseSearchCount)
                     {
+                        decreaseSearchCount = false;
                         // 검색 카운트를 낮추어야 한다면, 최소보다 큰지 판단
                         if(searchCount > minSearchCount)
                         {
