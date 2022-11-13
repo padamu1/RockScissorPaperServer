@@ -20,9 +20,5 @@ namespace SimulFactory.Game.Matching
             this.defaultSearchCount = Define.NORMAL_MODE_SEARCH_USER_COUNT;
             this.minSearchCount = Define.NORMAL_MODE_SEARCH_USER_MIN_COUNT;
         }
-        protected override void CheckSearchUser(int searchCount)
-        {
-            base.CheckSearchUser(searchCount);
-        }
     }
 }

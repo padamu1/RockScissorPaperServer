@@ -35,6 +35,13 @@ namespace SimulFactory.Core.Sql
                     {
                         ShopItemDto shopItemDto = new ShopItemDto();
                         shopItemDto.Uid = dr.GetInt32("uid");
+                        shopItemDto.Name = dr.GetString("name");
+                        shopItemDto.PriceType = dr.GetInt32("price_type");
+                        shopItemDto.PriceValue = dr.GetInt32("price_value");
+                        string rewardUids = dr.GetString("reward_uids");
+                        string rewardAmounts = dr.GetString("reward_amounts");
+                        shopItemDto.RewardUids = rewardUids == "" ? new int[0]:rewardUids.Split(',').Select(n=>int.Parse(n)).ToArray();
+                        shopItemDto.RewardAmounts = rewardAmounts == "" ? new int[0] : rewardAmounts.Split(',').Select(n => int.Parse(n)).ToArray();
                         shopItemDic.Add(shopItemDto.Uid, shopItemDto);
                     }
                     return true;

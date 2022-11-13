@@ -126,5 +126,44 @@ namespace SimulFactory.Core.Sql
 
             return result >= 1;
         }
+
+        public static bool UpdateUserPvpSql(PcInstance[] pcInstances)
+        {
+            // UPDATE[테이블] SET[열] = '변경할값' WHERE[조건]
+            int result = 0;
+            StringBuilder sb = new StringBuilder();
+            // 사용할 커넥션 가져오기
+            using (MySqlConnection connection = SqlController.GetMySqlConnection())
+            {
+                string insertQuery = "INSERT INTO table (user_no,rating,win_count,defeat_count) VALUES @insertParam ON DUPLICATE KEY UPDATE rating = VALUES(rating),win_count = VALUES(defeat_count),win_count = VALUES(defeat_count); ";
+                try //예외 처리
+                {
+                    // 커넥션 연결
+                    connection.Open();
+
+                    // 커맨드 설정
+                    MySqlCommand command = new MySqlCommand(insertQuery, connection);
+                    foreach(PcInstance pc in pcInstances)
+                    {
+                        sb.AppendFormat("({0},{1},{2},{3},{4})", pc.GetUserData().UserNo
+                            , pc.GetPcPvp().GetWinCount()
+                            , pc.GetPcPvp().GetDefeatCount()
+                            , pc.GetPcPvp().GetRating());
+                    }
+                    command.Parameters.AddWithValue("@insertParam", sb.ToString());
+
+                    result = command.ExecuteNonQuery(); // 성공시 1 들어감
+
+                    Console.WriteLine(command.ToString());
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("실패");
+                    Console.WriteLine(ex.ToString());
+                }
+            }
+
+            return result >= 1;
+        }
     }
 }

@@ -28,6 +28,7 @@ namespace SimulFactory.Core
         /// <returns>커넥션</returns>
         public static MySqlConnection GetMySqlConnection(string sqlName = "")
         {
+            // sql 이름이 설정이 안되어있을 겨웅 기존에 설정된 db를 반환
             MySqlConnection connection = new MySqlConnection(strConn);
             if("".Equals(sqlName))
             {
