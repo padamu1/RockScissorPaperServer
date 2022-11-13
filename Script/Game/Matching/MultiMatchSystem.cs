@@ -1,4 +1,5 @@
 ﻿using SimulFactory.Common.Bean;
+using SimulFactory.Common.Instance;
 using SimulFactory.Game.Matching.Mode;
 using System;
 using System.Collections.Generic;
@@ -28,34 +29,24 @@ namespace SimulFactory.Game.Matching
         {
             // 매칭 전 정렬 -> 점수 순으로 정렬
             matchSearchList.OrderBy(x => x.GetPcPvp().GetRating());
-
-            // 실제 로직 처리
-            for (int count = 0; count < matchSearchList.Count - searchCount - 1;)
+            if(searchCount > matchSearchList.Count)
             {
-                //bool matchSuccess = false;
-                if (matchSearchList[count + searchCount].GetPcPvp().GetRating() - matchSearchList[count].GetPcPvp().GetRating() <= Define.DEFAULT_SEARCH_RATING + matchSearchList[count].GetPcPvp().GetWaitCount() * Define.INCREASE_SEARCH_RATING)
+                for (int count = 0; count < matchSearchList.Count; count++)
                 {
-                    MultiMatch match = new MultiMatch(this);
-                    for(int index = count; index < count + searchCount; index++)
-                    {
-                        match.AddPcInstance(matchSearchList[index]);
-                        RemovePcInstance(matchSearchList[index]);
-                    }
-                    match.CalculateEloRating();
-                    readyMatchList.Add(match);
-                    count += searchCount;
+                    NoSearchUser(matchSearchList[count]);
                 }
-                else
-                {
-                    matchSearchList[count].GetPcPvp().SetWaitCount(matchSearchList[count].GetPcPvp().GetWaitCount() + 1);
-                    count += 1;
+                return;
+            }
+            base.CheckSearchUser(searchCount);
+        }
+        protected override void NoSearchUser(PcInstance pc)
+        {
+            base.NoSearchUser(pc);
 
-                    // 멀티 매칭 중 카운트가 최대 대기 카운트 보다 크다면, 유저 3명, 유저 2명에 대한 매칭이 이루어지도록 설정
-                    if (matchSearchList[count].GetPcPvp().GetWaitCount() >= Define.MULTI_MATCH_WAIT_COUNT)
-                    {
-                        this.decreaseSearchCount = true;
-                    }
-                }
+            // 멀티 매칭 중 카운트가 최대 대기 카운트 보다 크다면, 유저 3명, 유저 2명에 대한 매칭이 이루어지도록 설정
+            if (pc.GetPcPvp().GetWaitCount() >= Define.MULTI_MATCH_WAIT_COUNT)
+            {
+                this.decreaseSearchCount = true;
             }
         }
     }

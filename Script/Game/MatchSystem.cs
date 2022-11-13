@@ -157,23 +157,28 @@ namespace SimulFactory.Game
             for (int count = 0; count < matchSearchList.Count - (searchCount - 1);)
             {
                 //bool matchSuccess = false;
-                if (matchSearchList[count + 1].GetPcPvp().GetRating() - matchSearchList[count].GetPcPvp().GetRating() <= Define.DEFAULT_SEARCH_RATING + matchSearchList[count].GetPcPvp().GetWaitCount() * Define.INCREASE_SEARCH_RATING)
+                if (matchSearchList[count + (searchCount - 1)].GetPcPvp().GetRating() - matchSearchList[count].GetPcPvp().GetRating() <= Define.DEFAULT_SEARCH_RATING + matchSearchList[count].GetPcPvp().GetWaitCount() * Define.INCREASE_SEARCH_RATING)
                 {
                     NormalMatch match = new NormalMatch(this);
-                    match.AddPcInstance(matchSearchList[count]);
-                    RemovePcInstance(matchSearchList[count]);
-                    match.AddPcInstance(matchSearchList[count + 1]);
-                    RemovePcInstance(matchSearchList[count + 1]);
+                    for (int index = count; index < count + searchCount; index++)
+                    {
+                        match.AddPcInstance(matchSearchList[index]);
+                        RemovePcInstance(matchSearchList[index]);
+                    }
                     match.CalculateEloRating();
                     readyMatchList.Add(match);
                     count += searchCount;
                 }
                 else
                 {
-                    matchSearchList[count].GetPcPvp().SetWaitCount(matchSearchList[count].GetPcPvp().GetWaitCount() + 1);
-                    count += 1;
+                    NoSearchUser(matchSearchList[count]);
+                    count++;
                 }
             }
+        }
+        protected virtual void NoSearchUser(PcInstance pc)
+        {
+            pc.GetPcPvp().SetWaitCount(pc.GetPcPvp().GetWaitCount() + 1);
         }
     }
 }
