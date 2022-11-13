@@ -240,8 +240,8 @@ namespace SimulFactory.Game.Matching
                     S_MatchingResult.MatchingResultS(pc.Value, false);
                 }
                 pc.Value.GetPcPvp().SetMatch(null);
-                PcPvpSql.UpdateUserPvpSql(pc.Value);
             }
+            PcPvpSql.UpdateUserPvpSql(pcDic.Values.ToArray());
             matchSystem.RemoveReadyMatchList(this);
 
             // 스레드 종료
