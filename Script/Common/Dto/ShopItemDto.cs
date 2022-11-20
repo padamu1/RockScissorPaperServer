@@ -1,4 +1,4 @@
-﻿namespace SimulFactory.Common.Db
+﻿namespace SimulFactory.Common.Dto
 {
     public class ShopItemDto
     {

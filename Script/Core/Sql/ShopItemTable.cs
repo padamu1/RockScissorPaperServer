@@ -1,5 +1,5 @@
 ﻿using MySql.Data.MySqlClient;
-using SimulFactory.Common.Db;
+using SimulFactory.Common.Dto;
 using System;
 using System.Collections.Generic;
 using System.Linq;
