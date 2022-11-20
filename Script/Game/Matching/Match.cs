@@ -103,7 +103,12 @@ namespace SimulFactory.Game.Matching
         {
             foreach (KeyValuePair<int, PcInstance> pc in pcDic)
             {
-                S_MatchingSuccess.MatchingSuccessS(pc.Value);
+                List<string> users = new List<string>();
+                foreach(KeyValuePair<int, PcInstance> user in pcDic)
+                {
+                    users.Add(user.Value.GetUserData().UserName);
+                }
+                S_MatchingSuccess.MatchingSuccessS(pc.Value, users);
             }
         }
         /// <summary>

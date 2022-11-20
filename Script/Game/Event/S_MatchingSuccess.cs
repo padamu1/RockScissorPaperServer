@@ -10,9 +10,10 @@ namespace SimulFactory.Game.Event
 {
     public class S_MatchingSuccess
     {
-        public static void MatchingSuccessS(PcInstance pc)
+        public static void MatchingSuccessS(PcInstance pc, List<string> users)
         {
             Dictionary<byte, object> param = new Dictionary<byte, object>();
+            param.Add(0, users);
             Console.WriteLine("매칭 성공 메시지 보냄");
             pc.SendPacket((byte)Define.EVENT_CODE.MatchingSuccessS, param);
         }
