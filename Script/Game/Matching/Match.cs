@@ -164,13 +164,15 @@ namespace SimulFactory.Game.Matching
             foreach (KeyValuePair<int, PcInstance> pc in pcDic)
             {
                 int teamNo = pc.Value.GetPcPvp().GetTeamNo();
+                Dictionary<string, int> enemyResult = new Dictionary<string, int>();
                 foreach(KeyValuePair<int, int> response in roundResponseDic)
                 {
                     if(teamNo != response.Key)
                     {
-                        S_UserBattleResponse.UserBattleResponseS(pc.Value, response.Value);
+                        enemyResult.Add(pcDic[response.Key].GetUserData().UserName, response.Value);
                     }
                 }
+                S_UserBattleResponse.UserBattleResponseS(pc.Value, enemyResult);
             }
         }
         /// <summary>
