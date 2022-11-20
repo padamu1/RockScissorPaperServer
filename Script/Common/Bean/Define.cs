@@ -18,6 +18,8 @@ namespace SimulFactory.Common.Bean
             UserBattleButtonClickedC = 5,   // 배틀 중 유저가 클릭한 버튼을 보냄
             UserNameC = 6,                  // 유저 닉네임 변경 요청
             LoginCompleteC = 7,             // 유저 로그인 완료 메시지
+            FriendRequestC = 8,             // 친구 요청
+            FriendRemoveC = 9,              // 친구 삭제
 
             LoginS = 0,             // 로그인 응답
             UserInfoS = 1,          // 유저 정보 내려줌
@@ -29,6 +31,8 @@ namespace SimulFactory.Common.Bean
             UserBattleResponseS = 7,// 상대편이 낸 결과를 받음
             RoundResultS = 8,       // 라운드 결과 전송
             UserNameS = 9,          // 유저 닉네임 변경 요청 응답
+            FriendRequestS = 10,    // 친구 요청에 대한 결과 및 상대방에게 친구 요청 보냄
+            FriendRemoveS = 11,     // 친구 삭제
         }
         public enum WEB_SOCKET_STATE
         {
