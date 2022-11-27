@@ -44,7 +44,7 @@ namespace SimulFactory.Core.Sql
                     }
                     else
                     {
-                        Console.WriteLine("UnKnown UserNo");
+                        Console.WriteLine("{0} 유저의 친구가 없습니다.",pc.GetUserData().UserNo);
                     }
                 }
                 catch (Exception ex)
@@ -87,7 +87,7 @@ namespace SimulFactory.Core.Sql
                     }
                     else
                     {
-                        Console.WriteLine("UnKnown UserNo");
+                        Console.WriteLine("{0} 유저의 친구요청 데이터가 없습니다.", pc.GetUserData().UserNo);
                     }
                 }
                 catch (Exception ex)
