@@ -1,5 +1,6 @@
 ﻿using SimulFactory.Common.Bean;
 using SimulFactory.Core;
+using SimulFactory.Core.Sql;
 using SimulFactory.Game;
 using SimulFactory.Game.Event;
 using SimulFactory.Game.Matching;
@@ -33,6 +34,12 @@ namespace SimulFactory.Common.Instance
             userData = new UserData(this);
             pcPvp = new PcPvp(this);
             pcFriend = new PcFriend(this);
+        }
+        public void LoadData()
+        {
+            // 로그인 성공 시 관련 DB 로딩
+            PcPvpSql.GetUserPvp(this);
+            GetPcFriend().LoadPcFriend();
         }
         #region Getter
         public PcPvp GetPcPvp()

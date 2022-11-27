@@ -11,6 +11,92 @@ namespace SimulFactory.Core.Sql
 {
     public class PcFriendSql
     {
+        public static void LoadFriendData(PcInstance pc,ref Dictionary<string, FriendDto> friendDtoDic)
+        {
+            // 사용할 커넥션 가져오기
+            using (MySqlConnection connection = SqlController.GetMySqlConnection())
+            {
+                string insertQuery = "Select * From user_friend Where user_no=@userNo";
+                try //예외 처리
+                {
+                    // 커넥션 연결
+                    connection.Open();
+
+                    // 커맨드 설정
+                    MySqlCommand command = new MySqlCommand(insertQuery, connection);
+
+                    // 파라메터 정의
+                    command.Parameters.AddWithValue("@userNo", pc.GetUserData().UserNo);
+
+                    MySqlDataReader dr = command.ExecuteReader();
+                    if (dr.Read())
+                    {
+                        long friendNo = dr.GetInt64("friend_no");
+                        string friendName = dr.GetString("friend_name");
+                        if (!friendDtoDic.ContainsKey(friendName))
+                        {
+                            friendDtoDic.Add(friendName, new FriendDto()
+                            {
+                                FriendName = friendName,
+                                FriendNo = friendNo,
+                            });
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("UnKnown UserNo");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("실패");
+                    Console.WriteLine(ex.ToString());
+                }
+            }
+        }
+        public static void LoadFriendRequestData(PcInstance pc,ref Dictionary<string, FriendRequestDto> friendRequestDtoDic)
+        {
+            // 사용할 커넥션 가져오기
+            using (MySqlConnection connection = SqlController.GetMySqlConnection())
+            {
+                string insertQuery = "Select * From user_friend_request Where user_no=@userNo";
+                try //예외 처리
+                {
+                    // 커넥션 연결
+                    connection.Open();
+
+                    // 커맨드 설정
+                    MySqlCommand command = new MySqlCommand(insertQuery, connection);
+
+                    // 파라메터 정의
+                    command.Parameters.AddWithValue("@userNo", pc.GetUserData().UserNo);
+
+                    MySqlDataReader dr = command.ExecuteReader();
+                    if (dr.Read())
+                    {
+                        long friendNo = dr.GetInt64("friend_no");
+                        string friendName = dr.GetString("friend_name");
+                        if (!friendRequestDtoDic.ContainsKey(friendName))
+                        {
+                            friendRequestDtoDic.Add(friendName, new FriendRequestDto()
+                            {
+                                FriendName = friendName,
+                                FriendNo = friendNo,
+                            });
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("UnKnown UserNo");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("실패");
+                    Console.WriteLine(ex.ToString());
+                }
+            }
+        }
         /// <summary>
         /// 친구 추가시 사용
         /// </summary>

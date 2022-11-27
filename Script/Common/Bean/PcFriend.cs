@@ -26,7 +26,8 @@ namespace SimulFactory.Common.Bean
         /// </summary>
         public void LoadPcFriend()
         {
-            
+            PcFriendSql.LoadFriendData(pc,ref friends);
+            PcFriendSql.LoadFriendRequestData(pc,ref friendRequests);
         }
         public void AddFriend(FriendDto friendDto)
         {

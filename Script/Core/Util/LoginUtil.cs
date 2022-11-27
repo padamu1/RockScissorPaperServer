@@ -53,9 +53,7 @@ namespace SimulFactory.Core.Util
             // 유저 정보 조회
             if (UserDBSql.GetUserNo(pc))
             {
-                // 로그인 성공 시 관련 DB 로딩
-                PcPvpSql.GetUserPvp(pc);
-
+                pc.LoadData();
                 // 현재 접속중인 유저라면 이전 접속 상태를 끊고 새로 연결
                 if (!PcListInstance.GetInstance().CheckUser(pc.GetUserData().UserNo))
                 {
