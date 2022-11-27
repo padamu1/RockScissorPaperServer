@@ -69,5 +69,15 @@ namespace SimulFactory.Common.Instance
                 return null;
             }
         }
+        public void SendPacket(byte evCode, Dictionary<byte, object> param)
+        {
+            lock(pcDic)
+            {
+                foreach(PcInstance pc in pcDic.Values)
+                {
+                    pc.SendPacket(evCode, param);
+                }
+            }
+        }
     }
 }

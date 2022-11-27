@@ -6,8 +6,14 @@ using SimulFactory.Core;
 using SimulFactory.Core.Base;
 using SimulFactory.Game;
 
+public enum ApplicationState
+{
+    Run = 0,
+    Stop = 1,
+}
 public class ApplicationManager : ThreadBase
 {
+    public ApplicationState State = ApplicationState.Run;
     protected override void ThreadAction()
     {
         base.ThreadAction();
@@ -35,18 +41,23 @@ public class ApplicationManager : ThreadBase
                     break;
             }
         }
+        State = ApplicationState.Stop;
     }
 }
 public class Program
 {
     public static void Main()
     {
+        
         NetworkStarter.GetInstance();
         ApplicationManager applicationManager = new ApplicationManager();
         applicationManager.ThreadStart(1);
         while (true)
         {
-
+            if(applicationManager.State == ApplicationState.Stop)
+            {
+                break;
+            }
         }
         /*
         bool isServerStop = false;

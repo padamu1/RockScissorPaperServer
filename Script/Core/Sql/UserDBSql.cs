@@ -119,7 +119,7 @@ namespace SimulFactory.Core.Sql
             }
             return result;
         }
-        public static long GetUserNoFriendRequest(string userName)
+        public static long GetUserNoByName(string userName)
         {
             long result = -1;
             // 사용할 커넥션 가져오기

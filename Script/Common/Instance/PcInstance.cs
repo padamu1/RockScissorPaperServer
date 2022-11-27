@@ -58,6 +58,8 @@ namespace SimulFactory.Common.Instance
         public void SendUserData()
         {
             S_UserInfo.UserInfoS(this);
+            S_FriendData.FriendDataS(this, GetPcFriend().GetFriendList());
+            S_FriendRequest.FriendRequestS(this, Define.FRIEND_RECEIVE_DATA_TYPE.Other, GetPcFriend().GetFriendRequestDtoList());
         }
         public void SetMatchSystem(MatchSystem? matchSystem)
         {

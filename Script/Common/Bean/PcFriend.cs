@@ -37,6 +37,7 @@ namespace SimulFactory.Common.Bean
                 return;
             }
             friends.Add(friendDto.FriendName, friendDto);
+            S_FriendData.FriendDataS(pc, new List<FriendDto>() { friendDto });
         }
         public void RemoveFriend(string friendName)
         {
@@ -54,6 +55,10 @@ namespace SimulFactory.Common.Bean
 
             Console.WriteLine("{0} 가 {1} 의 친구가 아님", friendName, pc.GetUserData().UserName);
             return null;
+        }
+        public List<FriendDto> GetFriendList()
+        {
+            return friends.Values.ToList();
         }
         public void AddFriendRequest(FriendRequestDto friendRequestDto)
         {
@@ -82,6 +87,10 @@ namespace SimulFactory.Common.Bean
 
             Console.WriteLine("{0} 가 {1} 에 요청하지 않음", friendName, pc.GetUserData().UserName);
             return null;
+        }
+        public List<FriendRequestDto> GetFriendRequestDtoList()
+        {
+            return friendRequests.Values.ToList();
         }
     }
 }
