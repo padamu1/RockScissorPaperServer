@@ -119,5 +119,41 @@ namespace SimulFactory.Core.Sql
             }
             return result;
         }
+        public static long GetUserNoFriendRequest(string userName)
+        {
+            long result = -1;
+            // 사용할 커넥션 가져오기
+            using (MySqlConnection connection = SqlController.GetMySqlConnection())
+            {
+                string insertQuery = "Select * From user_db Where user_name=@userName";
+                try //예외 처리
+                {
+                    // 커넥션 연결
+                    connection.Open();
+
+                    // 커맨드 설정
+                    MySqlCommand command = new MySqlCommand(insertQuery, connection);
+
+                    // 파라메터 정의
+                    command.Parameters.AddWithValue("@userName",userName);
+
+                    MySqlDataReader dr = command.ExecuteReader();
+                    if (dr.Read())
+                    {
+                        result = dr.GetInt64("userNo");
+                    }
+                    else
+                    {
+                        Console.WriteLine("UnKnown UserName");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("실패");
+                    Console.WriteLine(ex.ToString());
+                }
+            }
+            return result;
+        }
     }
 }

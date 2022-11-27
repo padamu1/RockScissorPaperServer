@@ -20,6 +20,7 @@ namespace SimulFactory.Common.Bean
             LoginCompleteC = 7,             // 유저 로그인 완료 메시지
             FriendRequestC = 8,             // 친구 요청
             FriendRemoveC = 9,              // 친구 삭제
+            FriendReceiveC = 10,            // 친구 요청 수락 결과 보냄
 
             LoginS = 0,             // 로그인 응답
             UserInfoS = 1,          // 유저 정보 내려줌
@@ -33,6 +34,8 @@ namespace SimulFactory.Common.Bean
             UserNameS = 9,          // 유저 닉네임 변경 요청 응답
             FriendRequestS = 10,    // 친구 요청에 대한 결과 및 상대방에게 친구 요청 보냄
             FriendRemoveS = 11,     // 친구 삭제
+            FriendReceiveS = 12,    // 친구 요청 수락 결과에 대한 것을 상대방에게 보냄
+            FriendDataS = 13,       // 친구 데이터 보냄
         }
         public enum WEB_SOCKET_STATE
         {
@@ -84,6 +87,11 @@ namespace SimulFactory.Common.Bean
             Normal = 0,
             Multi = 1,
             Card = 2,
+        }
+        public enum FRIEND_RECEIVE_DATA_TYPE : int
+        {
+            Me = 0,
+            Other = 1,
         }
 
         public readonly static int NORMAL_MODE_SEARCH_USER_COUNT = 2;

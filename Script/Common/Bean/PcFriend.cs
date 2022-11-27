@@ -1,5 +1,7 @@
 ﻿using SimulFactory.Common.Dto;
 using SimulFactory.Common.Instance;
+using SimulFactory.Core.Sql;
+using SimulFactory.Game.Event;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,12 +30,12 @@ namespace SimulFactory.Common.Bean
         }
         public void AddFriend(FriendDto friendDto)
         {
-            if(friends.ContainsKey(friendDto.FirendName))
+            if(friends.ContainsKey(friendDto.FriendName))
             {
-                Console.WriteLine("{0} 에 이미 추가되어 있는 친구 : {1}",pc.GetUserData().UserName, friendDto.FirendName);
+                Console.WriteLine("{0} 에 이미 추가되어 있는 친구 : {1}",pc.GetUserData().UserName, friendDto.FriendName);
                 return;
             }
-            friends.Add(friendDto.FirendName, friendDto);
+            friends.Add(friendDto.FriendName, friendDto);
         }
         public void RemoveFriend(string friendName)
         {
@@ -54,15 +56,17 @@ namespace SimulFactory.Common.Bean
         }
         public void AddFriendRequest(FriendRequestDto friendRequestDto)
         {
-            if(friendRequests.ContainsKey(friendRequestDto.FirendName))
+            if(friendRequests.ContainsKey(friendRequestDto.FriendName))
             {
-                Console.WriteLine("{0} 에 이미 요청이 추가되어 있는 친구 : {1}",pc.GetUserData().UserName, friendRequestDto.FirendName);
+                Console.WriteLine("{0} 에 이미 요청이 추가되어 있는 친구 : {1}",pc.GetUserData().UserName, friendRequestDto.FriendName);
                 return;
             }
-            friendRequests.Add(friendRequestDto.FirendName, friendRequestDto);
+            friendRequests.Add(friendRequestDto.FriendName, friendRequestDto);
+            S_FriendRequest.FriendRequestS(pc, Define.FRIEND_RECEIVE_DATA_TYPE.Other, new List<FriendRequestDto>() { friendRequestDto });
         }
         public void RemoveFriendRequest(string friendName)
         {
+            PcFriendSql.DeleteFriendRequestData(pc, friendName);
             if(friendRequests.ContainsKey(friendName))
             {
                 friendRequests.Remove(friendName);
@@ -77,35 +81,6 @@ namespace SimulFactory.Common.Bean
 
             Console.WriteLine("{0} 가 {1} 에 요청하지 않음", friendName, pc.GetUserData().UserName);
             return null;
-        }
-        /// <summary>
-        /// 요청 수락 / 거절 (true / false)
-        /// </summary>
-        /// <param name="friendName"></param>
-        /// <param name="result"></param>
-        public void ReceiveRequest(string friendName, bool result)
-        {
-            if(result)
-            {
-                FriendRequestDto friendRequestDto = GetFriendRequestDto(friendName);
-                if(friendRequestDto == null)
-                {
-                    // 없는 유저
-                    return;
-                }
-
-                AddFriend(new FriendDto()
-                {
-                    FriendNo = friendRequestDto.FriendNo,
-                    FirendName = friendRequestDto.FirendName,
-                });
-
-                RemoveFriendRequest(friendName);
-            }
-            else
-            {
-                RemoveFriendRequest(friendName);
-            }
         }
     }
 }

@@ -8,8 +8,7 @@ namespace SimulFactory.Common.Dto
 {
     public class FriendRequestDto
     {
-        // 아래 한개 정보만 내려줌
-        public string FirendName { get; set; }
+        public string FriendName { get; set; }
         public long FriendNo { get; set; }
     }
 }

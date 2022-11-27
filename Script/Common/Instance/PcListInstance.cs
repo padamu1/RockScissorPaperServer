@@ -58,5 +58,16 @@ namespace SimulFactory.Common.Instance
                 return true;
             }
         }
+        public PcInstance GetPcInstance(long userNo)
+        {
+            lock(pcDic)
+            {
+                if(pcDic.ContainsKey(userNo))
+                {
+                    return pcDic[userNo];
+                }
+                return null;
+            }
+        }
     }
 }

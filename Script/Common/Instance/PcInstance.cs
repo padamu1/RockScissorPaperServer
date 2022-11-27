@@ -15,6 +15,7 @@ namespace SimulFactory.Common.Instance
         private UserData userData;
         private PcPvp pcPvp;
         private MatchSystem? matchSystem;
+        private PcFriend pcFriend;
         public PcInstance(WebSocketController socketController)
         {
             this.socketController = socketController;
@@ -31,6 +32,7 @@ namespace SimulFactory.Common.Instance
         {
             userData = new UserData(this);
             pcPvp = new PcPvp(this);
+            pcFriend = new PcFriend(this);
         }
         #region Getter
         public PcPvp GetPcPvp()
@@ -40,6 +42,10 @@ namespace SimulFactory.Common.Instance
         public UserData GetUserData()
         {
             return userData;
+        }
+        public PcFriend GetPcFriend()
+        {
+            return pcFriend;
         }
         #endregion
         public void SendUserData()

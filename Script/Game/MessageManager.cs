@@ -46,6 +46,12 @@ namespace SimulFactory.Game
                     case (byte)Define.EVENT_CODE.LoginCompleteC:
                         C_LoginComplete.LoginCompleteC(pc, param);
                         break;
+                    case (byte)Define.EVENT_CODE.FriendRequestC:
+                        C_FriendRequest.FriendRequestC(pc, param);
+                        break;
+                    case (byte)Define.EVENT_CODE.FriendReceiveC:
+                        C_FriendReceive.FriendReceiveC(pc, param);
+                        break;
                     default:
                         break;
                 }
