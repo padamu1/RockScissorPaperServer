@@ -69,5 +69,9 @@ namespace SimulFactory.Common.Instance
                 return null;
             }
         }
+        public void SendPacket()
+        {
+
+        }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using SimulFactory.Common.Bean;
 using SimulFactory.Common.Instance;
+using SimulFactory.Core.Util;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,11 +11,11 @@ namespace SimulFactory.Game.Event
 {
     public class S_UserBattleResponse
     {
-        public static void UserBattleResponseS(PcInstance pc, Dictionary<string, int> enemyResult)
+        public static EventData Data(PcInstance pc, Dictionary<string, int> enemyResult)
         {
             Dictionary<byte, object> param = new Dictionary<byte, object>();
             param.Add(0, enemyResult);
-            pc.SendPacket((byte)Define.EVENT_CODE.UserBattleResponseS, param);
+            return new EventData((byte)Define.EVENT_CODE.UserBattleResponseS, param);
         }
     }
 }

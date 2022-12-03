@@ -1,6 +1,7 @@
 ﻿using SimulFactory.Common.Bean;
 using SimulFactory.Core;
 using SimulFactory.Core.Sql;
+using SimulFactory.Core.Util;
 using SimulFactory.Game;
 using SimulFactory.Game.Event;
 using SimulFactory.Game.Matching;
@@ -22,9 +23,9 @@ namespace SimulFactory.Common.Instance
             this.socketController = socketController;
             SetupUser();
         }
-        public void SendPacket(byte evCode, Dictionary<byte, object> param)
+        public void SendPacket(EventData eventData)
         {
-            socketController.SendPacket(evCode,param);
+            socketController.SendPacket(eventData);
         }
         /// <summary>
         /// 유저 로그인 시 로딩되어야 할 정보들
@@ -57,7 +58,7 @@ namespace SimulFactory.Common.Instance
         #endregion
         public void SendUserData()
         {
-            S_UserInfo.UserInfoS(this);
+            this.SendPacket(S_UserInfo.Data(this));
         }
         public void SetMatchSystem(MatchSystem? matchSystem)
         {

@@ -5,14 +5,19 @@ using System.Text.Json;
 namespace SimulFactory.Core.Util
 {
     [Serializable]
-    public class DataFormat
+    public class EventData
     {
+        public EventData(byte eventCode, Dictionary<byte, object> data)
+        {
+            this.eventCode = eventCode;
+            this.data = data;
+        }
         public byte eventCode;
-        public Dictionary<byte, object>? data;
+        public Dictionary<byte, object> data;
     }
     public class ByteUtillity
     {
-        public static DataFormat ByteToObject(byte[] buffer)
+        public static EventData ByteToObject(byte[] buffer)
         {
             try
             {
@@ -21,7 +26,7 @@ namespace SimulFactory.Core.Util
                 {
                     return null;
                 }
-                DataFormat? dataFormat = JsonConvert.DeserializeObject<DataFormat>(data);
+                EventData? dataFormat = JsonConvert.DeserializeObject<EventData>(data);
 
                 //Console.WriteLine(data);
                 //Console.WriteLine(dataFormat?.eventCode);

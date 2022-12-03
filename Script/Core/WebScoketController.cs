@@ -28,11 +28,9 @@ namespace SimulFactory.Core
         /// </summary>
         /// <param name="eventCode"></param>
         /// <param name="param"></param>
-        public void SendPacket(byte eventCode, Dictionary<byte, object> param)
+        public void SendPacket(EventData eventData)
         {
-            dataFormat.eventCode = eventCode;
-            dataFormat.data = param;
-            SendData(ByteUtillity.ObjectToByte(dataFormat));
+            SendData(ByteUtillity.ObjectToByte(eventData));
         }
     }
 }

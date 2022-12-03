@@ -33,6 +33,16 @@ namespace SimulFactory.Game.Matching
             eloDic = new Dictionary<int, float>();
         }
         /// <summary>
+        /// 모든 유저에게 동일한 메시지 보낼때 사용
+        /// </summary>
+        public void SendPacket(EventData eventData)
+        {
+            foreach (KeyValuePair<int, PcInstance> pc in pcDic)
+            {
+                pc.Value.SendPacket(eventData);
+            }
+        }
+        /// <summary>
         /// 매칭에 참여할 유저 추가
         /// </summary>
         public void AddPcInstance(PcInstance pcInstance)
@@ -101,15 +111,12 @@ namespace SimulFactory.Game.Matching
         /// </summary>
         private void SendMatchSuccess()
         {
-            foreach (KeyValuePair<int, PcInstance> pc in pcDic)
+            List<string> users = new List<string>();
+            foreach (KeyValuePair<int, PcInstance> user in pcDic)
             {
-                List<string> users = new List<string>();
-                foreach(KeyValuePair<int, PcInstance> user in pcDic)
-                {
-                    users.Add(user.Value.GetUserData().UserName);
-                }
-                S_MatchingSuccess.MatchingSuccessS(pc.Value, users);
+                users.Add(user.Value.GetUserData().UserName);
             }
+            SendPacket(S_MatchingSuccess.Data(users));
         }
         /// <summary>
         /// 매칭 시작에 대한 결과를 클라이언트에 보냄
@@ -123,14 +130,14 @@ namespace SimulFactory.Game.Matching
                 ThreadStart(Define.MATCH_SYSTEM_DELAY_TIME);
                 foreach (KeyValuePair<int, PcInstance> pc in pcDic)
                 {
-                    S_MatchingResponse.MatchingReponseS(pc.Value, 0);
+                    pc.Value.SendPacket(S_MatchingResponse.Data(0));
                 }
             }
             else
             {
                 foreach (KeyValuePair<int, PcInstance> pc in pcDic)
                 {
-                    S_MatchingResponse.MatchingReponseS(pc.Value, 1);
+                    pc.Value.SendPacket(S_MatchingResponse.Data(1));
                     if (pc.Value.GetPcPvp().GetMatchAccept())
                     {
                         // 수락을 한 유저는 실패를 했지만 다시 매칭을 이어갈 수 있도록 넣어줌
@@ -161,7 +168,7 @@ namespace SimulFactory.Game.Matching
         {
             foreach (KeyValuePair<int, PcInstance> pc in pcDic)
             {
-                S_RoundResult.RoundResultS(pc.Value, winUserResult);
+                pc.Value.SendPacket(S_RoundResult.Data(pc.Value, winUserResult));
             }
         }
         protected void SendBattleResponse()
@@ -177,7 +184,7 @@ namespace SimulFactory.Game.Matching
                         enemyResult.Add(pcDic[response.Key].GetUserData().UserName, response.Value);
                     }
                 }
-                S_UserBattleResponse.UserBattleResponseS(pc.Value, enemyResult);
+                pc.Value.SendPacket(S_UserBattleResponse.Data(pc.Value, enemyResult));
             }
         }
         /// <summary>
@@ -239,12 +246,13 @@ namespace SimulFactory.Game.Matching
                 if (winTeamNos.Contains(pc.Value.GetPcPvp().GetTeamNo()))
                 {
                     pc.Value.GetPcPvp().SetRating(pc.Value.GetPcPvp().GetRating() + (int)(Define.K_FACTOR * (1- (eloDic[pc.Key]))));
-                    S_MatchingResult.MatchingResultS(pc.Value, true);
+                    pc.Value.SendPacket(S_MatchingResult.Data(pc.Value, true));
                 }
                 else
                 {
                     pc.Value.GetPcPvp().SetRating(pc.Value.GetPcPvp().GetRating() + (int)(Define.K_FACTOR * (0 - (eloDic[pc.Key]))));
-                    S_MatchingResult.MatchingResultS(pc.Value, false);
+                    pc.Value.SendPacket(S_MatchingResult.Data(pc.Value, false));
+                    
                 }
                 pc.Value.GetPcPvp().SetMatch(null);
             }

@@ -62,12 +62,12 @@ namespace SimulFactory.Core.Util
                 PcListInstance.GetInstance().AddInstance(pc);
 
                 // 로그인 성공 메시지 보냄
-                S_Login.LoginS(pc, true);
+                pc.SendPacket(S_Login.Data(pc, true));
                 return;
             }
 
             // 로그인 실패시
-            S_Login.LoginS(pc, false);
+            pc.SendPacket(S_Login.Data(pc, false));
         }
         /// <summary>
         /// 시간값과 임의로 정의된 값을 가지고 새로운 유저 넘버를 부여해주는 함수
@@ -113,7 +113,8 @@ namespace SimulFactory.Core.Util
             if (UserDBSql.InsertUserSql(pc))
             {
                 PcPvpSql.InsertUserPvpSql(pc);
-                S_Login.LoginS(pc, true);
+                pc.SendPacket(S_Login.Data(pc, true));
+
             }
             else
             {

@@ -1,5 +1,6 @@
 ﻿using SimulFactory.Common.Bean;
 using SimulFactory.Common.Instance;
+using SimulFactory.Core.Util;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,11 +11,11 @@ namespace SimulFactory.Game.Event
 {
     public class S_StartMatching
     {
-        public static void StartMatchingS(PcInstance pc)
+        public static EventData Data()
         {
             Dictionary<byte, object> param = new Dictionary<byte, object>();
             param.Add(0, true);
-            pc.SendPacket((byte)Define.EVENT_CODE.StartMatchingS, param);
+            return new EventData((byte)Define.EVENT_CODE.StartMatchingS, param);
         }
     }
 }

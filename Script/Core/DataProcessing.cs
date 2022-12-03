@@ -12,7 +12,6 @@ namespace SimulFactory.Core
 {
     public class DataProcessing
     {
-        protected DataFormat dataFormat;
         //웹 소켓의 상태 객체
         public Define.WEB_SOCKET_STATE State { get; protected set; } = Define.WEB_SOCKET_STATE.None;
         protected readonly TcpClient targetClient;
@@ -21,7 +20,6 @@ namespace SimulFactory.Core
         protected PcInstance? pc;
         public DataProcessing(TcpClient tcpClient)
         {
-            dataFormat = new DataFormat();
             State = Define.WEB_SOCKET_STATE.Connecting;  //완전한 WebSocket 연결이 아니므로 연결 중 표시
             targetClient = tcpClient;
             messageStream = targetClient.GetStream();

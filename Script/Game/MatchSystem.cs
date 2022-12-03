@@ -135,7 +135,7 @@ namespace SimulFactory.Game
                 if (matchSearchList.Contains(pcInstance))
                 {
                     removeMatchList.Add(pcInstance);
-                    S_MatchingCancel.MatchingCancelS(pcInstance);
+                    pcInstance.SendPacket(S_MatchingCancel.Data());
                 }
             }
         }
