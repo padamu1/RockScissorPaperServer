@@ -7,13 +7,14 @@ namespace SimulFactory.Core.Util
     [Serializable]
     public class EventData
     {
+        public byte eventCode;
+        public Dictionary<byte, object> data;
+
         public EventData(byte eventCode, Dictionary<byte, object> data)
         {
             this.eventCode = eventCode;
             this.data = data;
         }
-        public byte eventCode;
-        public Dictionary<byte, object> data;
     }
     public class ByteUtillity
     {
