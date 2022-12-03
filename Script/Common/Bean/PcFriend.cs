@@ -37,7 +37,7 @@ namespace SimulFactory.Common.Bean
                 return;
             }
             friends.Add(friendDto.FriendName, friendDto);
-            S_FriendData.FriendDataS(pc, new List<FriendDto>() { friendDto });
+            pc.SendPacket(S_FriendData.Data(new List<FriendDto>() { friendDto }));
         }
         public void RemoveFriend(string friendName)
         {
