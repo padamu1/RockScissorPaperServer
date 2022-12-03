@@ -9,7 +9,7 @@ namespace SimulFactory.Game.Event
         public static void FriendRequestC(PcInstance pc, Dictionary<byte, object> param)
         {
             string userName = (string)param[0];
-            long userNo = UserDBSql.GetUserNoFriendRequest(userName);
+            long userNo = UserDBSql.GetUserNoByName(userName);
             if(userNo < 0)
             {
                 Console.WriteLine("{0} 유저의 {1} 로의 친구 요청 실패 ",pc.GetUserData().UserName, userName);

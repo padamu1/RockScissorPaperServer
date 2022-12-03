@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="fd13e1bf-0006-465b-9885-f9dc5a8e28cf" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/Script/Game/Event/S_Login.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Script/Game/Event/S_Login.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Script/Core/Sql/PcFriendSql.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Script/Core/Sql/PcFriendSql.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

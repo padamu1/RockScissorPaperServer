@@ -44,7 +44,7 @@ namespace SimulFactory.Core.Sql
                     }
                     else
                     {
-                        Console.WriteLine("UnKnown UserNo");
+                        Console.WriteLine("{0} 유저의 친구가 없습니다.",pc.GetUserData().UserNo);
                     }
                 }
                 catch (Exception ex)
@@ -87,7 +87,7 @@ namespace SimulFactory.Core.Sql
                     }
                     else
                     {
-                        Console.WriteLine("UnKnown UserNo");
+                        Console.WriteLine("{0} 유저의 친구요청 데이터가 없습니다.", pc.GetUserData().UserNo);
                     }
                 }
                 catch (Exception ex)
@@ -183,7 +183,43 @@ namespace SimulFactory.Core.Sql
             return result >= 1;
         }
         /// <summary>
-        /// 친구 요청시 사용
+        /// 친구 삭제시 사용
+        /// </summary>
+        /// <param name="userNo"></param>
+        /// <param name="friendPC"></param>
+        /// <returns></returns>
+        public static bool DeleteFriendData(long userNo, string friendName)
+        {
+            int result = 0;
+            StringBuilder sb = new StringBuilder();
+            // 사용할 커넥션 가져오기
+            using (MySqlConnection connection = SqlController.GetMySqlConnection())
+            {
+                string commandText = "DELETE FROM user_friend WHERE user_no = VALUES(@userNo) AND friend_name = VALUES(@friendName); ";
+
+                try //예외 처리
+                {
+                    // 커넥션 연결
+                    connection.Open();
+                    MySqlCommand command = new MySqlCommand(commandText, connection);
+                    command.Parameters.AddWithValue("@userNo", userNo);
+                    command.Parameters.AddWithValue("@friendName", friendName);
+                    Console.WriteLine("실행 쿼리 : " + command.CommandText);
+                    result = command.ExecuteNonQuery(); // 성공시 1 들어감
+
+                    Console.WriteLine(command.ToString());
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("실패");
+                    Console.WriteLine(ex.ToString());
+                }
+            }
+
+            return result >= 1;
+        }
+        /// <summary>
+        /// 친구 요청 삭제 사용
         /// </summary>
         /// <param name="userNo"></param>
         /// <param name="friendPC"></param>

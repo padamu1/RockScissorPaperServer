@@ -49,8 +49,14 @@ namespace SimulFactory.Game
                     case (byte)Define.EVENT_CODE.FriendRequestC:
                         C_FriendRequest.FriendRequestC(pc, param);
                         break;
+                    case (byte)Define.EVENT_CODE.FriendRemoveC:
+                        C_FriendRemove.FriendRemoveC(pc, param);
+                        break;
                     case (byte)Define.EVENT_CODE.FriendReceiveC:
                         C_FriendReceive.FriendReceiveC(pc, param);
+                        break;
+                    case (byte)Define.EVENT_CODE.ChatC:
+                        C_Chat.ChatC(param);
                         break;
                     default:
                         break;
