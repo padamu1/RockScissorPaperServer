@@ -110,7 +110,7 @@ namespace SimulFactory.Core.Sql
             // 사용할 커넥션 가져오기
             using (MySqlConnection connection = SqlController.GetMySqlConnection())
             {
-                string insertQuery = "INSERT INTO user_friend (user_no, friend_user_no, friend_name) VALUES {0} ON DUPLICATE KEY UPDATE friend_name = VALUES(friend_name); ";
+                string insertQuery = "INSERT INTO user_friend (user_no, friend_no, friend_name) VALUES {0} ON DUPLICATE KEY UPDATE friend_name = VALUES(friend_name); ";
 
                 sb.AppendFormat("({0},{1},'{2}'),",
                     receiveUserNo,
@@ -195,7 +195,7 @@ namespace SimulFactory.Core.Sql
             // 사용할 커넥션 가져오기
             using (MySqlConnection connection = SqlController.GetMySqlConnection())
             {
-                string commandText = "DELETE FROM user_friend WHERE user_no = VALUES(@userNo) AND friend_name = VALUES(@friendName); ";
+                string commandText = @"DELETE FROM user_friend WHERE user_no = @userNo AND friend_name = @friendName; ";
 
                 try //예외 처리
                 {
@@ -231,7 +231,7 @@ namespace SimulFactory.Core.Sql
             // 사용할 커넥션 가져오기
             using (MySqlConnection connection = SqlController.GetMySqlConnection())
             {
-                string commandText = "DELETE FROM user_friend_request WHERE user_no = VALUES(@userNo) AND friend_name = VALUES(@friendName); ";
+                string commandText = @"DELETE FROM user_friend_request WHERE user_no = @userNo AND friend_name = @friendName; ";
 
                 try //예외 처리
                 {
