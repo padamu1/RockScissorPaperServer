@@ -58,6 +58,12 @@ namespace SimulFactory.Game
                     case (byte)Define.EVENT_CODE.ChatC:
                         C_Chat.ChatC(param);
                         break;
+                    case (byte)Define.EVENT_CODE.InviteUserC:
+                        C_InviteUser.InviteUserC(pc, param);
+                        break;
+                    case (byte)Define.EVENT_CODE.InviteReceiveC:
+                        C_InviteReceive.InviteReceiveC(pc, param);
+                        break;
                     default:
                         break;
                 }

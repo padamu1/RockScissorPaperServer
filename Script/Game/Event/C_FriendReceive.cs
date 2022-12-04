@@ -42,7 +42,7 @@ namespace SimulFactory.Game.Event
                 {
                     // 수락했는데 데이터가 정상적이지 않은 경우
 
-                    pc.SendPacket(S_FriendReceive.Data(pc, Common.Bean.Define.FRIEND_RECEIVE_DATA_TYPE.Me, false));
+                    pc.SendPacket(S_FriendReceive.Data(pc, Common.Bean.Define.RECEIVE_DATA_TYPE.Me, false));
                     return;
                 }
             }
@@ -52,10 +52,10 @@ namespace SimulFactory.Game.Event
             }
             pc.GetPcFriend().RemoveFriendRequest(friendUserName);
 
-            pc.SendPacket(S_FriendReceive.Data(pc, Common.Bean.Define.FRIEND_RECEIVE_DATA_TYPE.Me, true));
+            pc.SendPacket(S_FriendReceive.Data(pc, Common.Bean.Define.RECEIVE_DATA_TYPE.Me, true));
             if (friendPc != null)
             {
-                pc.SendPacket(S_FriendReceive.Data(friendPc, Common.Bean.Define.FRIEND_RECEIVE_DATA_TYPE.Other, result));
+                pc.SendPacket(S_FriendReceive.Data(friendPc, Common.Bean.Define.RECEIVE_DATA_TYPE.Other, result));
             }
         }
     }

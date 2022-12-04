@@ -264,11 +264,12 @@ namespace SimulFactory.Game.Matching
         }
 
         /// <summary>
-        /// 등록된 모든 유저의 elo 평점 계산
+        /// 등록된 모든 유저의 elo 평점 계산 후 매칭 리스트에 등록
         /// </summary>
         public void CalculateEloRating()
         {
             MatchUtil.SetPvpEloRating(pcDic, ref eloDic);
+            matchSystem.AddReadyMatch(this);
         }
     }
 }
