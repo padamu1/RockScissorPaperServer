@@ -23,6 +23,7 @@ namespace SimulFactory.Game.Event
             Dictionary<byte, object> param = new Dictionary<byte, object>();
             param.Add(0, (long)type);
             param.Add(1, otherUser.GetUserData().UserName);
+            param.Add(2, otherUser.GetUserData().UserNo);
             return new EventData((byte)Define.EVENT_CODE.InviteUserS, param);
         }
     }

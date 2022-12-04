@@ -57,7 +57,7 @@ namespace SimulFactory.Game.Event
                 if (inviteUser != null)
                 {
                     // 초대 거절을 상대방에게 알림
-                    pc.SendPacket(S_InviteReceive.Data(Define.RECEIVE_DATA_TYPE.Other, 1));
+                    inviteUser.SendPacket(S_InviteReceive.Data(Define.RECEIVE_DATA_TYPE.Other, 1, pc));
                 }
             }
         }
