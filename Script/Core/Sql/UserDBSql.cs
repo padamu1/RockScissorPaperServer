@@ -140,7 +140,7 @@ namespace SimulFactory.Core.Sql
                     MySqlDataReader dr = command.ExecuteReader();
                     if (dr.Read())
                     {
-                        result = dr.GetInt64("userNo");
+                        result = dr.GetInt64("user_no");
                     }
                     else
                     {

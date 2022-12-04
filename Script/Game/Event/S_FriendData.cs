@@ -1,4 +1,5 @@
-﻿using SimulFactory.Common.Bean;
+﻿using Newtonsoft.Json;
+using SimulFactory.Common.Bean;
 using SimulFactory.Common.Dto;
 using SimulFactory.Common.Instance;
 using System;
@@ -14,7 +15,11 @@ namespace SimulFactory.Game.Event
         public static void FriendDataS(PcInstance pc, List<FriendDto> friendDtoList)
         {
             Dictionary<byte, object> param = new Dictionary<byte, object>();
-            param.Add(0, friendDtoList);
+            if(friendDtoList.Count == 0)
+            {
+                return;
+            }
+            param.Add(0, JsonConvert.SerializeObject(friendDtoList));
             pc.SendPacket((byte)Define.EVENT_CODE.FriendDataS, param);
         }
     }

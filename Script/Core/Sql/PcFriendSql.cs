@@ -112,11 +112,11 @@ namespace SimulFactory.Core.Sql
             {
                 string insertQuery = "INSERT INTO user_friend (user_no, friend_user_no, friend_name) VALUES {0} ON DUPLICATE KEY UPDATE friend_name = VALUES(friend_name); ";
 
-                sb.AppendFormat("({0},{1},{2}),",
+                sb.AppendFormat("({0},{1},'{2}'),",
                     receiveUserNo,
                     requestUserNo,
                     requestUserName);
-                sb.AppendFormat("({0},{1},{2}),",
+                sb.AppendFormat("({0},{1},'{2}'),",
                     requestUserNo,
                     receiveUserNo,
                     receiveUserName);
@@ -157,7 +157,7 @@ namespace SimulFactory.Core.Sql
             {
                 string insertQuery = "INSERT INTO user_friend_request (user_no, friend_no, friend_name) VALUES {0} ON DUPLICATE KEY UPDATE friend_name = VALUES(friend_name); ";
 
-                sb.AppendFormat("({0},{1},{2})",
+                sb.AppendFormat("({0},{1},'{2}')",
                     userNo,
                     friendPC.GetUserData().UserNo,
                     friendPC.GetUserData().UserName);
