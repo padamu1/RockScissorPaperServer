@@ -20,7 +20,7 @@ namespace SimulFactory.Game.Event
             param.Add(1, result);
             return new EventData((byte)Define.EVENT_CODE.FriendRequestS, param);
         }
-        public static EventData Data(PcInstance pc, Define.RECEIVE_DATA_TYPE type,bool isList, List<FriendRequestDto> friendRequestDtoList)
+        public static EventData Data(PcInstance pc, Define.RECEIVE_DATA_TYPE type, bool isList, List<FriendRequestDto> friendRequestDtoList)
         {
             if (friendRequestDtoList.Count == 0)
             {
