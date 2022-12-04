@@ -17,7 +17,7 @@ namespace SimulFactory.Game.Event
             FriendDto friendDto = pc.GetPcFriend().GetFriend(friendname);
             if(friendDto == null)
             {
-                pc.SendPacket(S_FriendRemove.Data(Common.Bean.Define.RECEIVE_DATA_TYPE.Me, false));
+                pc.SendPacket(S_FriendRemove.Data(Common.Bean.Define.RECEIVE_DATA_TYPE.Me, false, friendname));
                 return;
             }
             PcFriendSql.DeleteFriendData(pc.GetUserData().UserNo, friendname);
@@ -31,7 +31,7 @@ namespace SimulFactory.Game.Event
             }
             pc.GetPcFriend().RemoveFriend(pc.GetUserData().UserName);
 
-            pc.SendPacket(S_FriendRemove.Data(Common.Bean.Define.RECEIVE_DATA_TYPE.Me, true));
+            pc.SendPacket(S_FriendRemove.Data(Common.Bean.Define.RECEIVE_DATA_TYPE.Me, true, friendname));
         }
     }
 }

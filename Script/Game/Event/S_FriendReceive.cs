@@ -11,11 +11,19 @@ namespace SimulFactory.Game.Event
 {
     public class S_FriendReceive
     {
-        public static EventData Data(PcInstance pc, Define.RECEIVE_DATA_TYPE type , bool result)
+        public static EventData Data(Define.RECEIVE_DATA_TYPE type , bool result)
         {
             Dictionary<byte, object> param = new Dictionary<byte, object>();
             param.Add(0, type);
             param.Add(1, result);
+            return new EventData((byte)Define.EVENT_CODE.FriendReceiveS, param);
+        }
+        public static EventData Data(Define.RECEIVE_DATA_TYPE type , string otherUserName, bool result)
+        {
+            Dictionary<byte, object> param = new Dictionary<byte, object>();
+            param.Add(0, type);
+            param.Add(1, otherUserName);
+            param.Add(2, result);
             return new EventData((byte)Define.EVENT_CODE.FriendReceiveS, param);
         }
     }

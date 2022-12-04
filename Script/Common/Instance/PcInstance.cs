@@ -65,7 +65,7 @@ namespace SimulFactory.Common.Instance
         {
             SendPacket(S_UserInfo.Data(this));
             SendPacket(S_FriendData.Data(GetPcFriend().GetFriendList()));
-            SendPacket(S_FriendRequest.Data(this, Define.RECEIVE_DATA_TYPE.Other, GetPcFriend().GetFriendRequestDtoList()));
+            SendPacket(S_FriendRequest.Data(this, Define.RECEIVE_DATA_TYPE.Other, true, GetPcFriend().GetFriendRequestDtoList()));
         }
         public void SetMatchSystem(MatchSystem? matchSystem)
         {
