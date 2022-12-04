@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SimulFactory.Core.Util;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -69,13 +70,13 @@ namespace SimulFactory.Common.Instance
                 return null;
             }
         }
-        public void SendPacket(byte evCode, Dictionary<byte, object> param)
+        public void SendPacket(EventData eventData)
         {
             lock(pcDic)
             {
                 foreach(PcInstance pc in pcDic.Values)
                 {
-                    pc.SendPacket(evCode, param);
+                    pc.SendPacket(eventData);
                 }
             }
         }

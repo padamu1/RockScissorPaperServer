@@ -117,7 +117,7 @@ namespace SimulFactory.Game
         {
             lock (addMatchList)
             {
-                if (!matchSearchList.Contains(pcInstance))
+                if (!matchSearchList.Contains(pcInstance) && pcInstance.GetPcPvp().GetMatch() == null)
                 {
                     pcInstance.GetPcPvp().SetWaitCount(0);
                     addMatchList.Add(pcInstance);
@@ -135,7 +135,7 @@ namespace SimulFactory.Game
                 if (matchSearchList.Contains(pcInstance))
                 {
                     removeMatchList.Add(pcInstance);
-                    S_MatchingCancel.MatchingCancelS(pcInstance);
+                    pcInstance.SendPacket(S_MatchingCancel.Data());
                 }
             }
         }
@@ -166,7 +166,6 @@ namespace SimulFactory.Game
                         RemovePcInstance(matchSearchList[index]);
                     }
                     match.CalculateEloRating();
-                    readyMatchList.Add(match);
                     count += searchCount;
                 }
                 else
@@ -174,6 +173,13 @@ namespace SimulFactory.Game
                     NoSearchUser(matchSearchList[count]);
                     count++;
                 }
+            }
+        }
+        public void AddReadyMatch(Match match)
+        {
+            lock(readyMatchList)
+            {
+                readyMatchList.Add(match);
             }
         }
         protected virtual void NoSearchUser(PcInstance pc)

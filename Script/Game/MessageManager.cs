@@ -8,7 +8,7 @@ namespace SimulFactory.Game
 {
     public class MessageManager
     {
-        public static void ProcessData(PcInstance pc, DataFormat dataFormat)                      // 클라이언트로부터 들어온 정보를 처리하기 위한 함수
+        public static void ProcessData(PcInstance pc, EventData dataFormat)                      // 클라이언트로부터 들어온 정보를 처리하기 위한 함수
         {
             byte eventCode = dataFormat.eventCode;
             Dictionary<byte, object> param = new Dictionary<byte, object>();
@@ -57,6 +57,12 @@ namespace SimulFactory.Game
                         break;
                     case (byte)Define.EVENT_CODE.ChatC:
                         C_Chat.ChatC(param);
+                        break;
+                    case (byte)Define.EVENT_CODE.InviteUserC:
+                        C_InviteUser.InviteUserC(pc, param);
+                        break;
+                    case (byte)Define.EVENT_CODE.InviteReceiveC:
+                        C_InviteReceive.InviteReceiveC(pc, param);
                         break;
                     default:
                         break;

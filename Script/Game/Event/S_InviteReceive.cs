@@ -1,5 +1,4 @@
 ﻿using SimulFactory.Common.Bean;
-using SimulFactory.Common.Instance;
 using SimulFactory.Core.Util;
 using System;
 using System.Collections.Generic;
@@ -9,13 +8,14 @@ using System.Threading.Tasks;
 
 namespace SimulFactory.Game.Event
 {
-    public class S_MatchingResponse
+    public class S_InviteReceive
     {
-        public static EventData Data(int result)
+        public static EventData Data(Define.RECEIVE_DATA_TYPE type, long code)
         {
             Dictionary<byte, object> param = new Dictionary<byte, object>();
-            param.Add(0, result);
-            return new EventData((byte)Define.EVENT_CODE.MatchingResponseS, param);
+            param.Add(0, (int)type);
+            param.Add(0, code);
+            return new EventData((byte)Define.EVENT_CODE.InviteReceiveS, param);
         }
     }
 }

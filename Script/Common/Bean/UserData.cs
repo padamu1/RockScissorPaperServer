@@ -26,10 +26,10 @@ namespace SimulFactory.Common.Bean
             if(UserDBSql.UpdateUserSql(pc, changeName))
             {
                 this.UserName = changeName;
-                S_UserName.UserNameS(pc, true);
+                pc.SendPacket(S_UserName.Data(pc, true));
                 return;
             }
-            S_UserName.UserNameS(pc, false);
+            pc.SendPacket(S_UserName.Data(pc, false));
         }
     }
 }

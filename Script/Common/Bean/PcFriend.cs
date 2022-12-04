@@ -37,7 +37,7 @@ namespace SimulFactory.Common.Bean
                 return;
             }
             friends.Add(friendDto.FriendName, friendDto);
-            S_FriendData.FriendDataS(pc, new List<FriendDto>() { friendDto });
+            pc.SendPacket(S_FriendData.Data(new List<FriendDto>() { friendDto }));
         }
         public void RemoveFriend(string friendName)
         {
@@ -68,7 +68,7 @@ namespace SimulFactory.Common.Bean
                 return;
             }
             friendRequests.Add(friendRequestDto.FriendName, friendRequestDto);
-            S_FriendRequest.FriendRequestS(pc, Define.FRIEND_RECEIVE_DATA_TYPE.Other, new List<FriendRequestDto>() { friendRequestDto });
+            pc.SendPacket(S_FriendRequest.Data(pc, Define.RECEIVE_DATA_TYPE.Other, new List<FriendRequestDto>() { friendRequestDto }));
         }
         public void RemoveFriendRequest(string friendName)
         {

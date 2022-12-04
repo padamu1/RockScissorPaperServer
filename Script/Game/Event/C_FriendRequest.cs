@@ -13,7 +13,7 @@ namespace SimulFactory.Game.Event
             if(userNo < 0)
             {
                 Console.WriteLine("{0} 유저의 {1} 로의 친구 요청 실패 ",pc.GetUserData().UserName, userName);
-                S_FriendRequest.FriendRequestS(pc, Define.FRIEND_RECEIVE_DATA_TYPE.Me, false);
+                pc.SendPacket(S_FriendRequest.Data(pc, Define.RECEIVE_DATA_TYPE.Me, false));
             }
             else
             {
@@ -29,12 +29,12 @@ namespace SimulFactory.Game.Event
                             FriendName = pc.GetUserData().UserName,
                         });
                     }
-                    S_FriendRequest.FriendRequestS(pc, Define.FRIEND_RECEIVE_DATA_TYPE.Me, true);
+                    pc.SendPacket(S_FriendRequest.Data(pc, Define.RECEIVE_DATA_TYPE.Me, true));
                 }
                 else
                 {
                     Console.WriteLine("{0} 유저의 {1} 로의 친구 요청 실패 ",pc.GetUserData().UserName, userName);
-                    S_FriendRequest.FriendRequestS(pc, Define.FRIEND_RECEIVE_DATA_TYPE.Me, false);
+                    pc.SendPacket(S_FriendRequest.Data(pc, Define.RECEIVE_DATA_TYPE.Me, false));
                 }
             }
         }

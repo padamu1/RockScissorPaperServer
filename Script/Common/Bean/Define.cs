@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SimulFactory.Common.Bean
+﻿namespace SimulFactory.Common.Bean
 {
     public class Define
     {
@@ -22,6 +16,8 @@ namespace SimulFactory.Common.Bean
             FriendRemoveC = 9,              // 친구 삭제
             FriendReceiveC = 10,            // 친구 요청 수락 결과 보냄
             ChatC = 11,                     // 채팅 입력
+            InviteUserC = 12,               // 유저 초대
+            InviteReceiveC = 13,            // 초대 응답
 
             LoginS = 0,             // 로그인 응답
             UserInfoS = 1,          // 유저 정보 내려줌
@@ -38,6 +34,8 @@ namespace SimulFactory.Common.Bean
             FriendReceiveS = 12,    // 친구 요청 수락 결과에 대한 것을 상대방에게 보냄
             FriendDataS = 13,       // 친구 데이터 보냄
             ChatS = 14,             // 채팅 받음
+            InviteUserS = 15,       // 초대 받음
+            InviteReceiveS = 16,    // 초대 응답에 대한 결과
         }
         public enum WEB_SOCKET_STATE
         {
@@ -90,7 +88,7 @@ namespace SimulFactory.Common.Bean
             Multi = 1,
             Card = 2,
         }
-        public enum FRIEND_RECEIVE_DATA_TYPE : int
+        public enum RECEIVE_DATA_TYPE : int
         {
             Me = 0,
             Other = 1,

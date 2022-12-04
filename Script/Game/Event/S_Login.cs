@@ -1,6 +1,7 @@
 ﻿using SimulFactory.Common.Bean;
 using SimulFactory.Common.Instance;
 using SimulFactory.Core;
+using SimulFactory.Core.Util;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,7 @@ namespace SimulFactory.Game.Event
 {
     public class S_Login
     {
-        public static void LoginS(PcInstance pc,bool result)
+        public static EventData Data(PcInstance pc,bool result)
         {
             Dictionary<byte, object> dic = new Dictionary<byte, object>(); // 주석
             dic.Add(0, result);
@@ -20,7 +21,7 @@ namespace SimulFactory.Game.Event
                 dic.Add(1, pc.GetUserData().UserNo);
                 dic.Add(2, pc.GetUserData().UserName);
             }
-            pc.SendPacket((byte)Define.EVENT_CODE.LoginS, dic);
+            return new EventData((byte)Define.EVENT_CODE.LoginS, dic);
         }
     }
 }
