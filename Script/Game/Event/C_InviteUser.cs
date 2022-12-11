@@ -31,7 +31,7 @@ namespace SimulFactory.Game.Event
                     if(match == null)
                     {
                         // 상대방 유저에게 초대 메시지 보냄
-                        pc.SendPacket(S_InviteUser.Data(Define.RECEIVE_DATA_TYPE.Other, pc));
+                        otherUser.SendPacket(S_InviteUser.Data(Define.RECEIVE_DATA_TYPE.Other, pc));
 
                         // 유저 초대에 성공
                         pc.SendPacket(S_InviteUser.Data(Define.RECEIVE_DATA_TYPE.Me, 0));
