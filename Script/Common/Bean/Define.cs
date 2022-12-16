@@ -100,6 +100,7 @@
             Whisper = 2, // 귓속말
         }
 
+        public readonly static int ABUSING_CHECK_COUNT = 10;
         public readonly static int NORMAL_MODE_SEARCH_USER_COUNT = 2;
         public readonly static int NORMAL_MODE_SEARCH_USER_MIN_COUNT = 2;
         public readonly static int MULTI_MODE_SEARCH_USER_COUNT = 4;

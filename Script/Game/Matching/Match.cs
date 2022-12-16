@@ -271,5 +271,9 @@ namespace SimulFactory.Game.Matching
             MatchUtil.SetPvpEloRating(pcDic, ref eloDic);
             matchSystem.AddReadyMatch(this);
         }
+        public virtual List<PcInstance> GetPcList()
+        {
+            return pcDic.Values.ToList();
+        }
     }
 }
