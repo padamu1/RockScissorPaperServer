@@ -16,6 +16,8 @@ namespace RockScissorPaperServer.Game.Matching
     public class AbusingCheckManager : ThreadBase
     {
         private Dictionary<long, Dictionary<long, int[]>> matchUsersLogs = new Dictionary<long, Dictionary<long, int[]>>();
+        private long lastSaveTime;
+        private long saveTimeDelay = 3600000; // 1시간에 한번씩 저장
         /// <summary>
         /// 각 유저 넘버에 해당 매칭에 참여했던 유저의 정보를 기록하는 메서드 - 1:1만 기록
         /// </summary>
@@ -65,6 +67,16 @@ namespace RockScissorPaperServer.Game.Matching
                     }
                 }
             }
+        }
+        public void Save()
+        {
+            long nowTime = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+            if (lastSaveTime >= nowTime)
+            {
+                return;
+            }
+            lastSaveTime = nowTime + saveTimeDelay;
+
         }
     }
 }
