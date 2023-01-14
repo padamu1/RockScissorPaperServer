@@ -28,9 +28,6 @@ namespace SimulFactory.Core
         /// </summary>
         /// <param name="eventCode"></param>
         /// <param name="param"></param>
-        public void SendPacket(EventData eventData)
-        {
-            SendData(ByteUtillity.ObjectToByte(eventData));
-        }
+        public void SendPacket(EventData eventData) => SendData(ByteUtillity.ObjectToByte(eventData));
     }
 }

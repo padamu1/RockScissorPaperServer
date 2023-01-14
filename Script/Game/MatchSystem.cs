@@ -182,9 +182,6 @@ namespace SimulFactory.Game
                 readyMatchList.Add(match);
             }
         }
-        protected virtual void NoSearchUser(PcInstance pc)
-        {
-            pc.GetPcPvp().SetWaitCount(pc.GetPcPvp().GetWaitCount() + 1);
-        }
+        protected virtual void NoSearchUser(PcInstance pc) => pc.GetPcPvp().SetWaitCount(pc.GetPcPvp().GetWaitCount() + 1);
     }
 }
