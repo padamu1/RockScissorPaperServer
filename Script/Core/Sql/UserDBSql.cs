@@ -69,7 +69,7 @@ namespace SimulFactory.Core.Sql
 
                     // 파라메터 정의
                     command.Parameters.AddWithValue("@userNo", pc.GetUserData().UserNo);
-                    command.Parameters.AddWithValue("@user_name", changeName);
+                    command.Parameters.AddWithValue("@userName", changeName);
 
                     result = command.ExecuteNonQuery(); // 성공시 1 들어감
                 }
@@ -145,6 +145,75 @@ namespace SimulFactory.Core.Sql
                     else
                     {
                         Console.WriteLine("UnKnown UserName");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("실패");
+                    Console.WriteLine(ex.ToString());
+                }
+            }
+            return result;
+        }
+        public static bool SetUserProfile(long userNo, string profileKey)
+        {
+            int result = 0;
+            StringBuilder sb = new StringBuilder();
+            // 사용할 커넥션 가져오기
+            using (MySqlConnection connection = SqlController.GetMySqlConnection())
+            {
+                string insertQuery = "INSERT INTO user_profile (user_no,profile_key) VALUES {0} ON DUPLICATE KEY UPDATE profile_key = VALUES(profile_key); ";
+
+                    sb.AppendFormat("({0},{1}),",
+                        userNo,
+                        profileKey);
+                string commandText = string.Format(insertQuery, sb.ToString().TrimEnd(','));
+
+                try //예외 처리
+                {
+                    // 커넥션 연결
+                    connection.Open();
+                    MySqlCommand command = new MySqlCommand(commandText, connection);
+                    Console.WriteLine("실행 쿼리 : " + command.CommandText);
+                    result = command.ExecuteNonQuery(); // 성공시 1 들어감
+
+                    Console.WriteLine(command.ToString());
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("실패");
+                    Console.WriteLine(ex.ToString());
+                }
+            }
+
+            return result >= 1;
+        }
+        public static string GetUserProfile(long userNo)
+        {
+            string result = "";
+            // 사용할 커넥션 가져오기
+            using (MySqlConnection connection = SqlController.GetMySqlConnection())
+            {
+                string insertQuery = "Select * From user_profile Where user_no=@userNo";
+                try //예외 처리
+                {
+                    // 커넥션 연결
+                    connection.Open();
+
+                    // 커맨드 설정
+                    MySqlCommand command = new MySqlCommand(insertQuery, connection);
+
+                    // 파라메터 정의
+                    command.Parameters.AddWithValue("@userNo",userNo);
+
+                    MySqlDataReader dr = command.ExecuteReader();
+                    if (dr.Read())
+                    {
+                        result = dr.GetString("profile_key");
+                    }
+                    else
+                    {
+                        Console.WriteLine("UserProfile Not Set");
                     }
                 }
                 catch (Exception ex)

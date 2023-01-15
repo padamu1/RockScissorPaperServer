@@ -33,7 +33,8 @@ namespace SimulFactory.Common.Thread
             }
             else
             {
-                if (matchUserWaitTime++ > Define.MATCH_USER_WAIT_TIME)
+                matchUserWaitTime += Define.MATCH_USER_RESULT_WAIT_DELAY;
+                if (matchUserWaitTime > Define.MATCH_USER_RESULT_WAIT_COUNT)
                 {
                     EndRound(Define.ROCK_SCISSOR_PAPER.Break);
                     return;
@@ -111,6 +112,7 @@ namespace SimulFactory.Common.Thread
             if (winUserResult != Define.ROCK_SCISSOR_PAPER.None)
             {
                 matchRound++;
+                matchUserWaitTime = 0;
             }
         }
 

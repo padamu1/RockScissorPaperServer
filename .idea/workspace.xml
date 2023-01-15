@@ -2,7 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="fd13e1bf-0006-465b-9885-f9dc5a8e28cf" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/Script/Core/Sql/PcFriendSql.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Script/Core/Sql/PcFriendSql.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Script/Common/Bean/Define.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Script/Common/Bean/Define.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Script/Common/Bean/UserData.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Script/Common/Bean/UserData.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Script/Common/Thread/MatchThread.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Script/Common/Thread/MatchThread.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Script/Core/Sql/UserDBSql.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Script/Core/Sql/UserDBSql.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Script/Core/Util/LoginUtil.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Script/Core/Util/LoginUtil.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Script/Game/Event/C_LoginComplete.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Script/Game/Event/C_LoginComplete.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Script/Game/Event/S_UserName.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Script/Game/Event/S_UserName.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
