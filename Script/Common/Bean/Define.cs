@@ -18,6 +18,8 @@
             ChatC = 11,                     // 채팅 입력
             InviteUserC = 12,               // 유저 초대
             InviteReceiveC = 13,            // 초대 응답
+            SetProfileC = 14,               // 프로필 설정
+            LoadProfileC = 15,              // 프로필 정보 요청
 
             LoginS = 0,             // 로그인 응답
             UserInfoS = 1,          // 유저 정보 내려줌
@@ -36,6 +38,7 @@
             ChatS = 14,             // 채팅 받음
             InviteUserS = 15,       // 초대 받음
             InviteReceiveS = 16,    // 초대 응답에 대한 결과
+            LoadProfileS = 17,      // 프로필 로드
         }
         public enum WEB_SOCKET_STATE
         {
@@ -107,6 +110,8 @@
         public readonly static int MULTI_MODE_SEARCH_USER_MIN_COUNT = 2;
         public readonly static int MATCH_SYSTEM_DELAY_TIME = 2000;
         public readonly static int MATCH_USER_WAIT_TIME = 10000;
+        public readonly static int MATCH_USER_RESULT_WAIT_DELAY = 2000;
+        public readonly static int MATCH_USER_RESULT_WAIT_COUNT = 10000;
         public readonly static int MAX_ROUND_COUNT = 7;
         public readonly static int MAX_WIN_COUNT = 4;
         public readonly static int INIT_RATING = 1000;                 // 레이팅 초기값
@@ -117,5 +122,6 @@
         public readonly static int RANDOM_NICKNAME_END_LENGHT = 10; 
         public readonly static int MULTI_MATCH_WAIT_COUNT = 10;        // 멀티 매칭 최대 대기 카운트
         public readonly static string[] RANDOM_STRING = new string[] { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "N", "M", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" };
+        public readonly static string NICKNAME_CHECK_CHARACTER = "!@#`~$%^&*()_+-=[]{};':\",.<>/?\\|/*-.";
     }
 }

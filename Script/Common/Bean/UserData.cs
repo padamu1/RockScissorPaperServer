@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace SimulFactory.Common.Bean
@@ -23,13 +24,30 @@ namespace SimulFactory.Common.Bean
         }
         public void ChangeUserName(string changeName)
         {
-            if(UserDBSql.UpdateUserSql(pc, changeName))
+            changeName = changeName.ToUpper();
+            if (UserDBSql.GetUserNoByName(changeName) == -1)
             {
-                this.UserName = changeName;
-                pc.SendPacket(S_UserName.Data(pc, true));
-                return;
+                string idChecker = Regex.Replace(changeName, @"[^a-zA-Z0-9가-힣\.*,]", "", RegexOptions.Singleline);
+                if(changeName == idChecker)
+                {
+                    if (UserDBSql.UpdateUserSql(pc, changeName))
+                    {
+                        this.UserName = changeName;
+                        pc.SendPacket(S_UserName.Data(pc, 0));
+                        return;
+                    }
+                }
+                else
+                {
+                    pc.SendPacket(S_UserName.Data(pc, 2));
+                    return;
+                }
             }
-            pc.SendPacket(S_UserName.Data(pc, false));
+            else
+            {
+                // 이미 존재하는 이름
+                pc.SendPacket(S_UserName.Data(pc, 1));
+            }
         }
     }
 }

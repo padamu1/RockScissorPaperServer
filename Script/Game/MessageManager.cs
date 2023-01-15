@@ -64,6 +64,9 @@ namespace SimulFactory.Game
                     case (byte)Define.EVENT_CODE.InviteReceiveC:
                         C_InviteReceive.InviteReceiveC(pc, param);
                         break;
+                    case (byte)Define.EVENT_CODE.SetProfileC:
+                        C_SetProfile.SetProfileC(pc, param);
+                        break;
                     default:
                         break;
                 }

@@ -11,11 +11,11 @@ namespace SimulFactory.Game.Event
 {
     public class S_UserName
     {
-        public static EventData Data(PcInstance pc, bool result)
+        public static EventData Data(PcInstance pc, long code)
         {
             Dictionary<byte, object> dic = new Dictionary<byte, object>();
-            dic.Add(0, result);
-            if(result)
+            dic.Add(0, code);
+            if(code == 0)
             {
                 dic.Add(1, pc.GetUserData().UserName);
             }

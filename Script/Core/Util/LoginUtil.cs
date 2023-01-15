@@ -96,7 +96,7 @@ namespace SimulFactory.Core.Util
                 int randomNum = Random.Shared.Next(0, Define.RANDOM_STRING.Length - 1);
                 sb.Append(Define.RANDOM_STRING[randomNum]);
             }
-            return sb.ToString();
+            return sb.ToString().ToUpper();
         }
         /// <summary>
         /// 생성된 유저 넘버를 넣어서 아이디를 생성하는 함수
