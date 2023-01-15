@@ -80,5 +80,12 @@ namespace SimulFactory.Common.Instance
                 }
             }
         }
+        public PcInstance GetPcInstance(string userName)
+        {
+            lock (pcDic)
+            {
+                return pcDic.First(n => n.Value.GetUserData().UserName == userName).Value;
+            }
+        }
     }
 }
