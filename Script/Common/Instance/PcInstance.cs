@@ -23,15 +23,7 @@ namespace SimulFactory.Common.Instance
             this.socketController = socketController;
             SetupUser();
         }
-        public void SendPacket(EventData eventData)
-        {
-            // 데이터를 보낼 필요가 없을 경우 null로 들어옴
-            if(eventData == null)
-            {
-                return;
-            }
-            socketController.SendPacket(eventData);
-        }
+        public void SendPacket(EventData eventData) => socketController.SendPacket(eventData);
         /// <summary>
         /// 유저 로그인 시 로딩되어야 할 정보들
         /// </summary>
