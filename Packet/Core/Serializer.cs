@@ -6,7 +6,7 @@ namespace RockScissorPaperServer.Packet.Core
     public static class Serializer
     {
         public static byte[] EMPTY_BYTES = new byte[0];
-        public enum TypeCode
+        public enum TypeCode : byte
         {
             Int = 0,
             Long = 1,
