@@ -1,25 +1,24 @@
 ﻿using System.Text;
 using System.Text.Json;
 
-namespace RockScissorPaperServer.Packet.Core
+namespace SimulFactory.Packet.Core
 {
+    public class TypeCode
+    {
+        public const short Int = 0;
+        public const short Long = 1;
+        public const short Short = 2;
+        public const short Bool = 3;
+        public const short String = 4;
+        public const short Char = 5;
+        public const short Double = 6;
+        public const short List = 8;
+        public const short Objects = 9;
+        public const short Dictionary = 10;
+    }
     public static class Serializer
     {
-        public static byte[] EMPTY_BYTES = new byte[0];
-        public enum TypeCode : byte
-        {
-            Int = 0,
-            Long = 1,
-            Short = 2,
-            Bool = 3,
-            String = 4,
-            Char = 5,
-            Double = 6,
-            List = 8,
-            Objects = 9,
-            Dictionary = 10
-        }
-        public static Dictionary<Type, TypeCode> TYPE_DICT = new Dictionary<Type, TypeCode>()
+        public static Dictionary<Type, short> TYPE_DICT = new Dictionary<Type, short>()
         {
             {typeof(int), TypeCode.Int },
             {typeof(long), TypeCode.Long },
@@ -32,34 +31,67 @@ namespace RockScissorPaperServer.Packet.Core
             {typeof(object[]), TypeCode.Objects },
             {typeof(Dictionary<byte,object>), TypeCode.Dictionary },
         };
+        public static Dictionary<Type, byte[]> TYPE_BYTE_DICT = new Dictionary<Type, byte[]>()
+        {
+            {typeof(int),  new byte[] { 0, 0 } },
+            {typeof(long), new byte[] { 1, 0 } },
+            {typeof(short), new byte[] { 2, 0 } },
+            {typeof(bool), new byte[] { 3, 0 } },
+            {typeof(string), new byte[] { 4, 0 } },
+            {typeof(string), new byte[] { 5, 0 } },
+            {typeof(double), new byte[] { 6, 0 } },
+            {typeof(List<object>), new byte[] { 7, 0 } },
+            {typeof(object[]), new byte[] { 8, 0 } },
+            {typeof(Dictionary<byte,object>), new byte[] { 9, 0 } },
+        };
 
         public static byte[] GetBytes(object value)
         {
-            switch (TYPE_DICT[value.GetType()])
+            Type objectType = value.GetType();
+            byte[] data;
+            switch (TYPE_DICT[objectType])
             {
                 case TypeCode.Int:
-                    return IntToBytes((int)value);
+                    data = IntToBytes((int)value);
+                    break;
                 case TypeCode.Long:
-                    return LongToBytes((long)value);
+                    data = LongToBytes((long)value);
+                    break;
                 case TypeCode.Short:
-                    return ShortToBytes((short)value);
+                    data = ShortToBytes((short)value);
+                    break;
                 case TypeCode.Bool:
-                    return BoolToBytes((bool)value);
+                    data = BoolToBytes((bool)value);
+                    break;
                 case TypeCode.String:
-                    return StringToBytes((string)value);
+                    data = StringToBytes((string)value);
+                    break;
                 case TypeCode.Char:
-                    return CharToBytes((char)value);
+                    data = CharToBytes((char)value);
+                    break;
                 case TypeCode.Double:
-                    return DoubleToBytes((long)value);
+                    data = DoubleToBytes((long)value);
+                    break;
                 case TypeCode.List:
-                    return ListToBytes((List<object>)value);
+                    data = ListToBytes((List<object>)value);
+                    break;
                 case TypeCode.Objects:
-                    return ObjectToBytes((object[])value);
+                    data = ObjectToBytes((object[])value);
+                    break;
                 case TypeCode.Dictionary:
-                    return DictionaryToBytes((Dictionary<byte, object>)value);
+                    data = DictionaryToBytes((Dictionary<byte, object>)value);
+                    break;
                 default:
-                    return EMPTY_BYTES;
+                    data = Config.EMPTY_BYTES;
+                    return data;
             }
+            byte[] type = TYPE_BYTE_DICT[objectType];
+            byte[] length = BitConverter.GetBytes(data.Length);
+            byte[] result = new byte[Config.LENGTH_SIZE + Config.TYPE_SIZE + data.Length];
+            Array.Copy(length, 0, result, 0, Config.LENGTH_SIZE);
+            Array.Copy(type, 0, result, Config.LENGTH_SIZE, Config.TYPE_SIZE);
+            Array.Copy(data, 0, result, Config.DATA_START_INDEX, data.Length);
+            return result;
         }
         #region Default Type <-> Bytes 
         public static byte[] IntToBytes(int value) => BitConverter.GetBytes(value);
@@ -79,16 +111,45 @@ namespace RockScissorPaperServer.Packet.Core
         #endregion
         public static byte[] ListToBytes(List<object> value)
         {
-
-            return EMPTY_BYTES;
+            byte[] bytes = new byte[0];
+            for (int count = 0; count < value.Count; count++)
+            {
+                byte[] currentBytes = bytes;
+                byte[] newResult = GetBytes(value[count]);
+                bytes = new byte[currentBytes.Length + newResult.Length];
+                Array.Copy(currentBytes, 0, bytes, 0, currentBytes.Length);
+                Array.Copy(newResult, 0, bytes, currentBytes.Length, newResult.Length);
+            }
+            return bytes;
+        }
+        public static List<object> BytesToList(byte[] value)
+        {
+            List<object> result = new List<object>();
+            int nextIdx = 0;
+            byte[] lengthBytes = new byte[Config.LENGTH_SIZE];
+            byte[] typeBytes = new byte[Config.TYPE_SIZE];
+            while (nextIdx < value.Length)
+            {
+                Array.Copy(value, nextIdx, lengthBytes, 0, Config.LENGTH_SIZE);
+                int length = BytesToInt(lengthBytes);
+                nextIdx += Config.LENGTH_SIZE;
+                Array.Copy(value, nextIdx, typeBytes, 0, Config.TYPE_SIZE);
+                short type = BytesToShort(typeBytes);
+                nextIdx += Config.TYPE_SIZE;
+                byte[] data = new byte[length];
+                Array.Copy(value, nextIdx, data, 0, length);
+                //result.Add(GetValue(type, data));
+                nextIdx += length;
+            }
+            return result;
         }
         public static byte[] ObjectToBytes(object[] value)
         {
-            return EMPTY_BYTES;
+            return Config.EMPTY_BYTES;
         }
         public static byte[] DictionaryToBytes(Dictionary<byte, object> value)
         {
-            return EMPTY_BYTES;
+            return Config.EMPTY_BYTES;
         }
     }
 }
