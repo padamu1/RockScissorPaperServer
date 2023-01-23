@@ -1,7 +1,8 @@
-﻿using System.Text;
-using System.Text.Json;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
 
-namespace PacketSerializer.Core
+namespace PacketSerializer
 {
     public class Config
     {
@@ -148,19 +149,19 @@ namespace PacketSerializer.Core
         }
         #region Default Type <-> Bytes 
         private static byte[] IntToBytes(int value) => BitConverter.GetBytes(value);
-        private static int BytesToInt(byte[] value) => BitConverter.ToInt32(value);
+        private static int BytesToInt(byte[] value) => BitConverter.ToInt32(value, 0);
         private static byte[] LongToBytes(long value) => BitConverter.GetBytes(value);
-        private static long BytesToLong(byte[] value) => BitConverter.ToInt64(value);
+        private static long BytesToLong(byte[] value) => BitConverter.ToInt64(value, 0);
         private static byte[] ShortToBytes(short value) => BitConverter.GetBytes(value);
-        private static short BytesToShort(byte[] value) => BitConverter.ToInt16(value);
+        private static short BytesToShort(byte[] value) => BitConverter.ToInt16(value, 0);
         private static byte[] BoolToBytes(bool value) => BitConverter.GetBytes(value);
-        private static bool BytesToBool(byte[] value) => BitConverter.ToBoolean(value);
+        private static bool BytesToBool(byte[] value) => BitConverter.ToBoolean(value, 0);
         private static byte[] StringToBytes(string value) => Encoding.UTF8.GetBytes((value));
         private static string BytesToString(byte[] value) => Encoding.UTF8.GetString(value);
-        private static byte[] CharToBytes(char value) => BitConverter.GetBytes((value));
-        private static char BytesToChar(byte[] value) => BitConverter.ToChar((value));
+        private static byte[] CharToBytes(char value) => BitConverter.GetBytes(value);
+        private static char BytesToChar(byte[] value) => BitConverter.ToChar(value, 0);
         private static byte[] DoubleToBytes(double value) => BitConverter.GetBytes(value);
-        private static double BytesToDouble(byte[] value) => BitConverter.ToDouble((value)); 
+        private static double BytesToDouble(byte[] value) => BitConverter.ToDouble(value, 0); 
         #endregion
         private static byte[] ListToBytes(List<object> value)
         {
