@@ -127,10 +127,9 @@ namespace SimulFactory.Core
                 switch (opcode)
                 {
                     case Define.PAYLOAD_DATA_TYPE.Text:
-                        MessageManager.ProcessData(pc, (PacketData)Serializer.Deserialize(decoded));
                         break;
                     case Define.PAYLOAD_DATA_TYPE.Binary:
-                        //Binary는 아무 동작 없음
+                        MessageManager.ProcessData(pc, (PacketData)Serializer.Deserialize(decoded));
                         break;
                     case Define.PAYLOAD_DATA_TYPE.ConnectionClose:
                         //받은 요청이 서버에서 보낸 요청에 대한 응답이 아닌 경우에만 실행

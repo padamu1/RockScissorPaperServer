@@ -56,6 +56,10 @@ namespace PacketSerializer
 
         public static byte[] Serialize(object value)
         {
+            if(value == null)
+            {
+                return new byte[0];
+            }
             Type objectType = value.GetType();
             byte[] data;
             switch (TYPE_DICT[objectType])
@@ -104,6 +108,10 @@ namespace PacketSerializer
         }
         public static object Deserialize(byte[] value)
         {
+            if(value.Length == 0)
+            {
+                return null;
+            }
             byte[] lengthBytes = new byte[Config.LENGTH_SIZE];
             Array.Copy(value, 0, lengthBytes, 0, Config.LENGTH_SIZE);
             int length = BytesToInt(lengthBytes);
