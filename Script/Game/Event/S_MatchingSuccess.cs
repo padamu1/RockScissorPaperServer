@@ -12,7 +12,7 @@ namespace SimulFactory.Game.Event
 {
     public class S_MatchingSuccess
     {
-        public static PacketData Data(List<string> users)
+        public static PacketData Data(List<object> users)
         {
             Dictionary<byte, object> param = new Dictionary<byte, object>();
             param.Add(0, users);

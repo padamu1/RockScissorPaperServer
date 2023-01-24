@@ -112,7 +112,7 @@ namespace SimulFactory.Game.Matching
         /// </summary>
         private void SendMatchSuccess()
         {
-            List<string> users = new List<string>();
+            List<object> users = new List<object>();
             foreach (KeyValuePair<int, PcInstance> user in pcDic)
             {
                 users.Add(user.Value.GetUserData().UserName);

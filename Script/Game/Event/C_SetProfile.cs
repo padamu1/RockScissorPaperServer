@@ -12,8 +12,11 @@ namespace SimulFactory.Game.Event
     {
         public static void SetProfileC(PcInstance pc, Dictionary<byte, object> param)
         {
-            string profileKey = (string)param[0];
-            UserDBSql.SetUserProfile(pc.GetUserData().UserNo, profileKey);
+            string faceColor = (string)param[0];
+            string eyeForm = (string)param[1];
+            string eyeColor = (string)param[2];
+            string mouthForm = (string)param[3];
+            UserDBSql.SetUserProfile(pc.GetUserData().UserNo, faceColor, eyeForm, eyeColor, mouthForm);
         }
     }
 }

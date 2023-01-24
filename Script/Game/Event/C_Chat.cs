@@ -29,10 +29,13 @@ namespace SimulFactory.Game.Event
                             if (targetUser == null)
                             {
                                 pc.SendPacket(S_Chat.Data(Define.CHAT_TYPE.Toast, "System", "접속중이지 않은 유저입니다."));
+                                return;
                             }
                             else
                             {
+                                pc.SendPacket(S_Chat.Data(chatType, pc.GetUserData().UserName, chatText));
                                 targetUser.SendPacket(S_Chat.Data(chatType, pc.GetUserData().UserName, chatText));
+                                return;
                             }
                         }
                         pc.SendPacket(S_Chat.Data(Define.CHAT_TYPE.Toast, "System", "없는 유저입니다."));

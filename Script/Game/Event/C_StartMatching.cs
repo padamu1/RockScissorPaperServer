@@ -8,7 +8,7 @@ namespace SimulFactory.Game.Event
     {
         public static void StartMatchingC(PcInstance pc, Dictionary<byte,object> param)
         {
-            switch((Define.MATCH_TYPE)(long)param[0])
+            switch((Define.MATCH_TYPE)(int)param[0])
             {
                 case Define.MATCH_TYPE.Normal:
                     NormalMatchSystem.GetInstance().AddPcInsatnce(pc);

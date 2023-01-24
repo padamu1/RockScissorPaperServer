@@ -15,7 +15,7 @@ namespace SimulFactory.Game.Event
         public static PacketData Data(PcInstance pc, Define.ROCK_SCISSOR_PAPER winUserResult)
         {
             Dictionary<byte, object> param = new Dictionary<byte, object>();
-            param.Add(0, winUserResult);
+            param.Add(0, (int)winUserResult);
             param.Add(1, pc.GetPcPvp().GetCardNo());
             // 2번에 카드 리스트 넣어서 보냄
             return new PacketData((byte)Define.EVENT_CODE.RoundResultS, param);
