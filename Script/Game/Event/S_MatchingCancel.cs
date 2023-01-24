@@ -1,4 +1,5 @@
-﻿using SimulFactory.Common.Bean;
+﻿using RockScissorPaperServer.PacketSerializer.Model;
+using SimulFactory.Common.Bean;
 using SimulFactory.Common.Instance;
 using SimulFactory.Core.Util;
 using System;
@@ -11,9 +12,9 @@ namespace SimulFactory.Game.Event
 {
     public class S_MatchingCancel
     {
-        public static EventData Data()
+        public static PacketData Data()
         {
-            return new EventData((byte)Define.EVENT_CODE.MatchingCancelS, new Dictionary<byte, object>());
+            return new PacketData((byte)Define.EVENT_CODE.MatchingCancelS, new Dictionary<byte, object>());
         }
     }
 }

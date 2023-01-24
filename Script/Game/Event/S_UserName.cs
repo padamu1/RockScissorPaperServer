@@ -1,4 +1,5 @@
-﻿using SimulFactory.Common.Bean;
+﻿using RockScissorPaperServer.PacketSerializer.Model;
+using SimulFactory.Common.Bean;
 using SimulFactory.Common.Instance;
 using SimulFactory.Core.Util;
 using System;
@@ -11,7 +12,7 @@ namespace SimulFactory.Game.Event
 {
     public class S_UserName
     {
-        public static EventData Data(PcInstance pc, long code)
+        public static PacketData Data(PcInstance pc, long code)
         {
             Dictionary<byte, object> dic = new Dictionary<byte, object>();
             dic.Add(0, code);
@@ -19,7 +20,7 @@ namespace SimulFactory.Game.Event
             {
                 dic.Add(1, pc.GetUserData().UserName);
             }
-            return new EventData((byte)Define.EVENT_CODE.UserNameS, dic);
+            return new PacketData((byte)Define.EVENT_CODE.UserNameS, dic);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using SimulFactory.Common.Bean;
+﻿using RockScissorPaperServer.PacketSerializer.Model;
+using SimulFactory.Common.Bean;
 using SimulFactory.Common.Instance;
 using SimulFactory.Core;
 using SimulFactory.Core.Util;
@@ -8,15 +9,15 @@ namespace SimulFactory.Game
 {
     public class MessageManager
     {
-        public static void ProcessData(PcInstance pc, EventData dataFormat)                      // 클라이언트로부터 들어온 정보를 처리하기 위한 함수
+        public static void ProcessData(PcInstance pc, PacketData packet)                      // 클라이언트로부터 들어온 정보를 처리하기 위한 함수
         {
-            byte eventCode = dataFormat.eventCode;
-            Dictionary<byte, object> param = new Dictionary<byte, object>();
+            byte eventCode = packet.EvCode;
+            Dictionary<byte, object> param = packet.Data;
 
             // 데이터가 널이 아니라면 넣어줌
-            if (dataFormat.data != null)
+            if (param == null)
             {
-                param = dataFormat.data;
+                return;
             }
             try
             {

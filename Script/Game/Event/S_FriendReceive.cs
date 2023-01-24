@@ -1,4 +1,5 @@
-﻿using SimulFactory.Common.Bean;
+﻿using RockScissorPaperServer.PacketSerializer.Model;
+using SimulFactory.Common.Bean;
 using SimulFactory.Common.Instance;
 using SimulFactory.Core.Util;
 using System;
@@ -11,20 +12,20 @@ namespace SimulFactory.Game.Event
 {
     public class S_FriendReceive
     {
-        public static EventData Data(Define.RECEIVE_DATA_TYPE type , bool result)
+        public static PacketData Data(Define.RECEIVE_DATA_TYPE type , bool result)
         {
             Dictionary<byte, object> param = new Dictionary<byte, object>();
             param.Add(0, type);
             param.Add(1, result);
-            return new EventData((byte)Define.EVENT_CODE.FriendReceiveS, param);
+            return new PacketData((byte)Define.EVENT_CODE.FriendReceiveS, param);
         }
-        public static EventData Data(Define.RECEIVE_DATA_TYPE type , string otherUserName, bool result)
+        public static PacketData Data(Define.RECEIVE_DATA_TYPE type , string otherUserName, bool result)
         {
             Dictionary<byte, object> param = new Dictionary<byte, object>();
             param.Add(0, type);
             param.Add(1, otherUserName);
             param.Add(2, result);
-            return new EventData((byte)Define.EVENT_CODE.FriendReceiveS, param);
+            return new PacketData((byte)Define.EVENT_CODE.FriendReceiveS, param);
         }
     }
 }

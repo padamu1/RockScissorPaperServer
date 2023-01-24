@@ -1,4 +1,5 @@
-﻿using SimulFactory.Core.Util;
+﻿using RockScissorPaperServer.PacketSerializer.Model;
+using SimulFactory.Core.Util;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -70,13 +71,13 @@ namespace SimulFactory.Common.Instance
                 return null;
             }
         }
-        public void SendPacket(EventData eventData)
+        public void SendPacket(PacketData packet)
         {
             lock(pcDic)
             {
                 foreach(PcInstance pc in pcDic.Values)
                 {
-                    pc.SendPacket(eventData);
+                    pc.SendPacket(packet);
                 }
             }
         }

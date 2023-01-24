@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using RockScissorPaperServer.PacketSerializer.Model;
 using SimulFactory.Common.Bean;
 using SimulFactory.Common.Dto;
 using SimulFactory.Core.Util;
@@ -12,12 +13,12 @@ namespace SimulFactory.Game.Event
 {
     public class S_LoadProfile
     {
-        public static EventData Data(string name, string key)
+        public static PacketData Data(string name, string key)
         {
             Dictionary<byte, object> param = new Dictionary<byte, object>();
             param.Add(0, name);
             param.Add(1, key);
-            return new EventData((byte)Define.EVENT_CODE.LoadProfileS, param);
+            return new PacketData((byte)Define.EVENT_CODE.LoadProfileS, param);
         }
     }
 }

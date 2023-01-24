@@ -106,7 +106,7 @@ namespace SimulFactory.Core.Util
         public static void CheckUserIdValid(PcInstance pc, byte[] userNo)
         {
             // DB 내용과 비교
-            long newUserNo = Math.Abs(ByteUtillity.BytesToLong(userNo));
+            long newUserNo = Math.Abs(BitConverter.ToInt64(userNo, 0));
             string newUserName = MakeUserNickName();
             pc.GetUserData().UserNo = newUserNo;
             pc.GetUserData().UserName = newUserName;

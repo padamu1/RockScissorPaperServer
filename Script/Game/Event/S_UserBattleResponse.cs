@@ -1,4 +1,5 @@
-﻿using SimulFactory.Common.Bean;
+﻿using RockScissorPaperServer.PacketSerializer.Model;
+using SimulFactory.Common.Bean;
 using SimulFactory.Common.Instance;
 using SimulFactory.Core.Util;
 using System;
@@ -11,11 +12,11 @@ namespace SimulFactory.Game.Event
 {
     public class S_UserBattleResponse
     {
-        public static EventData Data(PcInstance pc, Dictionary<string, int> enemyResult)
+        public static PacketData Data(PcInstance pc, Dictionary<string, int> enemyResult)
         {
             Dictionary<byte, object> param = new Dictionary<byte, object>();
             param.Add(0, enemyResult);
-            return new EventData((byte)Define.EVENT_CODE.UserBattleResponseS, param);
+            return new PacketData((byte)Define.EVENT_CODE.UserBattleResponseS, param);
         }
     }
 }

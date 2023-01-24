@@ -1,4 +1,5 @@
-﻿using SimulFactory.Common.Bean;
+﻿using RockScissorPaperServer.PacketSerializer.Model;
+using SimulFactory.Common.Bean;
 using SimulFactory.Common.Instance;
 using SimulFactory.Common.Thread;
 using SimulFactory.Core;
@@ -35,11 +36,11 @@ namespace SimulFactory.Game.Matching
         /// <summary>
         /// 모든 유저에게 동일한 메시지 보낼때 사용
         /// </summary>
-        public void SendPacket(EventData eventData)
+        public void SendPacket(PacketData packet)
         {
             foreach (KeyValuePair<int, PcInstance> pc in pcDic)
             {
-                pc.Value.SendPacket(eventData);
+                pc.Value.SendPacket(packet);
             }
         }
         /// <summary>

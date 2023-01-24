@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using RockScissorPaperServer.PacketSerializer.Model;
 using SimulFactory.Common.Bean;
 using SimulFactory.Common.Dto;
 using SimulFactory.Common.Instance;
@@ -13,7 +14,7 @@ namespace SimulFactory.Game.Event
 {
     public class S_FriendData
     {
-        public static EventData Data(List<FriendDto> friendDtoList)
+        public static PacketData Data(List<FriendDto> friendDtoList)
         {
             if(friendDtoList.Count == 0)
             {
@@ -21,7 +22,7 @@ namespace SimulFactory.Game.Event
             }
             Dictionary<byte, object> param = new Dictionary<byte, object>();
             param.Add(0, JsonConvert.SerializeObject(friendDtoList));
-            return new EventData((byte)Define.EVENT_CODE.FriendDataS, param);
+            return new PacketData((byte)Define.EVENT_CODE.FriendDataS, param);
         }
     }
 }

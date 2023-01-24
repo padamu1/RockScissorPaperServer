@@ -1,4 +1,6 @@
-﻿using SimulFactory.Common.Bean;
+﻿using PacketSerializer;
+using RockScissorPaperServer.PacketSerializer.Model;
+using SimulFactory.Common.Bean;
 using SimulFactory.Common.Instance;
 using SimulFactory.Core.Sql;
 using SimulFactory.Core.Util;
@@ -125,7 +127,7 @@ namespace SimulFactory.Core
                 switch (opcode)
                 {
                     case Define.PAYLOAD_DATA_TYPE.Text:
-                        MessageManager.ProcessData(pc, ByteUtillity.ByteToObject(decoded));
+                        MessageManager.ProcessData(pc, (PacketData)Serializer.Deserialize(decoded));
                         break;
                     case Define.PAYLOAD_DATA_TYPE.Binary:
                         //Binary는 아무 동작 없음

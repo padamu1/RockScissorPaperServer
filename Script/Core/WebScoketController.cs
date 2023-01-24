@@ -1,4 +1,6 @@
-﻿using SimulFactory.Common.Bean;
+﻿using PacketSerializer;
+using RockScissorPaperServer.PacketSerializer.Model;
+using SimulFactory.Common.Bean;
 using SimulFactory.Common.Instance;
 using SimulFactory.Core.Util;
 using SimulFactory.Game;
@@ -28,6 +30,6 @@ namespace SimulFactory.Core
         /// </summary>
         /// <param name="eventCode"></param>
         /// <param name="param"></param>
-        public void SendPacket(EventData eventData) => SendData(ByteUtillity.ObjectToByte(eventData));
+        public void SendPacket(PacketData packet) => SendData(Serializer.Serialize(packet));
     }
 }

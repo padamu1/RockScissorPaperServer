@@ -1,4 +1,5 @@
-﻿using SimulFactory.Common.Bean;
+﻿using RockScissorPaperServer.PacketSerializer.Model;
+using SimulFactory.Common.Bean;
 using SimulFactory.Core;
 using SimulFactory.Core.Sql;
 using SimulFactory.Core.Util;
@@ -23,7 +24,7 @@ namespace SimulFactory.Common.Instance
             this.socketController = socketController;
             SetupUser();
         }
-        public void SendPacket(EventData eventData) => socketController.SendPacket(eventData);
+        public void SendPacket(PacketData packetData) => socketController.SendPacket(packetData);
         /// <summary>
         /// 유저 로그인 시 로딩되어야 할 정보들
         /// </summary>
