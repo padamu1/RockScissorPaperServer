@@ -27,7 +27,7 @@ namespace SimulFactory.Common.Thread
         }
         protected void GameRun()
         {
-            if (matchRound > Define.MAX_ROUND_COUNT)
+            if (matchRound >= Define.MAX_ROUND_COUNT)
             {
                 EndGame();
             }
