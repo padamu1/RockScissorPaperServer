@@ -12,12 +12,13 @@ namespace SimulFactory.Game.Event
 {
     public class S_RoundResult
     {
-        public static PacketData Data(PcInstance pc, Define.ROCK_SCISSOR_PAPER winUserResult)
+        public static PacketData Data(List<object> winUserNames)
         {
             Dictionary<byte, object> param = new Dictionary<byte, object>();
-            param.Add(0, (int)winUserResult);
-            param.Add(1, pc.GetPcPvp().GetCardNo());
+            //param.Add(0, (int)winUserResult);
+            //param.Add(1, pc.GetPcPvp().GetCardNo());
             // 2번에 카드 리스트 넣어서 보냄
+            param.Add(0, winUserNames);
             return new PacketData((byte)Define.EVENT_CODE.RoundResultS, param);
         }
     }

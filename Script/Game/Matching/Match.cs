@@ -165,12 +165,17 @@ namespace SimulFactory.Game.Matching
             matchUserWaitTime += Define.MATCH_SYSTEM_DELAY_TIME;    // 유저를 대기하는 시간을 증가시킴
             return true;    // 매칭 대기 시간이 남은 경우
         }
-        protected void SendRoundResult(Define.ROCK_SCISSOR_PAPER winUserResult)
+        protected void SendRoundResult(int winUserResult)
         {
-            foreach (KeyValuePair<int, PcInstance> pc in pcDic)
+            List<object> winUserNames = new List<object>();
+            foreach(KeyValuePair<int, int> result in roundResponseDic)
             {
-                pc.Value.SendPacket(S_RoundResult.Data(pc.Value, winUserResult));
+                if(result.Value == winUserResult)
+                {
+                    winUserNames.Add(pcDic[result.Key].GetUserData().UserName);
+                }
             }
+            SendPacket(S_RoundResult.Data(winUserNames));
         }
         protected void SendBattleResponse()
         {
@@ -217,7 +222,7 @@ namespace SimulFactory.Game.Matching
                     userWinCountDic[teamNo.Key] = 10;
                 }
             }
-            EndGame();
+            matchRound = Define.MAX_ROUND_COUNT;
         }
         /// <summary>
         /// 게임 종료시 호출된 메서드

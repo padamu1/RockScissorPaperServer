@@ -82,7 +82,7 @@ namespace SimulFactory.Common.Thread
                         userWinCountDic[teamNo] = Define.MAX_ROUND_COUNT;
                     }
                 }
-                EndGame();
+                matchRound = Define.MAX_ROUND_COUNT;
                 return;
             }
             int winCount = 0;
@@ -100,13 +100,13 @@ namespace SimulFactory.Common.Thread
             }
             SendBattleResponse();
 
+            SendRoundResult((int)winUserResult);
             // 다음 계산을 위해 초기화
             roundResponseDic.Clear();
-            SendRoundResult(winUserResult);
 
             if (winCount == Define.MAX_WIN_COUNT)
             {
-                EndGame();
+                matchRound = Define.MAX_ROUND_COUNT;
                 return;
             }
             if (winUserResult != Define.ROCK_SCISSOR_PAPER.None)
