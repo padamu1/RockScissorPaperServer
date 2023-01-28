@@ -30,6 +30,13 @@ namespace SimulFactory.Core
         /// </summary>
         /// <param name="eventCode"></param>
         /// <param name="param"></param>
-        public void SendPacket(PacketData packet) => SendData(Serializer.Serialize(packet));
+        public void SendPacket(PacketData packet)
+        {
+            if(State == Define.WEB_SOCKET_STATE.Open)
+            {
+                SendData(Serializer.Serialize(packet));
+            }
+        }
+
     }
 }

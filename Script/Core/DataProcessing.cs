@@ -153,7 +153,7 @@ namespace SimulFactory.Core
 
             return true;
         }
-        protected void SendData(byte[] data, Define.PAYLOAD_DATA_TYPE opcode = Define.PAYLOAD_DATA_TYPE.Text)
+        protected void SendData(byte[] data, Define.PAYLOAD_DATA_TYPE opcode = Define.PAYLOAD_DATA_TYPE.Binary)
         {
             byte[] sendData;
             BitArray firstByte = new BitArray(new bool[] {
@@ -205,10 +205,14 @@ namespace SimulFactory.Core
         {
 
             // pc 자원 먼저 해제
-            pc?.Dispose();
+            if(pc != null)
+            {
+                PcListInstance.GetInstance().RemoveInstance(pc.GetUserData().UserNo);
+            }
 
             targetClient?.Close();
             targetClient?.Dispose(); //모든 소켓에 관련된 자원 해제
+            State = Define.WEB_SOCKET_STATE.Closed;
         }
     }
 }

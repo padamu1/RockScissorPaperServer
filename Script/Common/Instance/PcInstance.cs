@@ -81,7 +81,6 @@ namespace SimulFactory.Common.Instance
                 match.UserDisconnect(this);
             }
             matchSystem?.RemovePcInstance(this);
-
             Console.WriteLine(GetUserData().UserName + " Client Disconnected");
         }
     }

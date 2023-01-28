@@ -87,6 +87,7 @@ namespace SimulFactory.Common.Thread
                         userWinCountDic[teamNo] = Define.MAX_ROUND_COUNT;
                     }
                 }
+                EndGame();
                 matchRound = Define.MAX_ROUND_COUNT;
                 return;
             }
