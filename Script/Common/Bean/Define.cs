@@ -74,6 +74,11 @@
             MATCH_READY = 0,
             MATCH_START = 1,
         }
+        public enum GAME_STATE
+        {
+            USER_RESULT_RECEIVE = 0,
+            ROUNT_RESULT = 1,
+        }
 
         public enum ROCK_SCISSOR_PAPER
         {

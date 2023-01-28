@@ -27,21 +27,26 @@ namespace SimulFactory.Common.Thread
         }
         protected void GameRun()
         {
-            if (matchRound >= Define.MAX_ROUND_COUNT)
+            if (matchRound > Define.MAX_ROUND_COUNT)
             {
                 EndGame();
             }
             else
             {
+                switch (gameState)
+                {
+                    case Define.GAME_STATE.USER_RESULT_RECEIVE:
+                        EndRound(CheckRoundResult());
+                        break;
+                    case Define.GAME_STATE.ROUNT_RESULT:
+                        SetRoundResult();
+                        break;
+                }
                 matchUserWaitTime += Define.MATCH_USER_RESULT_WAIT_DELAY;
                 if (matchUserWaitTime > Define.MATCH_USER_RESULT_WAIT_COUNT)
                 {
                     EndRound(Define.ROCK_SCISSOR_PAPER.Break);
                     return;
-                }
-                else
-                {
-                    EndRound(CheckRoundResult());
                 }
             }
         }
@@ -85,35 +90,40 @@ namespace SimulFactory.Common.Thread
                 matchRound = Define.MAX_ROUND_COUNT;
                 return;
             }
-            int winCount = 0;
+            maxWinCount = 0;
             foreach (KeyValuePair<int, PcInstance> pc in pcDic)
             {
                 int teamNo = pc.Value.GetPcPvp().GetTeamNo();
                 if ((Define.ROCK_SCISSOR_PAPER)roundResponseDic[teamNo] == winUserResult)
                 {
                     userWinCountDic[teamNo]++;
-                    if (userWinCountDic[teamNo] > winCount)
+                    if (userWinCountDic[teamNo] > maxWinCount)
                     {
-                        winCount = userWinCountDic[teamNo];
+                        maxWinCount = userWinCountDic[teamNo];
                     }
                 }
             }
             SendBattleResponse();
-
-            SendRoundResult((int)winUserResult);
+            this.winUserResult = (int)winUserResult;
+            gameState = Define.GAME_STATE.ROUNT_RESULT;
+        }
+        public virtual void SetRoundResult()
+        {
+            SendRoundResult(winUserResult);
             // 다음 계산을 위해 초기화
             roundResponseDic.Clear();
 
-            if (winCount == Define.MAX_WIN_COUNT)
+            if (maxWinCount == Define.MAX_WIN_COUNT)
             {
                 matchRound = Define.MAX_ROUND_COUNT;
                 return;
             }
-            if (winUserResult != Define.ROCK_SCISSOR_PAPER.None)
+            if (winUserResult != (int)Define.ROCK_SCISSOR_PAPER.None)
             {
                 matchRound++;
                 matchUserWaitTime = 0;
             }
+            gameState = Define.GAME_STATE.USER_RESULT_RECEIVE;
         }
 
         public override void Dispose()

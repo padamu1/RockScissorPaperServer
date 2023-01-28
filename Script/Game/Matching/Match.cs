@@ -21,17 +21,22 @@ namespace SimulFactory.Game.Matching
         protected Dictionary<int, int> roundResponseDic;     // 데미지 게산을 위한 임시 보관소
         protected Dictionary<int,  float> eloDic;   // elo probability
         protected MatchSystem matchSystem;
+        protected Define.GAME_STATE gameState;
+        protected int winUserResult;
+        protected int maxWinCount;
         public Match(MatchSystem matchSystem)
         {
             this.matchSystem = matchSystem;
             sendMatchSuccessMessage = false;
             matchUserWaitTime = 0;
             matchRound = 0;
+            maxWinCount = 0;
             pcDic = new Dictionary<int, PcInstance>();
             userWinCountDic = new Dictionary<int, int>();
             matchState = Define.MATCH_STATE.MATCH_READY;
             roundResponseDic = new Dictionary<int, int>();
             eloDic = new Dictionary<int, float>();
+            gameState = Define.GAME_STATE.USER_RESULT_RECEIVE;
         }
         /// <summary>
         /// 모든 유저에게 동일한 메시지 보낼때 사용
