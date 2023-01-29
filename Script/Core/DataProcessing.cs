@@ -181,11 +181,11 @@ namespace SimulFactory.Core
                 sendData = new byte[data.Length + 4];
                 firstByte.CopyTo(sendData, 0);
                 sendData[1] = 126;
-                byte[] lengthData = BitConverter.GetBytes((ushort)data.Length);
-                Array.Copy(lengthData, 0, sendData, 2, 2);
+                byte[] lengthData = BitConverter.GetBytes((short)data.Length);
+                sendData[2] = lengthData[1];
+                sendData[3] = lengthData[0];
                 data.CopyTo(sendData, 4);
             }
-
             messageStream.Write(sendData, 0, sendData.Length);  //클라이언트에 전송
         }
 
