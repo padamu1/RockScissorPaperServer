@@ -1,4 +1,5 @@
-﻿using SimulFactory.Common.Instance;
+﻿using RockScissorPaperServer.Script.Common.Dto;
+using SimulFactory.Common.Instance;
 using SimulFactory.Game.Matching;
 using System;
 using System.Collections.Generic;
@@ -10,9 +11,8 @@ namespace SimulFactory.Common.Bean
 {
     public class PcPvp
     {
-        private int rating;
-        private int winCount;
-        private int defeatCount;
+        private NormalPvpDto normalPvpDto;
+        private MultiPvpDto multiPvpDto;
         private int matchId;
         private int cardNo;
         private bool matchAccept;
@@ -23,7 +23,8 @@ namespace SimulFactory.Common.Bean
         public PcPvp(PcInstance pc)
         {
             this.pc = pc;
-            rating = Define.INIT_RATING;
+            normalPvpDto = new NormalPvpDto(Define.INIT_RATING);
+            multiPvpDto = new MultiPvpDto();
         }
         public void SetWaitCount(int waitCount)
         {
@@ -32,30 +33,6 @@ namespace SimulFactory.Common.Bean
         public int GetWaitCount()
         {
             return waitCount;
-        }
-        public void SetRating(int rating)
-        {
-            this.rating = rating;
-        }
-        public int GetRating()
-        {
-            return rating;
-        }
-        public void SetWinCount(int winCount)
-        {
-            this.winCount = winCount;
-        }
-        public int GetWinCount()
-        {
-            return winCount;
-        }
-        public void SetDefeatCount(int defeatCount)
-        {
-            this.defeatCount = defeatCount;
-        }
-        public int GetDefeatCount()
-        {
-            return defeatCount;
         }
         public void SetMatchId(int matchId)
         {
@@ -89,18 +66,6 @@ namespace SimulFactory.Common.Bean
         {
             return teamNo;
         }
-        public void UpdateMatchResult(bool isWin, int rating)
-        {
-            if(isWin)
-            {
-                winCount++;
-            }
-            else
-            {
-                defeatCount++;
-            }
-            this.rating += rating;
-        }
         public void SetMatch(Match? match)
         {
             if(match == null)
@@ -115,6 +80,14 @@ namespace SimulFactory.Common.Bean
         public Match GetMatch()
         {
             return match;
+        }
+        public NormalPvpDto GetNormalPvpDto()
+        {
+            return normalPvpDto;
+        }
+        public MultiPvpDto GetMultiPvpDto()
+        {
+            return multiPvpDto;
         }
     }
 }

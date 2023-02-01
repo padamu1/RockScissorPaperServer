@@ -177,7 +177,6 @@ namespace SimulFactory.Core
             }
             else
             {
-                // 수신과 마찬가지로 32,767이상의 길이(int16 범위 이상)의 데이터에 대응하지 못함
                 sendData = new byte[data.Length + 4];
                 firstByte.CopyTo(sendData, 0);
                 sendData[1] = 126;
@@ -203,7 +202,6 @@ namespace SimulFactory.Core
 
         public void Dispose()
         {
-
             // pc 자원 먼저 해제
             if(pc != null)
             {

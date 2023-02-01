@@ -230,7 +230,7 @@ namespace SimulFactory.Game.Matching
             matchRound = Define.MAX_ROUND_COUNT;
         }
         /// <summary>
-        /// 게임 종료시 호출된 메서드
+        /// 게임 종료시 호출될 메서드
         /// </summary>
         protected virtual void EndGame()
         {
@@ -250,24 +250,13 @@ namespace SimulFactory.Game.Matching
                     winTeamNos.Add(teamNo.Key);
                 }
             }
-
-            // 결과 각 유저에게 전송
-            foreach (KeyValuePair<int, PcInstance> pc in pcDic)
-            {
-                if (winTeamNos.Contains(pc.Value.GetPcPvp().GetTeamNo()))
-                {
-                    pc.Value.GetPcPvp().SetRating(pc.Value.GetPcPvp().GetRating() + (int)(Define.K_FACTOR * (1- (eloDic[pc.Key]))));
-                    pc.Value.SendPacket(S_MatchingResult.Data(pc.Value, true));
-                }
-                else
-                {
-                    pc.Value.GetPcPvp().SetRating(pc.Value.GetPcPvp().GetRating() + (int)(Define.K_FACTOR * (0 - (eloDic[pc.Key]))));
-                    pc.Value.SendPacket(S_MatchingResult.Data(pc.Value, false));
-                    
-                }
-                pc.Value.GetPcPvp().SetMatch(null);
-            }
-            PcPvpSql.UpdateUserPvpSql(pcDic.Values.ToArray());
+            SendGameResult(winTeamNos);
+        }
+        /// <summary>
+        /// 결과를 받아서 유저 게임 기록 갱신
+        /// </summary>
+        protected virtual void SendGameResult(List<int> winTeamNos)
+        {
             matchSystem.RemoveReadyMatchList(this);
 
             // 스레드 종료

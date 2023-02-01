@@ -1,4 +1,5 @@
 ﻿using RockScissorPaperServer.PacketSerializer.Model;
+using RockScissorPaperServer.Script.Common.Dto;
 using SimulFactory.Common.Bean;
 using SimulFactory.Common.Instance;
 using SimulFactory.Core.Util;
@@ -12,22 +13,21 @@ namespace SimulFactory.Game.Event
 {
     public class S_MatchingResult
     {
-        public static PacketData Data(PcInstance pc, bool isWin)
+        public static PacketData Data(bool isWin, PvpDtoBase pvpDto, int type)
         {
             Dictionary<byte, object> param = new Dictionary<byte, object>();
             if(isWin)
             {
                 param.Add(0, true);
-                pc.GetPcPvp().UpdateMatchResult(true , 10);
             }
             else
             {
                 param.Add(0, false);
-                pc.GetPcPvp().UpdateMatchResult(false , -10);
             }
-            param.Add(1, pc.GetPcPvp().GetRating());
-            param.Add(2, pc.GetPcPvp().GetWinCount());
-            param.Add(3, pc.GetPcPvp().GetDefeatCount());
+            param.Add(1,pvpDto.Rating);
+            param.Add(2,pvpDto.WinCount);
+            param.Add(3,pvpDto.DefeatCount);
+            param.Add(4, type);
 
             return new PacketData((byte)Define.EVENT_CODE.MatchingResultS, param);
         }
