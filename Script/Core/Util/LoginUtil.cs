@@ -112,7 +112,7 @@ namespace SimulFactory.Core.Util
             pc.GetUserData().UserName = newUserName;
             if (UserDBSql.InsertUserSql(pc))
             {
-                PcPvpSql.InsertUserPvpSql(pc);
+                PcPvpSql.InsertUserNormalPvpSql(pc);
                 pc.SendPacket(S_Login.Data(pc, true));
 
             }

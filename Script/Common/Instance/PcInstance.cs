@@ -37,7 +37,8 @@ namespace SimulFactory.Common.Instance
         public void LoadData()
         {
             // 로그인 성공 시 관련 DB 로딩
-            PcPvpSql.GetUserPvp(this);
+            PcPvpSql.GetUserNormalPvp(this);
+            PcPvpSql.GetUserMultiPvp(this);
             GetPcFriend().LoadPcFriend();
         }
         #region Getter

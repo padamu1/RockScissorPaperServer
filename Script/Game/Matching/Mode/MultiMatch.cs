@@ -45,7 +45,7 @@ namespace SimulFactory.Game.Matching.Mode
                 pc.Value.GetPcPvp().SetMatch(null);
             }
             // 멀티 데이터 설정
-            //PcPvpSql.UpdateUserPvpSql(pcDic.Values.ToArray());
+            PcPvpSql.UpdateUserMultiPvpSql(pcDic.Values.ToArray());
             base.SendGameResult(winTeamNos);
         }
     }
