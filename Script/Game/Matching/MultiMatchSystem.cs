@@ -28,7 +28,6 @@ namespace SimulFactory.Game.Matching
         protected override void CheckSearchUser(int searchCount)
         {
             // 매칭 전 정렬 -> 점수 순으로 정렬
-            matchSearchList.OrderBy(x => x.GetPcPvp().GetRating());
             if(searchCount > matchSearchList.Count)
             {
                 for (int count = 0; count < matchSearchList.Count; count++)

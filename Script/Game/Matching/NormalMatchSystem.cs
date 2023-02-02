@@ -20,5 +20,11 @@ namespace SimulFactory.Game.Matching
             this.defaultSearchCount = Define.NORMAL_MODE_SEARCH_USER_COUNT;
             this.minSearchCount = Define.NORMAL_MODE_SEARCH_USER_MIN_COUNT;
         }
+        protected override void CheckSearchUser(int searchCount)
+        {
+            // 매칭 전 정렬
+            matchSearchList.OrderBy(x => x.GetPcPvp().GetNormalPvpDto().Rating);
+            base.CheckSearchUser(searchCount);
+        }
     }
 }

@@ -151,13 +151,11 @@ namespace SimulFactory.Game
         }
         protected virtual void CheckSearchUser(int searchCount)
         {
-            // 매칭 전 정렬
-            matchSearchList.OrderBy(x => x.GetPcPvp().GetRating());
             // 실제 로직 처리
             for (int count = 0; count < matchSearchList.Count - (searchCount - 1);)
             {
                 //bool matchSuccess = false;
-                if (matchSearchList[count + (searchCount - 1)].GetPcPvp().GetRating() - matchSearchList[count].GetPcPvp().GetRating() <= Define.DEFAULT_SEARCH_RATING + matchSearchList[count].GetPcPvp().GetWaitCount() * Define.INCREASE_SEARCH_RATING)
+                if (matchSearchList[count + (searchCount - 1)].GetPcPvp().GetNormalPvpDto().Rating - matchSearchList[count].GetPcPvp().GetNormalPvpDto().Rating <= Define.DEFAULT_SEARCH_RATING + matchSearchList[count].GetPcPvp().GetWaitCount() * Define.INCREASE_SEARCH_RATING)
                 {
                     NormalMatch match = new NormalMatch(this);
                     for (int index = count; index < count + searchCount; index++)

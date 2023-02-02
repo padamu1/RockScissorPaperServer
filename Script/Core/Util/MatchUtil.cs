@@ -1,4 +1,6 @@
 ﻿using SimulFactory.Common.Bean;
+using SimulFactory.Game.Matching;
+using SimulFactory.Game.Matching.Mode;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,11 +16,15 @@ namespace SimulFactory.Core.Util
         /// </summary>
         /// <param name="userRating"></param>
         /// <param name="eloDic"></param>
-        public static void SetPvpEloRating(Dictionary<int, Common.Instance.PcInstance> userRating, ref Dictionary<int, float> eloDic)
+        public static void SetPvpEloRating(Dictionary<int, Common.Instance.PcInstance> userRating, Match match, ref Dictionary<int, float> eloDic)
         {
             foreach(KeyValuePair<int, Common.Instance.PcInstance> calculatedTeam in userRating)
             {
-                int teamRating = userRating[1].GetPcPvp().GetRating();
+                int teamRating = 0;
+                if (match is NormalMatch)
+                {
+                    teamRating = userRating[1].GetPcPvp().GetNormalPvpDto().Rating;
+                }
 
                 int enemyRating = 0; 
                 foreach (KeyValuePair<int, Common.Instance.PcInstance> team in userRating)
@@ -28,7 +34,10 @@ namespace SimulFactory.Core.Util
                     {
                         continue;
                     }
-                    enemyRating += team.Value.GetPcPvp().GetRating();
+                    if (match is NormalMatch)
+                    {
+                        enemyRating += team.Value.GetPcPvp().GetNormalPvpDto().Rating;
+                    }
                 }
                 float teamProbability = Probability(teamRating, enemyRating / userRating.Count - 1);
                 eloDic.Add(calculatedTeam.Key, teamProbability);
