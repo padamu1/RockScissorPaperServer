@@ -143,6 +143,7 @@ namespace SimulFactory.Game.Matching
             {
                 foreach (KeyValuePair<int, PcInstance> pc in pcDic)
                 {
+                    pc.Value.GetPcPvp().SetMatch(null);
                     pc.Value.SendPacket(S_MatchingResponse.Data(1));
                     if (pc.Value.GetPcPvp().GetMatchAccept())
                     {

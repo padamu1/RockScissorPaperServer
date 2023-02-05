@@ -12,10 +12,10 @@ namespace SimulFactory.Game.Event
 {
     public class S_StartMatching
     {
-        public static PacketData Data()
+        public static PacketData Data(bool result)
         {
             Dictionary<byte, object> param = new Dictionary<byte, object>();
-            param.Add(0, true);
+            param.Add(0, result);
             return new PacketData((byte)Define.EVENT_CODE.StartMatchingS, param);
         }
     }

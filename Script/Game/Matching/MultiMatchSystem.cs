@@ -36,7 +36,28 @@ namespace SimulFactory.Game.Matching
                 }
                 return;
             }
-            base.CheckSearchUser(searchCount);
+
+            // 실제 로직 처리
+            for (int count = 0; count < matchSearchList.Count - (searchCount - 1);)
+            {
+                //bool matchSuccess = false;
+                if (matchSearchList[count + (searchCount - 1)].GetPcPvp().GetNormalPvpDto().Rating - matchSearchList[count].GetPcPvp().GetNormalPvpDto().Rating <= Define.DEFAULT_SEARCH_RATING + matchSearchList[count].GetPcPvp().GetWaitCount() * Define.INCREASE_SEARCH_RATING)
+                {
+                    MultiMatch match = new MultiMatch(this);
+                    for (int index = count; index < count + searchCount; index++)
+                    {
+                        match.AddPcInstance(matchSearchList[index]);
+                        RemovePcInstance(matchSearchList[index]);
+                    }
+                    match.CalculateEloRating();
+                    count += searchCount;
+                }
+                else
+                {
+                    NoSearchUser(matchSearchList[count]);
+                    count++;
+                }
+            }
         }
         protected override void NoSearchUser(PcInstance pc)
         {

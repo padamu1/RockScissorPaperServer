@@ -33,7 +33,6 @@ namespace SimulFactory.Game
                 {
                     foreach (PcInstance instance in addMatchList)
                     {
-                        instance.SetMatchSystem(this);
                         Console.WriteLine(instance.GetUserData().UserNo + " 매칭 리스트 추가");
                         matchSearchList.Add(instance);
                     }
@@ -117,10 +116,16 @@ namespace SimulFactory.Game
         {
             lock (addMatchList)
             {
-                if (!matchSearchList.Contains(pcInstance) && pcInstance.GetPcPvp().GetMatch() == null)
+                if (!addMatchList.Contains(pcInstance) && !matchSearchList.Contains(pcInstance) && pcInstance.GetMatchSystem() == null && pcInstance.GetPcPvp().GetMatch() == null)
                 {
                     pcInstance.GetPcPvp().SetWaitCount(0);
+                    pcInstance.SetMatchSystem(this);
                     addMatchList.Add(pcInstance);
+                    pcInstance.SendPacket(S_StartMatching.Data(true));
+                }
+                else
+                {
+                    pcInstance.SendPacket(S_StartMatching.Data(false));
                 }
             }
         }
@@ -132,7 +137,7 @@ namespace SimulFactory.Game
         {
             lock (removeMatchList)
             {
-                if (matchSearchList.Contains(pcInstance))
+                if (!removeMatchList.Contains(pcInstance) && matchSearchList.Contains(pcInstance))
                 {
                     removeMatchList.Add(pcInstance);
                     pcInstance.SendPacket(S_MatchingCancel.Data());
@@ -151,27 +156,6 @@ namespace SimulFactory.Game
         }
         protected virtual void CheckSearchUser(int searchCount)
         {
-            // 실제 로직 처리
-            for (int count = 0; count < matchSearchList.Count - (searchCount - 1);)
-            {
-                //bool matchSuccess = false;
-                if (matchSearchList[count + (searchCount - 1)].GetPcPvp().GetNormalPvpDto().Rating - matchSearchList[count].GetPcPvp().GetNormalPvpDto().Rating <= Define.DEFAULT_SEARCH_RATING + matchSearchList[count].GetPcPvp().GetWaitCount() * Define.INCREASE_SEARCH_RATING)
-                {
-                    NormalMatch match = new NormalMatch(this);
-                    for (int index = count; index < count + searchCount; index++)
-                    {
-                        match.AddPcInstance(matchSearchList[index]);
-                        RemovePcInstance(matchSearchList[index]);
-                    }
-                    match.CalculateEloRating();
-                    count += searchCount;
-                }
-                else
-                {
-                    NoSearchUser(matchSearchList[count]);
-                    count++;
-                }
-            }
         }
         public void AddReadyMatch(Match match)
         {
