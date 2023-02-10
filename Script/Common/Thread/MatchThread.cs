@@ -27,27 +27,23 @@ namespace SimulFactory.Common.Thread
         }
         protected void GameRun()
         {
-            if (matchRound >= Define.MAX_ROUND_COUNT)
+            switch (gameState)
             {
-                EndGame();
+                case Define.GAME_STATE.USER_RESULT_RECEIVE:
+                    EndRound(CheckRoundResult());
+                    break;
+                case Define.GAME_STATE.ROUNT_RESULT:
+                    SetRoundResult();
+                    break;
+                case Define.GAME_STATE.EndGame:
+                    EndGame();
+                    break;
             }
-            else
+            matchUserWaitTime += Define.MATCH_USER_RESULT_WAIT_DELAY;
+            if (matchUserWaitTime > Define.MATCH_USER_RESULT_WAIT_COUNT)
             {
-                switch (gameState)
-                {
-                    case Define.GAME_STATE.USER_RESULT_RECEIVE:
-                        EndRound(CheckRoundResult());
-                        break;
-                    case Define.GAME_STATE.ROUNT_RESULT:
-                        SetRoundResult();
-                        break;
-                }
-                matchUserWaitTime += Define.MATCH_USER_RESULT_WAIT_DELAY;
-                if (matchUserWaitTime > Define.MATCH_USER_RESULT_WAIT_COUNT)
-                {
-                    EndRound(Define.ROCK_SCISSOR_PAPER.Break);
-                    return;
-                }
+                EndRound(Define.ROCK_SCISSOR_PAPER.Break);
+                return;
             }
         }
 
@@ -84,11 +80,10 @@ namespace SimulFactory.Common.Thread
                     int teamNo = pc.Value.GetPcPvp().GetTeamNo();
                     if (roundResponseDic.ContainsKey(teamNo))
                     {
-                        userWinCountDic[teamNo] = Define.MAX_ROUND_COUNT;
+                        userWinCountDic[teamNo] = Define.MAX_WIN_COUNT;
                     }
                 }
                 EndGame();
-                matchRound = Define.MAX_ROUND_COUNT;
                 return;
             }
             maxWinCount = 0;
@@ -116,7 +111,7 @@ namespace SimulFactory.Common.Thread
 
             if (maxWinCount == Define.MAX_WIN_COUNT)
             {
-                matchRound = Define.MAX_ROUND_COUNT;
+                gameState = Define.GAME_STATE.EndGame;
                 return;
             }
             if (winUserResult != (int)Define.ROCK_SCISSOR_PAPER.None)

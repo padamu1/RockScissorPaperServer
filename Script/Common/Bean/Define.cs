@@ -78,6 +78,7 @@
         {
             USER_RESULT_RECEIVE = 0,
             ROUNT_RESULT = 1,
+            EndGame = 2,
         }
 
         public enum ROCK_SCISSOR_PAPER
@@ -117,7 +118,6 @@
         public readonly static int MATCH_USER_WAIT_TIME = 10000;
         public readonly static int MATCH_USER_RESULT_WAIT_DELAY = 2000;
         public readonly static int MATCH_USER_RESULT_WAIT_COUNT = 10000;
-        public readonly static int MAX_ROUND_COUNT = 10;
         public readonly static int MAX_WIN_COUNT = 5;
         public readonly static int INIT_RATING = 1000;                 // 레이팅 초기값
         public readonly static int DEFAULT_SEARCH_RATING = 150;

@@ -228,7 +228,7 @@ namespace SimulFactory.Game.Matching
                     userWinCountDic[teamNo.Key] = 10;
                 }
             }
-            matchRound = Define.MAX_ROUND_COUNT;
+            gameState = Define.GAME_STATE.EndGame;
         }
         /// <summary>
         /// 게임 종료시 호출될 메서드

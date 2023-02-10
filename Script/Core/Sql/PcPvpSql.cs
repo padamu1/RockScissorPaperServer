@@ -18,7 +18,7 @@ namespace SimulFactory.Core.Sql
             // 사용할 커넥션 가져오기
             using (MySqlConnection connection = SqlController.GetMySqlConnection())
             {
-                string insertQuery = "INSERT INTO user_pvp_db(user_no, rating, win_count, defeat_count) VALUES(@user_no, @rating, @win_count, @defeat_count)";
+                string insertQuery = "INSERT INTO user_pvp_db(user_no, rating, win_count, defeat_count) VALUES(@user_no, @rating, @winCount, @defeatCount)";
                 try //예외 처리
                 {
                     // 커넥션 연결

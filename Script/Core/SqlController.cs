@@ -14,7 +14,7 @@ namespace SimulFactory.Core
     /// </summary>
     public class SqlController
     {
-        private static string strConn = "Server=127.0.0.1;Port=3001;Database=rsp_db; Uid=root;Pwd=#Qudtk#20050;";
+        private static string strConn = "Server=rspdb.mysql.database.azure.com;Port=3306;Database=rsp_db; Uid=padamu1;Pwd=#Qudtk#20050;";
         public static void CheckSqlConnection()
         {
             MySqlConnection connection = new MySqlConnection(strConn);
