@@ -114,10 +114,10 @@
         public readonly static int NORMAL_MODE_SEARCH_USER_MIN_COUNT = 2;
         public readonly static int MULTI_MODE_SEARCH_USER_COUNT = 4;
         public readonly static int MULTI_MODE_SEARCH_USER_MIN_COUNT = 2;
-        public readonly static int MATCH_SYSTEM_DELAY_TIME = 2000;
-        public readonly static int MATCH_USER_WAIT_TIME = 10000;
-        public readonly static int MATCH_USER_RESULT_WAIT_DELAY = 2000;
-        public readonly static int MATCH_USER_RESULT_WAIT_COUNT = 10000;
+        public readonly static int MATCH_SYSTEM_DELAY_TIME = 1000;
+        public readonly static int MATCH_USER_WAIT_TIME = 11000;
+        public readonly static int MATCH_USER_RESULT_WAIT_DELAY = 1000;
+        public readonly static int MATCH_USER_RESULT_WAIT_COUNT = 11000;
         public readonly static int MAX_WIN_COUNT = 5;
         public readonly static int INIT_RATING = 1000;                 // 레이팅 초기값
         public readonly static int DEFAULT_SEARCH_RATING = 150;
