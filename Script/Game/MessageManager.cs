@@ -75,6 +75,7 @@ namespace SimulFactory.Game
             catch(Exception e)
             {
                 Console.WriteLine(e.Message);
+                return;
             }
         }
     }
