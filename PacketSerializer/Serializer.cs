@@ -108,22 +108,31 @@ namespace PacketSerializer
         }
         public static object Deserialize(byte[] value)
         {
-            if(value.Length == 0)
+            try
             {
+                if (value.Length == 0)
+                {
+                    return null;
+                }
+                byte[] lengthBytes = new byte[Config.LENGTH_SIZE];
+                Array.Copy(value, 0, lengthBytes, 0, Config.LENGTH_SIZE);
+                int length = BytesToInt(lengthBytes);
+
+                byte[] typeBytes = new byte[Config.TYPE_SIZE];
+                Array.Copy(value, Config.LENGTH_SIZE, typeBytes, 0, Config.TYPE_SIZE);
+                short type = BytesToShort(typeBytes);
+
+                byte[] dataBytes = new byte[length];
+                Array.Copy(value, Config.DATA_START_INDEX, dataBytes, 0, length);
+
+                return TypeToValue(type, dataBytes);
+
+            }
+            catch(Exception ex)
+            {
+                Console.Write(ex.ToString());
                 return null;
             }
-            byte[] lengthBytes = new byte[Config.LENGTH_SIZE];
-            Array.Copy(value, 0, lengthBytes, 0, Config.LENGTH_SIZE);
-            int length = BytesToInt(lengthBytes);
-
-            byte[] typeBytes = new byte[Config.TYPE_SIZE];
-            Array.Copy(value, Config.LENGTH_SIZE, typeBytes, 0, Config.TYPE_SIZE);
-            short type = BytesToShort(typeBytes);
-
-            byte[] dataBytes = new byte[length];
-            Array.Copy(value, Config.DATA_START_INDEX, dataBytes, 0, length);
-
-            return TypeToValue(type, dataBytes);
         }
         private static object TypeToValue(int type, byte[] dataBytes)
         {

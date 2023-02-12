@@ -124,25 +124,33 @@ namespace SimulFactory.Core
                     decoded[i] = (byte)(dataBuffer[offset + i] ^ masks[i % 4]);
                 }
 
-                switch (opcode)
+                try
                 {
-                    case Define.PAYLOAD_DATA_TYPE.Text:
-                        break;
-                    case Define.PAYLOAD_DATA_TYPE.Binary:
-                        MessageManager.ProcessData(pc, (PacketData)Serializer.Deserialize(decoded));
-                        break;
-                    case Define.PAYLOAD_DATA_TYPE.ConnectionClose:
-                        //받은 요청이 서버에서 보낸 요청에 대한 응답이 아닌 경우에만 실행
-                        if (State != Define.WEB_SOCKET_STATE.CloseSent)
-                        {
-                            SendCloseRequest(1000, "Graceful Close");
-                            State = Define.WEB_SOCKET_STATE.Closed;
-                        }
-                        Dispose();      // 소켓 닫음
-                        return false;
-                    default:
-                        Console.WriteLine("Unknown Data Type");
-                        break;
+                    switch (opcode)
+                    {
+                        case Define.PAYLOAD_DATA_TYPE.Text:
+                            break;
+                        case Define.PAYLOAD_DATA_TYPE.Binary:
+                            MessageManager.ProcessData(pc, (PacketData)Serializer.Deserialize(decoded));
+                            break;
+                        case Define.PAYLOAD_DATA_TYPE.ConnectionClose:
+                            //받은 요청이 서버에서 보낸 요청에 대한 응답이 아닌 경우에만 실행
+                            if (State != Define.WEB_SOCKET_STATE.CloseSent)
+                            {
+                                SendCloseRequest(1000, "Graceful Close");
+                                State = Define.WEB_SOCKET_STATE.Closed;
+                            }
+                            Dispose();      // 소켓 닫음
+                            return false;
+                        default:
+                            Console.WriteLine("Unknown Data Type");
+                            break;
+                    }
+                }
+                catch(Exception ex)
+                {
+                    Console.Write(ex.ToString());
+                    return true;
                 }
             }
             else
