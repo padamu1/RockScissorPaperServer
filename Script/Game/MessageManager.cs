@@ -68,6 +68,9 @@ namespace SimulFactory.Game
                     case (byte)Define.EVENT_CODE.SetProfileC:
                         C_SetProfile.SetProfileC(pc, param);
                         break;
+                    case (byte)Define.EVENT_CODE.LoadProfileC:
+                        C_LoadProfile.LoadProfileC(pc, param);
+                        break;
                     default:
                         break;
                 }

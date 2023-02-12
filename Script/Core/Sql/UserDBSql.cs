@@ -155,21 +155,18 @@ namespace SimulFactory.Core.Sql
             }
             return result;
         }
-        public static bool SetUserProfile(long userNo, string faceColor, string eyeForm, string eyeColor, string mouthColor)
+        public static bool SetUserProfile(long userNo, string profileJson)
         {
             int result = 0;
             StringBuilder sb = new StringBuilder();
             // 사용할 커넥션 가져오기
             using (MySqlConnection connection = SqlController.GetMySqlConnection())
             {
-                string insertQuery = "INSERT INTO user_profile (user_no, face_color, eye_form, eye_color, mouth_color) VALUES {0} ON DUPLICATE KEY UPDATE profile_key = VALUES(profile_key); ";
+                string insertQuery = "INSERT INTO user_profile (user_no, profile_json) VALUES {0} ON DUPLICATE KEY UPDATE profile_key = VALUES(profile_key); ";
 
-                    sb.AppendFormat("({0}, {1}, {2}, {3}, {4}),",
+                    sb.AppendFormat("({0}, {1}),",
                         userNo,
-                        faceColor,
-                        eyeForm,
-                        eyeColor,
-                        mouthColor);
+                        profileJson);
                 string commandText = string.Format(insertQuery, sb.ToString().TrimEnd(','));
 
                 try //예외 처리
@@ -212,7 +209,7 @@ namespace SimulFactory.Core.Sql
                     MySqlDataReader dr = command.ExecuteReader();
                     if (dr.Read())
                     {
-                        result = dr.GetString("profile_key");
+                        result = dr.GetString("profile_json");
                     }
                     else
                     {
