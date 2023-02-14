@@ -23,7 +23,7 @@ namespace SimulFactory.Core.Util
                 int teamRating = 0;
                 if (match is NormalMatch)
                 {
-                    teamRating = userRating[1].GetPcPvp().GetNormalPvpDto().Rating;
+                    teamRating = userRating[calculatedTeam.Value.GetPcPvp().GetTeamNo()].GetPcPvp().GetNormalPvpDto().Rating;
                 }
 
                 int enemyRating = 0; 
@@ -39,7 +39,7 @@ namespace SimulFactory.Core.Util
                         enemyRating += team.Value.GetPcPvp().GetNormalPvpDto().Rating;
                     }
                 }
-                float teamProbability = Probability(teamRating, enemyRating / userRating.Count - 1);
+                float teamProbability = Probability(teamRating, enemyRating / (userRating.Count - 1));
                 eloDic.Add(calculatedTeam.Key, teamProbability);
             }
         }

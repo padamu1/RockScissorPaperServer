@@ -24,6 +24,11 @@ namespace SimulFactory.Common.Bean
         }
         public void ChangeUserName(string changeName)
         {
+            if (changeName.Length > 10)
+            {
+                pc.SendPacket(S_UserName.Data(pc, 3));
+                return;
+            }
             changeName = changeName.ToUpper();
             if (UserDBSql.GetUserNoByName(changeName) == -1)
             {

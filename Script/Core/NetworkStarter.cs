@@ -46,16 +46,11 @@ namespace SimulFactory.Core
 
             // TCP Listen 시작
             ConnectionManager.StartTcpListen();
-            while (isThreadRun)
-            {
-
-            }
-            ConnectionManager.StopTcpListen();
         }
 
         public void ServiceStop()
         {
-            isThreadRun = false;
+            ConnectionManager.StopTcpListen();
             Console.WriteLine("service stopped");
         }
         public void ServiceStart()

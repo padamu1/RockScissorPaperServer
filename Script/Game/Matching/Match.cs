@@ -152,6 +152,7 @@ namespace SimulFactory.Game.Matching
                     }
                     else
                     {
+                        pc.Value.SetMatchSystem(null);
                         matchSystem.RemovePcInstance(pc.Value);
                     }
                 }

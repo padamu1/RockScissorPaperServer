@@ -162,12 +162,13 @@ namespace SimulFactory.Core.Sql
             // 사용할 커넥션 가져오기
             using (MySqlConnection connection = SqlController.GetMySqlConnection())
             {
-                string insertQuery = "INSERT INTO user_profile (user_no, profile_json) VALUES {0} ON DUPLICATE KEY UPDATE profile_key = VALUES(profile_key); ";
-
-                    sb.AppendFormat("({0}, {1}),",
+                sb.Append("INSERT INTO user_profile (user_no, profile_json) VALUES ");
+                sb.AppendFormat("({0}, '{1}')",
                         userNo,
                         profileJson);
-                string commandText = string.Format(insertQuery, sb.ToString().TrimEnd(','));
+                sb.Append("ON DUPLICATE KEY UPDATE profile_json = VALUES(profile_json);");
+
+                string commandText = sb.ToString();
 
                 try //예외 처리
                 {
