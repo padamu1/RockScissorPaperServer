@@ -51,11 +51,11 @@ namespace SimulFactory.Game
                 lock (matchSearchList)
                 {
                     // 검색 카운트를 낮추어야 하는지 판단.
-                    if(decreaseSearchCount)
+                    if (decreaseSearchCount)
                     {
                         decreaseSearchCount = false;
                         // 검색 카운트를 낮추어야 한다면, 최소보다 큰지 판단
-                        if(searchCount > minSearchCount)
+                        if (searchCount > minSearchCount)
                         {
                             searchCount--;
                         }
@@ -159,11 +159,18 @@ namespace SimulFactory.Game
         }
         public void AddReadyMatch(Match match)
         {
-            lock(readyMatchList)
+            lock (readyMatchList)
             {
                 readyMatchList.Add(match);
             }
         }
-        protected virtual void NoSearchUser(PcInstance pc) => pc.GetPcPvp().SetWaitCount(pc.GetPcPvp().GetWaitCount() + 1);
+        protected virtual void NoSearchUser(PcInstance pc)
+        {
+            pc.GetPcPvp().SetWaitCount(pc.GetPcPvp().GetWaitCount() + 1);
+            if (pc.GetPcPvp().GetWaitCount() > 20)
+            {
+
+            }
+        }
     }
 }

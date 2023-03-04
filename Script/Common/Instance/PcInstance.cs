@@ -15,20 +15,20 @@ namespace SimulFactory.Common.Instance
     {
         private WebSocketController socketController;
 
-        private UserData userData;
-        private PcPvp pcPvp;
-        private MatchSystem? matchSystem;
+        protected UserData userData;
+        protected PcPvp pcPvp;
+        protected MatchSystem? matchSystem;
         private PcFriend pcFriend;
         public PcInstance(WebSocketController socketController)
         {
             this.socketController = socketController;
             SetupUser();
         }
-        public void SendPacket(PacketData packetData) => socketController.SendPacket(packetData);
+        public virtual void SendPacket(PacketData packetData) => socketController.SendPacket(packetData);
         /// <summary>
         /// 유저 로그인 시 로딩되어야 할 정보들
         /// </summary>
-        private void SetupUser()
+        protected virtual void SetupUser()
         {
             userData = new UserData(this);
             pcPvp = new PcPvp(this);
