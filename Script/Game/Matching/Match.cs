@@ -1,4 +1,5 @@
-﻿using RockScissorPaperServer.PacketSerializer.Model;
+﻿using RockScissorPaperServer.AutoBattle.Common.Base;
+using RockScissorPaperServer.PacketSerializer.Model;
 using SimulFactory.Common.Bean;
 using SimulFactory.Common.Instance;
 using SimulFactory.Common.Thread;
@@ -145,7 +146,7 @@ namespace SimulFactory.Game.Matching
                 {
                     pc.Value.GetPcPvp().SetMatch(null);
                     pc.Value.SendPacket(S_MatchingResponse.Data(1));
-                    if (pc.Value.GetPcPvp().GetMatchAccept())
+                    if (pc.Value.GetPcPvp().GetMatchAccept() && pc.Value is not AIModule)
                     {
                         // 수락을 한 유저는 실패를 했지만 다시 매칭을 이어갈 수 있도록 넣어줌
                         matchSystem.AddPcInsatnce(pc.Value);

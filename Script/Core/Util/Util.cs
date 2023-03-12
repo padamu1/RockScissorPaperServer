@@ -9,6 +9,11 @@ namespace SimulFactory.Core.Util
 {
     public class Util
     {
+        public static Random rand = new Random();
+        public static int RInt(int min, int max)
+        {
+            return rand.Next(min, max);
+        }
         public static byte[] RSAEncrypt(byte[] DataToEncrypt, RSAParameters RSAKeyInfo, bool DoOAEPPadding)
         {
             try

@@ -1,4 +1,7 @@
-﻿using SimulFactory.Common.Bean;
+﻿using RockScissorPaperServer.AutoBattle;
+using RockScissorPaperServer.AutoBattle.Common.Base;
+using SimulFactory.Common.Bean;
+using SimulFactory.Common.Instance;
 using SimulFactory.Game.Matching.Mode;
 using System;
 using System.Collections.Generic;
@@ -45,6 +48,16 @@ namespace SimulFactory.Game.Matching
                     NoSearchUser(matchSearchList[count]);
                     count++;
                 }
+            }
+        }
+        protected override void NoSearchUser(PcInstance pc)
+        {
+            base.NoSearchUser(pc);
+            if (pc.GetPcPvp().GetWaitCount() > 20)
+            {
+                AIModule ai = AutoBattleManager.GetInstance().SpawnAI();
+                ai.SetRating(pc.GetPcPvp().GetNormalPvpDto().Rating);
+                AddPcInsatnce(ai);
             }
         }
     }

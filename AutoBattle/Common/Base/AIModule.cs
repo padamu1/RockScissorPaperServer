@@ -1,4 +1,5 @@
 ﻿using RockScissorPaperServer.PacketSerializer.Model;
+using SimulFactory.Common.Bean;
 using SimulFactory.Common.Instance;
 using SimulFactory.Core;
 using SimulFactory.Core.Util;
@@ -12,22 +13,26 @@ namespace RockScissorPaperServer.AutoBattle.Common.Base
 {
     public class AIModule : PcInstance
     {
+        private Define.MATCH_TYPE matchType;
         public AIModule(WebSocketController socketController) : base(socketController)
         {
             this.userData.UserName = LoginUtil.MakeUserNickName();
         }
-        /// <summary>
-        /// 기본 데이터를 설정하기 위한 함수
-        /// </summary>
-        public void SetDefaultData()
+        public void SetMatchType(Define.MATCH_TYPE matchType)
         {
-
+            this.matchType = matchType;
         }
         /// <summary>
         /// AIModule의 정보를 설정하기 위한 함수
         /// </summary>
         protected override void SetupUser()
         {
+            userData = new UserData(this);
+            pcPvp = new PcPvp(this);
+        }
+        public void SetRating(int rating)
+        {
+            pcPvp.GetNormalPvpDto().Rating = rating;
         }
         /// <summary>
         /// AIModule은 패킷에 대한 처리를 할 필요가 없으므로 전용 프로세스 매니저를 통해 처리

@@ -1,4 +1,5 @@
-﻿using RockScissorPaperServer.Script.Common.Dto;
+﻿using RockScissorPaperServer.AutoBattle.Common.Base;
+using RockScissorPaperServer.Script.Common.Dto;
 using SimulFactory.Common.Bean;
 using SimulFactory.Common.Instance;
 using SimulFactory.Common.Thread;
@@ -40,7 +41,7 @@ namespace SimulFactory.Game.Matching.Mode
                 pc.Value.GetPcPvp().SetMatch(null);
             }
             // 노말 데이터 설정
-            PcPvpSql.UpdateUserNormalPvpSql(pcDic.Values.ToArray());
+            PcPvpSql.UpdateUserNormalPvpSql(pcDic.Values.Where(n => n is not AIModule).ToArray());
             base.SendGameResult(winTeamNos);
         }
     }

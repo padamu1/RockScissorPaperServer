@@ -3,6 +3,9 @@ using SimulFactory.Common.Bean;
 using SimulFactory.Common.Instance;
 using SimulFactory.Game.Event;
 using SimulFactory.Game.Matching;
+using RockScissorPaperServer.AutoBattle;
+using RockScissorPaperServer.AutoBattle.Common.Base;
+
 namespace SimulFactory.Game
 {
     public class MatchSystem
@@ -167,10 +170,6 @@ namespace SimulFactory.Game
         protected virtual void NoSearchUser(PcInstance pc)
         {
             pc.GetPcPvp().SetWaitCount(pc.GetPcPvp().GetWaitCount() + 1);
-            if (pc.GetPcPvp().GetWaitCount() > 20)
-            {
-
-            }
         }
     }
 }

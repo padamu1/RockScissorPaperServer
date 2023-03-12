@@ -27,7 +27,6 @@ namespace RockScissorPaperServer.AutoBattle
         private void AddAI()
         {
             AIModule aIModule = new AIModule(null);
-            aIModule.SetDefaultData();
             aIModules.Enqueue(aIModule);
         }
         public AIModule SpawnAI()

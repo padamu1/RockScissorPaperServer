@@ -1,6 +1,7 @@
 ﻿using RockScissorPaperServer.AutoBattle.Common.Base;
 using RockScissorPaperServer.PacketSerializer.Model;
 using SimulFactory.Common.Bean;
+using SimulFactory.Core.Util;
 
 namespace RockScissorPaperServer.AutoBattle.Common
 {
@@ -23,52 +24,27 @@ namespace RockScissorPaperServer.AutoBattle.Common
             }
             try
             {
-                switch (eventCode)
+                switch ((Define.EVENT_CODE)eventCode)
                 {
-                    case (byte)Define.EVENT_CODE.StartMatchingC:
-                        C_StartMatching.StartMatchingC(ai, param);
+                    case Define.EVENT_CODE.MatchingSuccessS:
+                        ai.GetPcPvp().SetMatchAccept(true);
                         break;
-                    case (byte)Define.EVENT_CODE.MatchingResponseC:
-                        C_MatchingResponse.MatchingResponseC(pc, param);
+                    case Define.EVENT_CODE.MatchingResponseS:
+                        // 매칭에 대한 결과
+                        ai.GetPcPvp().GetMatch().SetDmg(ai.GetPcPvp().GetTeamNo(), Util.RInt(0,3));
                         break;
-                    case (byte)Define.EVENT_CODE.MatchingCancelC:
-                        C_MatchingCancel.MatchingCancel(pc);
+                    case Define.EVENT_CODE.MatchingCancelS:
+                        ai.DespawnModule();
                         break;
-                    case (byte)Define.EVENT_CODE.PingC:
-
+                    case Define.EVENT_CODE.MatchingResultS:
+                        // 승리 패배 결과
                         break;
-                    case (byte)Define.EVENT_CODE.UserBattleButtonClickedC:
-                        C_UserBattleButtonClicked.UserBattleButtonClickedC(pc, param);
+                    case Define.EVENT_CODE.UserBattleResponseS:
+                        // 상대편이 낸 결과를 받음
                         break;
-                    case (byte)Define.EVENT_CODE.UserNameC:
-                        C_UserName.UserNameC(pc, param);
-                        break;
-                    case (byte)Define.EVENT_CODE.LoginCompleteC:
-                        C_LoginComplete.LoginCompleteC(pc, param);
-                        break;
-                    case (byte)Define.EVENT_CODE.FriendRequestC:
-                        C_FriendRequest.FriendRequestC(pc, param);
-                        break;
-                    case (byte)Define.EVENT_CODE.FriendRemoveC:
-                        C_FriendRemove.FriendRemoveC(pc, param);
-                        break;
-                    case (byte)Define.EVENT_CODE.FriendReceiveC:
-                        C_FriendReceive.FriendReceiveC(pc, param);
-                        break;
-                    case (byte)Define.EVENT_CODE.ChatC:
-                        C_Chat.ChatC(pc, param);
-                        break;
-                    case (byte)Define.EVENT_CODE.InviteUserC:
-                        C_InviteUser.InviteUserC(pc, param);
-                        break;
-                    case (byte)Define.EVENT_CODE.InviteReceiveC:
-                        C_InviteReceive.InviteReceiveC(pc, param);
-                        break;
-                    case (byte)Define.EVENT_CODE.SetProfileC:
-                        C_SetProfile.SetProfileC(pc, param);
-                        break;
-                    case (byte)Define.EVENT_CODE.LoadProfileC:
-                        C_LoadProfile.LoadProfileC(pc, param);
+                    case Define.EVENT_CODE.RoundResultS:
+                        // 해당 라운드의 결과를 받음
+                        ai.GetPcPvp().GetMatch().SetDmg(ai.GetPcPvp().GetTeamNo(), Util.RInt(0, 3));
                         break;
                     default:
                         break;
