@@ -38,6 +38,7 @@ namespace RockScissorPaperServer.AutoBattle.Common
                         break;
                     case Define.EVENT_CODE.MatchingResultS:
                         // 승리 패배 결과
+                        ai.DespawnModule();
                         break;
                     case Define.EVENT_CODE.UserBattleResponseS:
                         // 상대편이 낸 결과를 받음

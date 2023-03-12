@@ -1,4 +1,5 @@
-﻿using SimulFactory.Common.Instance;
+﻿using RockScissorPaperServer.AutoBattle;
+using SimulFactory.Common.Instance;
 using SimulFactory.Core.Sql;
 using SimulFactory.Game;
 using SimulFactory.Game.Matching;
@@ -27,6 +28,7 @@ namespace SimulFactory.Core
             // 서버 시작 전 준비 작업
             PcListInstance.GetInstance();
 
+            AutoBattleManager.GetInstance();
             // 매칭 서버 준비
             normalMatchThread = new Thread(NormalMatchSystem.GetInstance().Matching);
             normalMatchThread.IsBackground = true;

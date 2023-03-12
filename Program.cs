@@ -10,21 +10,21 @@ public class ApplicationManager
 {
     public static void Start()
     {
-        Console.WriteLine("서버를 종료하시려면 \"Quit\" \n서비스를 시작하려면 \"Start\" \n서비스를 종료하려면 \"Stop\" 를 입력해주세요.");
+        Console.WriteLine("Quit this program : \"Quit\" \n Service Start : \"Start\" \n Service Stop : \"Stop\"");
         switch (Console.ReadLine())
         {
             case "Stop":
-                Console.WriteLine("서비스가 종료됩니다.");
+                Console.WriteLine("Service Stop");
                 NetworkStarter.GetInstance().ServiceStop();
                 Start();
                 break;
             case "Start":
-                Console.WriteLine("서비스가 시작됩니다.");
+                Console.WriteLine("Service Start");
                 NetworkStarter.GetInstance().ServiceStart();
                 Start();
                 break;
             case "Quit":
-                Console.WriteLine("esc : 프로그램이 종료됩니다.");
+                Console.WriteLine("esc : program end");
                 break;
             default:
                 break;
@@ -36,7 +36,7 @@ public class Program
     public static void Main()
     {
         NetworkStarter.GetInstance();
-        Console.WriteLine("서비스가 시작됩니다.");
+        Console.WriteLine("Service will Started");
         NetworkStarter.GetInstance().ServiceStart();
         ApplicationManager.Start();
     }

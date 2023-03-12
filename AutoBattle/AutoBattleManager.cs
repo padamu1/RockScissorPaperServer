@@ -31,7 +31,7 @@ namespace RockScissorPaperServer.AutoBattle
         }
         public AIModule SpawnAI()
         {
-            if(aIModules.Count == 0)
+            if(aIModules.Count <= 0)
             {
                 AddAI();
             }

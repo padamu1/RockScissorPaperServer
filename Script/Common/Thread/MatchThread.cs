@@ -65,7 +65,7 @@ namespace SimulFactory.Common.Thread
         /// <param name="winTeamNo"></param>
         protected virtual void EndRound(Define.ROCK_SCISSOR_PAPER winUserResult)
         {
-            Console.WriteLine("매칭 결과 확인");
+            Console.WriteLine("matching reponse check");
             if (winUserResult == Define.ROCK_SCISSOR_PAPER.None)
             {
                 // 다음 라운드 진행 안함
@@ -73,7 +73,7 @@ namespace SimulFactory.Common.Thread
             }
             else if (winUserResult == Define.ROCK_SCISSOR_PAPER.Break)
             {
-                Console.WriteLine("한 쪽 연결 끊김");
+                Console.WriteLine("some client connection close");
 
                 foreach (KeyValuePair<int, PcInstance> pc in pcDic)
                 {
@@ -105,9 +105,10 @@ namespace SimulFactory.Common.Thread
         }
         public virtual void SetRoundResult()
         {
-            SendRoundResult(winUserResult);
+            Dictionary<int, int>? roundResponseDicCopied = new Dictionary<int, int>(roundResponseDic);
             // 다음 계산을 위해 초기화
-            roundResponseDic.Clear();
+            roundResponseDic.Clear(); 
+            SendRoundResult(winUserResult, roundResponseDicCopied);
 
             if (maxWinCount == Define.MAX_WIN_COUNT)
             {

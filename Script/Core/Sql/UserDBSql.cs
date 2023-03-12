@@ -35,17 +35,17 @@ namespace SimulFactory.Core.Sql
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine("실패");
+                    Console.WriteLine("failed");
                     Console.WriteLine(ex.ToString());
                 }
             }
             if (result >= 1)
             {
-                Console.WriteLine("인서트 성공");
+                Console.WriteLine("user insert success");
             }
             else
             {
-                Console.WriteLine("인서트 실패");
+                Console.WriteLine("user insert failed");
             }
 
             return result >= 1;
@@ -75,7 +75,7 @@ namespace SimulFactory.Core.Sql
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine("실패");
+                    Console.WriteLine("failed");
                     Console.WriteLine(ex.ToString());
                 }
             }
@@ -113,7 +113,7 @@ namespace SimulFactory.Core.Sql
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine("실패");
+                    Console.WriteLine("failed");
                     Console.WriteLine(ex.ToString());
                 }
             }
@@ -149,7 +149,7 @@ namespace SimulFactory.Core.Sql
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine("실패");
+                    Console.WriteLine("failed");
                     Console.WriteLine(ex.ToString());
                 }
             }
@@ -175,14 +175,14 @@ namespace SimulFactory.Core.Sql
                     // 커넥션 연결
                     connection.Open();
                     MySqlCommand command = new MySqlCommand(commandText, connection);
-                    Console.WriteLine("실행 쿼리 : " + command.CommandText);
+                    Console.WriteLine("exac query : " + command.CommandText);
                     result = command.ExecuteNonQuery(); // 성공시 1 들어감
 
                     Console.WriteLine(command.ToString());
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine("실패");
+                    Console.WriteLine("failed");
                     Console.WriteLine(ex.ToString());
                 }
             }
@@ -219,7 +219,7 @@ namespace SimulFactory.Core.Sql
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine("실패");
+                    Console.WriteLine("failed");
                     Console.WriteLine(ex.ToString());
                 }
             }

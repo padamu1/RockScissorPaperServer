@@ -16,7 +16,7 @@ namespace SimulFactory.Game.Event
         {
             Dictionary<byte, object> param = new Dictionary<byte, object>();
             param.Add(0, users);
-            Console.WriteLine("매칭 성공 메시지 보냄");
+            Console.WriteLine("matching success message send");
             return new PacketData((byte)Define.EVENT_CODE.MatchingSuccessS, param);
         }
     }

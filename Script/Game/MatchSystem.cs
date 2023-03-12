@@ -36,7 +36,7 @@ namespace SimulFactory.Game
                 {
                     foreach (PcInstance instance in addMatchList)
                     {
-                        Console.WriteLine(instance.GetUserData().UserNo + " 매칭 리스트 추가");
+                        Console.WriteLine(instance.GetUserData().UserNo + " matching list add");
                         matchSearchList.Add(instance);
                     }
                     addMatchList.Clear();
@@ -45,7 +45,7 @@ namespace SimulFactory.Game
                 {
                     foreach (PcInstance instance in removeMatchList)
                     {
-                        Console.WriteLine(instance.GetUserData().UserNo + " 매칭 리스트 삭제");
+                        Console.WriteLine(instance.GetUserData().UserNo + " matching list remove");
                         matchSearchList.Remove(instance);
                         instance.SetMatchSystem(null);
                     }
@@ -88,21 +88,21 @@ namespace SimulFactory.Game
                                 switch (match.CheckUserWaitState())
                                 {
                                     case Define.MATCH_READY_STATE.MATCH_START_BEFORE_WAIT:
-                                        Console.WriteLine("매칭 성공 시작 대기중 ...");
+                                        Console.WriteLine("matching success wait for start ...");
                                         break;
                                     case Define.MATCH_READY_STATE.MATCH_START_WAIT:
                                         // 매칭 시작 대기중
-                                        Console.WriteLine("매칭 시작 대기중 ...");
+                                        Console.WriteLine("wait for start ...");
                                         break;
                                     case Define.MATCH_READY_STATE.MATCH_START_SUCCESS:
                                         // 매칭 시작 성공
                                         match.SendMatchStartResult(Define.MATCH_READY_STATE.MATCH_START_SUCCESS);
-                                        Console.WriteLine("매칭 성공 ...");
+                                        Console.WriteLine("matching success ...");
                                         break;
                                     case Define.MATCH_READY_STATE.MATCH_START_FAILED:
                                         // 매칭 시작 실패
                                         match.SendMatchStartResult(Define.MATCH_READY_STATE.MATCH_START_FAILED);
-                                        Console.WriteLine("매칭 실패 ...");
+                                        Console.WriteLine("matching failed ...");
                                         break;
                                 }
                                 break;
@@ -119,16 +119,25 @@ namespace SimulFactory.Game
         {
             lock (addMatchList)
             {
-                if (!addMatchList.Contains(pcInstance) && !matchSearchList.Contains(pcInstance) && pcInstance.GetMatchSystem() == null && pcInstance.GetPcPvp().GetMatch() == null)
+                if(pcInstance is AIModule)
                 {
                     pcInstance.GetPcPvp().SetWaitCount(0);
                     pcInstance.SetMatchSystem(this);
                     addMatchList.Add(pcInstance);
-                    pcInstance.SendPacket(S_StartMatching.Data(true));
                 }
                 else
                 {
-                    pcInstance.SendPacket(S_StartMatching.Data(false));
+                    if (!addMatchList.Contains(pcInstance) && !matchSearchList.Contains(pcInstance) && pcInstance.GetMatchSystem() == null && pcInstance.GetPcPvp().GetMatch() == null)
+                    {
+                        pcInstance.GetPcPvp().SetWaitCount(0);
+                        pcInstance.SetMatchSystem(this);
+                        addMatchList.Add(pcInstance);
+                        pcInstance.SendPacket(S_StartMatching.Data(true));
+                    }
+                    else
+                    {
+                        pcInstance.SendPacket(S_StartMatching.Data(false));
+                    }
                 }
             }
         }
@@ -140,10 +149,18 @@ namespace SimulFactory.Game
         {
             lock (removeMatchList)
             {
-                if (!removeMatchList.Contains(pcInstance) && matchSearchList.Contains(pcInstance))
+                if(pcInstance is AIModule)
                 {
                     removeMatchList.Add(pcInstance);
                     pcInstance.SendPacket(S_MatchingCancel.Data());
+                }
+                else
+                {
+                    if (!removeMatchList.Contains(pcInstance) && matchSearchList.Contains(pcInstance))
+                    {
+                        removeMatchList.Add(pcInstance);
+                        pcInstance.SendPacket(S_MatchingCancel.Data());
+                    }
                 }
             }
         }

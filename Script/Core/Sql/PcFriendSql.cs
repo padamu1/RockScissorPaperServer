@@ -44,12 +44,12 @@ namespace SimulFactory.Core.Sql
                     }
                     else
                     {
-                        Console.WriteLine("{0} 유저의 친구가 없습니다.",pc.GetUserData().UserNo);
+                        Console.WriteLine("{0} user friend not exist",pc.GetUserData().UserNo);
                     }
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine("실패");
+                    Console.WriteLine("failed");
                     Console.WriteLine(ex.ToString());
                 }
             }
@@ -87,7 +87,7 @@ namespace SimulFactory.Core.Sql
                     }
                     else
                     {
-                        Console.WriteLine("{0} 유저의 친구요청 데이터가 없습니다.", pc.GetUserData().UserNo);
+                        Console.WriteLine("{0} user request friend not exist", pc.GetUserData().UserNo);
                     }
                 }
                 catch (Exception ex)
@@ -128,14 +128,14 @@ namespace SimulFactory.Core.Sql
                     // 커넥션 연결
                     connection.Open();
                     MySqlCommand command = new MySqlCommand(commandText, connection);
-                    Console.WriteLine("실행 쿼리 : " + command.CommandText);
+                    Console.WriteLine("exac query : " + command.CommandText);
                     result = command.ExecuteNonQuery(); // 성공시 1 들어감
 
                     Console.WriteLine(command.ToString());
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine("실패");
+                    Console.WriteLine("failed");
                     Console.WriteLine(ex.ToString());
                 }
             }
@@ -168,14 +168,14 @@ namespace SimulFactory.Core.Sql
                     // 커넥션 연결
                     connection.Open();
                     MySqlCommand command = new MySqlCommand(commandText, connection);
-                    Console.WriteLine("실행 쿼리 : " + command.CommandText);
+                    Console.WriteLine("exac query : " + command.CommandText);
                     result = command.ExecuteNonQuery(); // 성공시 1 들어감
 
                     Console.WriteLine(command.ToString());
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine("실패");
+                    Console.WriteLine("failed");
                     Console.WriteLine(ex.ToString());
                 }
             }
@@ -204,14 +204,14 @@ namespace SimulFactory.Core.Sql
                     MySqlCommand command = new MySqlCommand(commandText, connection);
                     command.Parameters.AddWithValue("@userNo", userNo);
                     command.Parameters.AddWithValue("@friendName", friendName);
-                    Console.WriteLine("실행 쿼리 : " + command.CommandText);
+                    Console.WriteLine("exac query : " + command.CommandText);
                     result = command.ExecuteNonQuery(); // 성공시 1 들어감
 
                     Console.WriteLine(command.ToString());
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine("실패");
+                    Console.WriteLine("failed");
                     Console.WriteLine(ex.ToString());
                 }
             }
@@ -240,14 +240,14 @@ namespace SimulFactory.Core.Sql
                     MySqlCommand command = new MySqlCommand(commandText, connection);
                     command.Parameters.AddWithValue("@userNo", pc.GetUserData().UserNo);
                     command.Parameters.AddWithValue("@friendName", friendName);
-                    Console.WriteLine("실행 쿼리 : " + command.CommandText);
+                    Console.WriteLine("exac query : " + command.CommandText);
                     result = command.ExecuteNonQuery(); // 성공시 1 들어감
 
                     Console.WriteLine(command.ToString());
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine("실패");
+                    Console.WriteLine("failed");
                     Console.WriteLine(ex.ToString());
                 }
             }

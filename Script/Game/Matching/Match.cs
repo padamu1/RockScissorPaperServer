@@ -173,10 +173,10 @@ namespace SimulFactory.Game.Matching
             matchUserWaitTime += Define.MATCH_SYSTEM_DELAY_TIME;    // 유저를 대기하는 시간을 증가시킴
             return true;    // 매칭 대기 시간이 남은 경우
         }
-        protected void SendRoundResult(int winUserResult)
+        protected void SendRoundResult(int winUserResult, Dictionary<int,int> resultDic)
         {
             List<object> winUserNames = new List<object>();
-            foreach(KeyValuePair<int, int> result in roundResponseDic)
+            foreach(KeyValuePair<int, int> result in resultDic)
             {
                 if(result.Value == winUserResult)
                 {

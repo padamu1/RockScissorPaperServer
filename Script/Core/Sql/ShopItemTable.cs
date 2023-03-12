@@ -48,7 +48,7 @@ namespace SimulFactory.Core.Sql
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine("실패");
+                    Console.WriteLine("failed");
                     Console.WriteLine(ex.ToString());
                     return false;
                 }
@@ -60,7 +60,7 @@ namespace SimulFactory.Core.Sql
             {
                 return shopItemDic[uid];
             }
-            Console.WriteLine("ShopItem uid : {0}가 null임",uid);
+            Console.WriteLine("ShopItem uid : {0} is null",uid);
             return null;
         }
     }

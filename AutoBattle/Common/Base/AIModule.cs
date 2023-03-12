@@ -16,7 +16,7 @@ namespace RockScissorPaperServer.AutoBattle.Common.Base
         private Define.MATCH_TYPE matchType;
         public AIModule(WebSocketController socketController) : base(socketController)
         {
-            this.userData.UserName = LoginUtil.MakeUserNickName();
+            Console.WriteLine("AI Module created");
         }
         public void SetMatchType(Define.MATCH_TYPE matchType)
         {
@@ -29,6 +29,8 @@ namespace RockScissorPaperServer.AutoBattle.Common.Base
         {
             userData = new UserData(this);
             pcPvp = new PcPvp(this);
+            this.userData.UserName = LoginUtil.MakeUserNickName();
+            this.userData.UserNo = DateTimeOffset.Now.ToUnixTimeMilliseconds();
         }
         public void SetRating(int rating)
         {
@@ -47,6 +49,7 @@ namespace RockScissorPaperServer.AutoBattle.Common.Base
         /// </summary>
         public void DespawnModule()
         {
+            Console.WriteLine("AI Returned");
             AutoBattleManager.GetInstance().ReturnAIModule(this);
         }
     }
