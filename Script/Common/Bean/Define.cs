@@ -20,6 +20,7 @@
             InviteReceiveC = 13,            // 초대 응답
             SetProfileC = 14,               // 프로필 설정
             LoadProfileC = 15,              // 프로필 정보 요청
+            BuyShopItemC = 16,              // 상점아이템 구매시 사용
 
             LoginS = 0,             // 로그인 응답
             UserInfoS = 1,          // 유저 정보 내려줌
@@ -39,6 +40,7 @@
             InviteUserS = 15,       // 초대 받음
             InviteReceiveS = 16,    // 초대 응답에 대한 결과
             LoadProfileS = 17,      // 프로필 로드
+            BuyShopItemS = 18,      // 상점 아이템 구매에 대한 결과
         }
         public enum WEB_SOCKET_STATE
         {
